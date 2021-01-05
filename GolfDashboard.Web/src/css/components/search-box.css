@@ -1,0 +1,15 @@
+.search-container {
+    background: var(--color-primary-900);
+    width: 26.250em;
+}
+
+.search-input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    caret-color: var(--color-white-tinted);
+}
+
+.search-input::placeholder {
+    color: #879e8f;
+}

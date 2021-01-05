@@ -1,0 +1,84 @@
+@import "../../node_modules/@syncfusion/ej2-base/styles/bootstrap4.css";
+@import "../../node_modules/@syncfusion/ej2-react-navigations/styles/bootstrap4.css";
+
+:root {
+
+    /* Primary Colour Shades */
+    --color-primary-100: #E3E8E5; 
+    --color-primary-200: #C6D2CB;
+    --color-primary-300: #9CB0A4;
+    --color-primary-400: #879D90;
+    --color-primary-500: #698474;
+    --color-primary-600: #546A5D;
+    --color-primary-700: #4A5C51;
+    --color-primary-800: #3F4F46;
+    --color-primary-900: #2d3831;
+
+    /* Tints */
+    --color-white-tinted: #dfe5e1;
+
+    /* Warning Colour Shades */
+    --color-warning-100: #D6B5B2;
+    --color-warning-200: #C1918B;
+    --color-warning-300: #AD6C65;
+    --color-warning-400: #A25951;
+    --color-warning-500: #98473E;
+    --color-warning-600: #894038;
+    --color-warning-700: #7A3932;
+    --color-warning-800: #5B2B25;
+    --color-warning-900: #3D1C19;
+
+    /* Grey Shades */
+    --color-grey: #212529;
+    --color-light-grey: #6C757D;
+    --color-grey95: #F2F2F2;
+
+    /* Accent Shades */
+    --color-accent-green: #6CDA98;
+    --color-accent-red: #DA6C6C;
+    --color-accent-blue: #3E517A; 
+}
+
+html {
+    background: var(--color-grey95);
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    display: flex;
+}
+
+#root {
+    flex-grow: 1;
+    display: flex;
+}
+
+a,
+a:hover {
+    color: inherit;
+}
+
+.root-content {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr;
+    flex-grow: 1;
+}
+
+.main-content {
+    background-color: var(--color-primary-800);
+}
+
+.main-content-body {
+    background-color: #F2F2F2;
+    border-top-left-radius: 0.25em;
+}
+
+.sidebar {
+    background: var(--color-primary-800);
+}
+
+.text-white-tinted {
+    color: var(--color-white-tinted);
+}
