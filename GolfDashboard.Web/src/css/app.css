@@ -29,18 +29,19 @@
     --color-warning-900: #3D1C19;
 
     /* Grey Shades */
-    --color-grey: #212529;
-    --color-light-grey: #6C757D;
-    --color-grey95: #F2F2F2;
+    --color-grey-500: #212529;
+    --color-grey-400: #797979;
+    --color-grey-300: #A9A9A9;
+    --color-grey-200: #F5F5F5;
+    --color-grey-100: #FAFAFA;
 
     /* Accent Shades */
     --color-accent-green: #6CDA98;
     --color-accent-red: #DA6C6C;
-    --color-accent-blue: #3E517A; 
+    --color-accent-blue: #3E517A;
 }
 
 html {
-    background: var(--color-grey95);
     height: 100%;
 }
 
@@ -71,8 +72,18 @@ a:hover {
 }
 
 .main-content-body {
-    background-color: #F2F2F2;
+    background-color: var(--color-grey-100);
     border-top-left-radius: 0.25em;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.grid-card {
+    margin: 0.75em;
+    border: 1px solid var(--color-grey-300);
+    border-radius: 0.5em;
+    background: var(--color-grey-200);
 }
 
 .sidebar {
@@ -81,4 +92,8 @@ a:hover {
 
 .text-white-tinted {
     color: var(--color-white-tinted);
+}
+
+.grid-two-col-span {
+    grid-column-start: span 2;
 }

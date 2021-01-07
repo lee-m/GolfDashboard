@@ -26,8 +26,11 @@ export default class App extends React.Component {
           </div>
           <div className="main-content d-flex flex-column">
               <TopNavBar />
-              <div className="main-content-body flex-grow-1">
-                Main Content
+              <div className="main-content-body flex-grow-1 p-2">
+                <div className="grid-card">Handicap History</div>
+                <div className="grid-card">Average Score by Par</div>
+                <div className="grid-card grid-two-col-span">Recent Rounds</div>
+                <div className="grid-card grid-two-col-span">Notes Rounds</div>
               </div>
           </div>
         </div>
