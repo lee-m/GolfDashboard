@@ -74,27 +74,8 @@ a:hover {
 .main-content-body {
     background-color: var(--color-grey-100);
     border-top-left-radius: 0.25em;
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-}
-
-.grid-card {
-    margin: 0.75em;
-    padding: 0.75em;
-    border: 1px solid var(--color-grey-300);
-    border-radius: 0.5em;
-    background: white;
-}
-
-.sidebar {
-    background: var(--color-primary-800);
 }
 
 .text-white-tinted {
     color: var(--color-white-tinted);
-}
-
-.grid-two-col-span {
-    grid-column-start: span 2;
 }
