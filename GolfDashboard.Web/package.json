@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@syncfusion/ej2-react-navigations": "^18.4.33",
+    "@syncfusion/ej2-react-grids": "^17.2.53-1205479",
+    "@syncfusion/ej2-react-richtexteditor": "^18.4.33",
     "@testing-library/jest-dom": "^5.11.8",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.0",

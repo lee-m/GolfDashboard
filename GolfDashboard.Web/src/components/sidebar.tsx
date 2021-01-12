@@ -17,7 +17,7 @@ export class Sidebar extends React.Component {
                     <SideNavItem isFirst={true} linkURL="/" linkText="Dashboard" logo={HomeLogo} logoAlt="Home Logo" />
                     <SideNavItem linkURL="/rounds" linkText="Round History" logo={GridLogo} logoAlt="Round History Logo" />
                     <SideNavItem linkURL="/notes" linkText="Notes" logo={NotesLogo} logoAlt="Notes Logo" />
-                    <SideNavItem linkURL="/clubs" linkText="Find a Golf Club" logo={GolfCourseLogo} logoAlt="Find a Course Logo" />
+                    <SideNavItem linkURL="/clubs" linkText="Find a Club" logo={GolfCourseLogo} logoAlt="Find a Course Logo" />
                 </div>
             </div>
         );

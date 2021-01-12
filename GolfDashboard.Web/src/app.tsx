@@ -17,9 +17,9 @@ export default class App extends React.Component {
     return (
       <div className="root-content">
         <Sidebar />
-        <div className="main-content d-flex flex-column">
+        <div className="main-content">
           <TopNavBar />
-          <div className="main-content-body flex-grow-1 p-2">
+          <div className="main-content-body">
             <Route exact path="/" component={DashboardPage} />
             <Route path="/clubs" component={ClubsPage} />
             <Route path="/notes" component={NotesPage} />

@@ -7,7 +7,7 @@ export class LoggedInUser extends React.Component {
         return (
             <div className="pr-3 ml-auto d-flex">
                 <img src={PersonLogo} alt="Person" />
-                <p className="text-white-tinted pl-1 m-0 align-self-center">Lee</p>
+                <p className="text-white-tinted pl-2 m-0 align-self-center">Lee</p>
             </div>
         );
     }

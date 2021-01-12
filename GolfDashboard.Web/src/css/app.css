@@ -1,5 +1,15 @@
-@import "../../node_modules/@syncfusion/ej2-base/styles/bootstrap4.css";
-@import "../../node_modules/@syncfusion/ej2-react-navigations/styles/bootstrap4.css";
+@import '../../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-calendars/styles/material.css';  
+@import '../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';  
+@import '../../node_modules/@syncfusion/ej2-icons/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-lists/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import "../../node_modules/@syncfusion/ej2-react-grids/styles/material.css";
+@import '../../node_modules/@syncfusion/ej2-richtexteditor/styles/material.css';
+@import '../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
 
 :root {
 
@@ -32,7 +42,7 @@
     --color-grey-500: #212529;
     --color-grey-400: #797979;
     --color-grey-300: #A9A9A9;
-    --color-grey-200: #F5F5F5;
+    --color-grey-200: #D4D4D4;
     --color-grey-100: #FAFAFA;
 
     /* Accent Shades */
@@ -48,6 +58,11 @@ html {
 body {
     min-height: 100%;
     display: flex;
+}
+
+.btn-primary {
+    background-color: var(--color-accent-blue);
+    color: white;
 }
 
 #root {
@@ -69,6 +84,9 @@ a:hover {
 
 .main-content {
     background-color: var(--color-primary-800);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
 }
 
 .main-content-body {
