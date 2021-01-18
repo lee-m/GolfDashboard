@@ -14,13 +14,11 @@ interface ClubsPageState {
 
 export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
 
-    private _grid: GridComponent | null;
     private _pageSettings: PageSettingsModel;
 
     constructor(props: ClubsPageProps) {
         super(props);
 
-        this._grid = null;
         this._pageSettings = { 
             pageSize: 50
         };
@@ -53,15 +51,14 @@ export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
 
     render() {
         return (
-            <GridComponent ref={g => this._grid = g}
-                           allowPaging={true} 
+            <GridComponent allowPaging={true} 
                            pageSettings={this._pageSettings}
                            dataSource={this.state.clubs}>
                 <ColumnsDirective>
-                    <ColumnDirective field='name' headerText='Club Name' width='30%'/>
-                    <ColumnDirective field='address' headerText='Address' width='35%' />
-                    <ColumnDirective field='website' headerText='Website' width='25%' disableHtmlEncode={true} template={this.websiteColumnTemplate}/>
-                    <ColumnDirective field='distance' headerText='Distance (Miles)' width='10%' />
+                    <ColumnDirective field="name" headerText="Club Name" width="30%" />
+                    <ColumnDirective field="address" headerText="Address" width="35%" />
+                    <ColumnDirective field="website" headerText="Website" width="25%" disableHtmlEncode={true} template={this.websiteColumnTemplate}/>
+                    <ColumnDirective field="distanceInMiles" headerText="Distance (Miles)" width="10%" format="N2" />
                 </ColumnsDirective>
                 <Inject services={[Page, Filter]} />
             </GridComponent>

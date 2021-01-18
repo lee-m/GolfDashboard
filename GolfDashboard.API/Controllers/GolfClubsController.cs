@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
+using GolfDashboard.API.Models;
 using GolfDashboard.Data;
-using GolfDashboard.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +21,17 @@ namespace GolfDashboard.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<GolfClub> Get(double lat, double lng)
+        public IEnumerable<GolfClubResponseModel> Get(double? lat, double? lng)
         {
-            return _dbContext.GolfClubs;
+            return _dbContext.GolfClubs.Select(x => new GolfClubResponseModel
+            {
+                Name = x.Name,
+                Address = string.Join(", ", x.Address.Split("\n", StringSplitOptions.None).ToArray()),
+                Website = x.Website,
+                DistanceInMiles = lat == null || lng == null
+                    ? 0
+                    : DistanceUtils.DistanceBetweenPositionsInMiles(x.Latitude, x.Longitude, lat.Value, lng.Value)
+            }).ToList().OrderBy(x => x.DistanceInMiles);
         }
     }
 }
