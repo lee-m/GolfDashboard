@@ -16,6 +16,7 @@ export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
 
     private _pageSettings: PageSettingsModel;
     private _filterSettings: FilterSettingsModel;
+    private _gridComponent: GridComponent | null;
 
     constructor(props: ClubsPageProps) {
         super(props);
@@ -27,21 +28,38 @@ export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
             type: 'Menu'
         };
         this.state = {
-            clubs: []
+            clubs: [],
         };
+        this._gridComponent = null;
     }
 
     componentDidMount() {
+        navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => this.fetchClubsData(position),
+                                                 () => this.fetchClubsData(null));
+    }
 
-        navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
-            fetch("https://localhost:44392/golfclubs?lat=" + position.coords.latitude + "&lng=" + position.coords.longitude)
-                .then(result => result.json())
-                .then(result => {
-                    this.setState({
-                        clubs: result
-                    });
+    fetchClubsData(position: GeolocationPosition | null) {
+        
+        var url = "https://localhost:44392/golfclubs";
+
+        if(position !== null) {
+            url += "?lat=" + position.coords.latitude + "&lng=" + position.coords.longitude;
+        }
+
+        this._gridComponent?.showSpinner();
+
+        fetch(url)
+            .then(result => result.json())
+            .then(result => {
+                this._gridComponent?.hideSpinner();
+                this.setState({
+                    clubs: result
                 });
-        });
+            })
+            .catch(err => {
+                this._gridComponent?.hideSpinner();
+                alert("Unable to fetch club data.");
+            });
     }
 
     websiteColumnTemplate(args: any) {
@@ -59,7 +77,8 @@ export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
                            allowFiltering={true}
                            pageSettings={this._pageSettings}
                            filterSettings={this._filterSettings}
-                           dataSource={this.state.clubs}>
+                           dataSource={this.state.clubs}
+                           ref={grid => this._gridComponent = grid}>
                 <ColumnsDirective>
                     <ColumnDirective field="name" headerText="Club Name" width="25%" />
                     <ColumnDirective field="address" headerText="Address" width="35%" allowFiltering={false}/>
