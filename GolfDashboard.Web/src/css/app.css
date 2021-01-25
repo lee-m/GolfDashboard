@@ -97,3 +97,7 @@ a:hover {
 .text-white-tinted {
     color: var(--color-white-tinted);
 }
+
+.font-size-small {
+    font-size: small;
+}

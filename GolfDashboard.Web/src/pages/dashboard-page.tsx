@@ -13,7 +13,7 @@ export class DashboardPage extends React.Component {
                     <div className="d-flex">
                         <span>Recent Rounds</span>
                         <div className="ml-auto">
-                            <button className="btn btn-primary btn-sm align-self-end">Add Round</button>
+                            <button className="btn btn-primary btn-sm align-self-end font-size-small">Add Round</button>
                         </div>
                     </div>
                 </div>
@@ -22,7 +22,7 @@ export class DashboardPage extends React.Component {
                     <div className="d-flex">
                         <span>Notes</span>
                         <div className="ml-auto">
-                            <button className="btn btn-primary btn-sm align-self-end">Add Note</button>
+                            <button className="btn btn-primary btn-sm align-self-end font-size-small">Add Note</button>
                         </div>
                     </div>
                 </div>
