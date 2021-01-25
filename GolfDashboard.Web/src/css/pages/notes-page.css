@@ -1,3 +1,15 @@
 .notes-main-content {
     display: flex;
+    flex-direction: column;
+}
+
+
+.e-richtexteditor {
+    display: flex !important;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.e-rte-content {
+    flex-grow: 1;
 }
