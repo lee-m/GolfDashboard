@@ -2,3 +2,8 @@
     background: var(--color-primary-800);
     padding-top: 4.125em;
 }
+
+.sidebar-selected-item {
+    background-color: var(--color-primary-900);
+    transition: background-color 0.5s ease;
+}

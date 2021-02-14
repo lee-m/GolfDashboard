@@ -80,7 +80,6 @@ a:hover {
 
 .main-content-body {
     background-color: var(--color-grey-100);
-    border-top-left-radius: 0.25em;
 }
 
 .text-white-tinted {

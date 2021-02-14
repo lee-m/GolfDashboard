@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@syncfusion/ej2-react-grids": "^17.2.53-1205479",
+    "@syncfusion/ej2-react-notifications": "^18.4.39",
     "@syncfusion/ej2-react-richtexteditor": "^18.4.33",
     "@testing-library/jest-dom": "^5.11.8",
     "@testing-library/react": "^11.2.3",
