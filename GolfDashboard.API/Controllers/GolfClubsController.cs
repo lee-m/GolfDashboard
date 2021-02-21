@@ -29,7 +29,7 @@ namespace GolfDashboard.API.Controllers
                 Address = string.Join(", ", x.Address.Split("\n", StringSplitOptions.None).ToArray()),
                 Website = x.Website,
                 DistanceInMiles = lat == null || lng == null
-                    ? 0
+                    ? null
                     : DistanceUtils.DistanceBetweenPositionsInMiles(x.Latitude, x.Longitude, lat.Value, lng.Value)
             }).ToList().OrderBy(x => x.DistanceInMiles);
         }
