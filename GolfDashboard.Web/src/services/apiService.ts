@@ -1,4 +1,4 @@
-import { GolfClub } from '../golfClub';
+import { GolfClub } from '../models/golfClub';
 
 export class APIService {
 
@@ -8,7 +8,7 @@ export class APIService {
         this._url = process.env.REACT_APP_API_URL ?? "";
     }
 
-    getGolfClubs(position: GeolocationPosition | null): Promise<Array<GolfClub>> {
+    async getGolfClubs(position: GeolocationPosition | null): Promise<Array<GolfClub>> {
 
         let baseURL = this._url + "/golfclubs"
 
@@ -16,6 +16,12 @@ export class APIService {
             baseURL += "?lat=" + position.coords.latitude + "&lng=" + position.coords.longitude;
         }
 
-        return fetch(baseURL).then(result => result.json());
+        let response = await fetch(baseURL);
+
+        if(!response.ok) {
+            throw new Error();
+        }
+
+        return await response.json();
     }
 }

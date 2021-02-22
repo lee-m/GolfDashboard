@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ToastComponent, ToastPositionModel } from '@syncfusion/ej2-react-notifications';
 import { ColumnDirective, ColumnsDirective, GridComponent, Inject, Page, PageSettingsModel, Filter, FilterSettingsModel } from '@syncfusion/ej2-react-grids';
 import { getValue } from '@syncfusion/ej2-base';
-import { GolfClub } from '../golfClub';
+import { GolfClub } from '../models/golfClub';
 import { APIService } from '../services/apiService';
 
 import '../css/pages/clubs-page.css';
@@ -46,19 +46,18 @@ export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
             () => this.fetchClubsData(null));
     }
 
-    fetchClubsData(position: GeolocationPosition | null) {
+    async fetchClubsData(position: GeolocationPosition | null) {
 
-        this._apiService.getGolfClubs(position)
-            .then(clubData => {
-
-                this.setState({
-                    clubs: clubData
-                });
-
-            })
-            .catch(err => {
-                this._toastComponent!.show({ content: 'Unable to retrieve the list of golf clubs. Please check your network connection and try again.', cssClass: 'e-toast-danger' });
+        try 
+        {
+            this.setState({
+                clubs: await this._apiService.getGolfClubs(position)
             });
+        }
+        catch(e)
+        {
+            this._toastComponent!.show({ content: 'Unable to retrieve the list of golf clubs. Please check your network connection and try again.', cssClass: 'e-toast-danger' });
+        }
     }
 
     websiteColumnTemplate(args: any) {
