@@ -16,6 +16,7 @@ namespace GolfDashboard.API.Controllers
             _dbContext = dbContext;
         }
 
+        [HttpPost]
         public void Add(Note newNote)
         {
             _dbContext.Notes.Add(newNote);

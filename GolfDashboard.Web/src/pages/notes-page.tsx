@@ -1,5 +1,7 @@
 import React, { ChangeEvent } from 'react';
+import { Route } from 'react-router-dom';
 import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
+import { APIService } from '../services/apiService';
 
 import '../css/pages/notes-page.css';
 
@@ -12,14 +14,18 @@ interface NotesState {
 export class NotesPage extends React.Component<NotesProps, NotesState> {
 
     private _rteEditor: RichTextEditorComponent | null;
+    private _apiService: APIService;
 
     constructor(props: NotesProps) {
+
         super(props);
     
         this._rteEditor = null;
+        this._apiService = new APIService();
         this.state = {
             title: "",
         };
+        
     }
 
     render() {
@@ -34,9 +40,11 @@ export class NotesPage extends React.Component<NotesProps, NotesState> {
                 <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor}>
                     <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
                 </RichTextEditorComponent>
-                <button className="btn btn-primary btn-sm align-self-end font-size-small mt-2" 
-                        onClick={(e) => this.saveNewNote()}
-                        disabled={!this.canSave()}>Save</button>
+                <Route render={({ history}) => (
+                    <button className="btn btn-primary btn-sm align-self-end font-size-small mt-2" 
+                            onClick={(e) => this.saveNewNote(history)}
+                            disabled={!this.canSave()}>Save</button>
+                )} />
             </div>
         );
     }
@@ -47,14 +55,17 @@ export class NotesPage extends React.Component<NotesProps, NotesState> {
         });
     }
 
-    saveNewNote(): void {
+    saveNewNote(history: any) {
 
         var noteContents = {
             title: this.state.title,
             content: this._rteEditor!.getHtml()
         };
 
-        alert(JSON.stringify(noteContents));
+        this._apiService.saveNewNote(noteContents)
+            .then(success => {
+                history.push("/");
+            });
     }
 
     canSave(): boolean {

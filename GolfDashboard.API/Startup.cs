@@ -29,7 +29,9 @@ namespace GolfDashboard.API
             {
                 options.AddPolicy(CORSPolicyName, configure =>
                 {
-                    configure.WithOrigins("https://localhost:3000", "http://localhost:3000");
+                    configure.WithOrigins("https://localhost:3000", "http://localhost:3000")
+                             .WithMethods("GET", "POST")
+                             .WithHeaders("Content-Type");
                 });
             });
         }

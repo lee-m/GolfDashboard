@@ -1,4 +1,5 @@
 import { GolfClub } from '../models/golfClub';
+import { Note } from '../models/note'
 
 export class APIService {
 
@@ -23,5 +24,19 @@ export class APIService {
         }
 
         return await response.json();
+    }
+
+    async saveNewNote(note: Note): Promise<boolean> {
+
+        let response = await fetch(this._url + "/note", {
+            method: "POST",
+            body: JSON.stringify(note),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        return response.ok;
+
     }
 }
