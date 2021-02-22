@@ -34,7 +34,9 @@ export class NotesPage extends React.Component<NotesProps, NotesState> {
                 <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor}>
                     <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
                 </RichTextEditorComponent>
-                <button className="btn btn-primary btn-sm align-self-end font-size-small mt-2" onClick={(e) => this.saveNewNote()}>Save</button>
+                <button className="btn btn-primary btn-sm align-self-end font-size-small mt-2" 
+                        onClick={(e) => this.saveNewNote()}
+                        disabled={!this.canSave()}>Save</button>
             </div>
         );
     }
@@ -53,5 +55,9 @@ export class NotesPage extends React.Component<NotesProps, NotesState> {
         };
 
         alert(JSON.stringify(noteContents));
+    }
+
+    canSave(): boolean {
+        return this.state.title.trim().length > 0;
     }
 }
