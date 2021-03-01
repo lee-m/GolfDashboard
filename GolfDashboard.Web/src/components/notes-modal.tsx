@@ -6,7 +6,7 @@ import { APIService } from '../services/apiService';
 import '../css/components/notes-modal.css';
 
 interface OnSaveCallback { 
-    (): void 
+    (success: boolean): void 
 }
 
 interface NotesProps { 
@@ -87,7 +87,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         });
     }
 
-    saveNewNote() {
+    async saveNewNote() {
 
         this._notesDialog?.hide();
 
@@ -96,7 +96,15 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
             content: this._rteEditor!.getHtml()
         };
 
-                this.props.onSaveCallback();
+        try 
+        {
+            let result = await this._apiService.saveNewNote(noteContents);
+            this.props.onSaveCallback(result);
+        }
+        catch
+        {
+            this.props.onSaveCallback(false);
+        }
     }
 
     canSave(): boolean {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ToastComponent  } from '@syncfusion/ej2-react-notifications';
 import { NotesModal } from '../components/notes-modal'
 
 import '../css/pages/dashboard-page.css';
@@ -6,13 +7,16 @@ import '../css/pages/dashboard-page.css';
 export class DashboardPage extends React.Component {
 
     private _notesDialog: NotesModal|null;
+    private _toastInstance: ToastComponent|null;
 
     constructor(props: any) {
 
         super(props);
 
         this._notesDialog = null;
+        this._toastInstance = null;
         this.addNoteClick = this.addNoteClick.bind(this);
+        this.onNoteSaved = this.onNoteSaved.bind(this);
         
     }
 
@@ -20,7 +24,23 @@ export class DashboardPage extends React.Component {
         this._notesDialog?.show();
     }
 
-    onNoteSaved() {
+    onNoteSaved(success: boolean) {
+
+        if(success) {
+
+            this._toastInstance?.show({
+                content: "Note saved",
+                cssClass: "e-toast-success"
+            });
+
+        } else {
+
+            this._toastInstance?.show({
+                content: "Error saving note",
+                cssClass: "e-toast-danger"
+            });
+
+        }
     }
 
     render() {
@@ -49,6 +69,7 @@ export class DashboardPage extends React.Component {
                     </div>
                 </div>
                 <NotesModal target="#root" onSaveCallback={this.onNoteSaved} ref={dialog => this._notesDialog = dialog} />
+                <ToastComponent ref={toast => this._toastInstance = toast!} position={{X: "Right", Y: "Bottom"}} />
             </div>
         );
     }
