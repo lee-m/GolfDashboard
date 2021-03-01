@@ -49,9 +49,8 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         };
         this._apiService = new APIService();
         this.state = {
-            title: "",
+            title: ""
         };
-        
     }
 
     show() {
@@ -72,11 +71,12 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                              position={{ X: 'center', Y: 'center' }}
                              buttons={this._notesDialogButtons} 
                              ref={dialog => this._notesDialog = dialog}>
-                    <div className="notes-main-content h-100">
-                        <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor}>
-                            <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
-                        </RichTextEditorComponent>
-                    </div>
+                <div className="notes-main-content h-100">
+                    <input id="noteTitle" type="text" placeholder="Title" className="mb-2" value={this.state.title} onChange={(e) => this.onTitleChanged(e)} />
+                    <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor}>
+                        <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
+                    </RichTextEditorComponent>
+                </div>
             </DialogComponent>
         );
     }
@@ -89,8 +89,6 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
     async saveNewNote() {
 
-        this._notesDialog?.hide();
-
         var noteContents = {
             title: this.state.title,
             content: this._rteEditor!.getHtml()
@@ -98,8 +96,15 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
         try 
         {
-            let result = await this._apiService.saveNewNote(noteContents);
-            this.props.onSaveCallback(result);
+            if(await this._apiService.saveNewNote(noteContents)) {
+
+                this._rteEditor!.value = "";
+                this.setState({ title: "" });
+
+                this.props.onSaveCallback(true);
+                this._notesDialog?.hide();
+
+            }
         }
         catch
         {
