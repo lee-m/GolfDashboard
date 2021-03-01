@@ -5,6 +5,7 @@
   "dependencies": {
     "@syncfusion/ej2-react-grids": "^18.4.43",
     "@syncfusion/ej2-react-notifications": "^18.4.39",
+    "@syncfusion/ej2-react-popups": "^18.4.43",
     "@syncfusion/ej2-react-richtexteditor": "^18.4.42",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
