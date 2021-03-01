@@ -72,9 +72,11 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                              position={{ X: 'center', Y: 'center' }}
                              buttons={this._notesDialogButtons} 
                              ref={dialog => this._notesDialog = dialog}>
-                    <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor}>
-                        <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
-                    </RichTextEditorComponent>
+                    <div className="notes-main-content h-100">
+                        <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor}>
+                            <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
+                        </RichTextEditorComponent>
+                    </div>
             </DialogComponent>
         );
     }
