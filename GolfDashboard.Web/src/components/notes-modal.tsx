@@ -21,7 +21,7 @@ interface NotesState {
 
 export class NotesModal extends React.Component<NotesProps, NotesState> {
 
-    private _notesDialog: DialogComponent | null;
+    private _notesDialog: DialogComponent | null = null;
     private _notesDialogButtons: Array<ButtonPropsModel>;
     private _animationSettings: AnimationSettingsModel;
     private _rteEditor: RichTextEditorComponent | null;
@@ -31,23 +31,25 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
         super(props);
     
-        this._notesDialog = null;
         this._rteEditor = null;
+        this._apiService = new APIService();
         
         this._notesDialogButtons = [{
             buttonModel: {
                 content: "Save",
                 isPrimary: true,
-                cssClass: "e-flat"
+                cssClass: "e-flat",
+                disabled: true
 
             },
             click: () => this.saveNewNote()
         }];
+
         this._animationSettings = {
             effect: "FadeZoom",
             delay: 0
         };
-        this._apiService = new APIService();
+
         this.state = {
             title: ""
         };
@@ -73,18 +75,24 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                              ref={dialog => this._notesDialog = dialog}>
                 <div className="notes-main-content h-100">
                     <input id="noteTitle" type="text" placeholder="Title" className="mb-2" value={this.state.title} onChange={(e) => this.onTitleChanged(e)} />
-                    <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor}>
+                    <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor} change={(e) => this.onContentChanged()}>
                         <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
                     </RichTextEditorComponent>
                 </div>
             </DialogComponent>
         );
     }
+    onContentChanged(): void {
+        this.enableDisableSaveButton();
+    }
 
     onTitleChanged(event: ChangeEvent<HTMLInputElement>): void {
+
         this.setState({
             title: event.target.value,
         });
+
+        this.enableDisableSaveButton();
     }
 
     async saveNewNote() {
@@ -112,7 +120,12 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         }
     }
 
-    canSave(): boolean {
-        return this.state.title.trim().length > 0;
+    enableDisableSaveButton(): void {
+
+        let canSave = this.state.title.trim().length > 0 && this._rteEditor!.value.length > 0;
+
+        this._notesDialogButtons[0].buttonModel!.disabled = !canSave;
+        this._notesDialog!.buttons = this._notesDialogButtons;
+        this._notesDialog!.dataBind();
     }
 }
