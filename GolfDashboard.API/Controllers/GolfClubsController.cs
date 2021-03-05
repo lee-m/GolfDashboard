@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using GolfDashboard.API.Models;
@@ -11,7 +10,7 @@ namespace GolfDashboard.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class GolfClubsController : ControllerBase
+    public class GolfClubsController : Controller
     {
         private readonly GolfDashboardDbContext _dbContext;
 
@@ -21,17 +20,19 @@ namespace GolfDashboard.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<GolfClubResponseModel> Get(double? lat, double? lng)
+        public ActionResult Get(double? lat, double? lng)
         {
-            return _dbContext.GolfClubs.Select(x => new GolfClubResponseModel
+            var result = _dbContext.GolfClubs.Select(x => new GolfClubDTO
             {
                 Name = x.Name,
                 Address = string.Join(", ", x.Address.Split("\n", StringSplitOptions.None).ToArray()),
                 Website = x.Website,
                 DistanceInMiles = lat == null || lng == null
-                    ? null
+                    ? (double?)null
                     : DistanceUtils.DistanceBetweenPositionsInMiles(x.Latitude, x.Longitude, lat.Value, lng.Value)
-            }).ToList().OrderBy(x => x.DistanceInMiles);
+            }).OrderBy(x => x.DistanceInMiles);
+
+            return Json(result);
         }
     }
 }

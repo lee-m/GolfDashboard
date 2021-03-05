@@ -1,6 +1,6 @@
 ﻿namespace GolfDashboard.API.Models
 {
-    public class GolfClubResponseModel
+    public class GolfClubDTO
     {
         public string Name { get; set; }
         public string Address { get; set; }
