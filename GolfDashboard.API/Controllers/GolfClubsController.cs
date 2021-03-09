@@ -22,17 +22,27 @@ namespace GolfDashboard.API.Controllers
         [HttpGet]
         public ActionResult Get(double? lat, double? lng)
         {
-            var result = _dbContext.GolfClubs.Select(x => new GolfClubDTO
+            if(lat == null || lng == null)
+            {
+                return Json(_dbContext.GolfClubs.Select(x => new GolfClubDTO
+                {
+                    Name = x.Name,
+                    Address = string.Join(", ", x.Address.Split("\n", StringSplitOptions.None).ToArray()),
+                    Website = x.Website,
+                }).OrderBy(x => x.Name));
+            }
+
+            //Calculate the distance from the specified location to each club
+            var clubs = _dbContext.GolfClubs.AsParallel().Select(x => new GolfClubDTO
             {
                 Name = x.Name,
-                Address = string.Join(", ", x.Address.Split("\n", StringSplitOptions.None).ToArray()),
+                Address = string.Join(", ", x.Address.Split("\n").ToArray()),
                 Website = x.Website,
-                DistanceInMiles = lat == null || lng == null
-                    ? (double?)null
-                    : DistanceUtils.DistanceBetweenPositionsInMiles(x.Latitude, x.Longitude, lat.Value, lng.Value)
-            }).OrderBy(x => x.DistanceInMiles);
+                DistanceInMiles = DistanceUtils.DistanceBetweenPositionsInMiles(x.Latitude, x.Longitude, lat.Value, lng.Value)
+            });
 
-            return Json(result);
+            //https: //localhost:5001/golfclubs?lat=52.7225537&lng=-2.4203989999999997
+            return Json(clubs.OrderBy(x => x.DistanceInMiles));
         }
     }
 }
