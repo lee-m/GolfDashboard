@@ -1,6 +1,7 @@
 @import '../css/theme.css';
 
-:root {
+:root 
+{
 
     /* Primary Colour Shades */
     --color-primary-100: #E3E8E5; 
@@ -40,53 +41,68 @@
     --color-accent-blue: #3E517A;
 }
 
-html {
+html 
+{
     height: 100%;
-    font-family: "Roboto", "Segoe UI", "GeezaPro", "DejaVu Serif", "sans-serif", "-apple-system", "BlinkMacSystemFont";
 }
 
-body {
+body,
+.e-control 
+{
+    font-family: 'Nunito', sans-serif !important;
+}
+
+body 
+{
     min-height: 100%;
     display: flex;
 }
 
-.btn-primary {
+.btn-primary 
+{
     background-color: var(--color-accent-blue);
     color: white;
 }
 
-#root {
+#root 
+{
     flex-grow: 1;
     display: flex;
 }
 
 a,
-a:hover {
+a:hover 
+{
     color: inherit;
 }
 
-.root-content {
+.root-content 
+{
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr;
     flex-grow: 1;
 }
 
-.main-content {
+.main-content 
+{
     background-color: var(--color-primary-800);
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
 }
 
-.main-content-body {
+.main-content-body 
+{
     background-color: var(--color-grey-100);
 }
 
-.text-white-tinted {
+.text-white-tinted 
+{
     color: var(--color-white-tinted);
 }
 
-.font-size-small {
+.font-size-small 
+{
     font-size: small;
 }
