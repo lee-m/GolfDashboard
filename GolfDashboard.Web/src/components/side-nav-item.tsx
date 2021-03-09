@@ -31,7 +31,7 @@ export function SideNavItem(props: SideNavItemProps) {
     return (
         <div className={rowClasses.join(" ")}>
             <div className="col-2">
-                <img src={props.logo} alt={props.logoAlt}></img>
+                <img src={props.logo} alt={props.logoAlt} className="sidebar-item-logo"></img>
             </div>
             <div className="col-10 text-white-tinted">
                 <div className="d-flex justify-content-between">

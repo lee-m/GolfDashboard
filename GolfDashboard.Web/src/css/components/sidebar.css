@@ -7,3 +7,8 @@
     background-color: var(--color-primary-900);
     transition: background-color 0.5s ease;
 }
+
+.sidebar-item-logo {
+    width: 20px;
+    height: 20px;
+}
