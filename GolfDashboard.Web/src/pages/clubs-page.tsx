@@ -93,10 +93,10 @@ export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
                     filterSettings={this._filterSettings}
                     dataSource={this.state.clubs}>
                     <ColumnsDirective>
-                        <ColumnDirective field="name" headerText="Club Name" width="25%" />
-                        <ColumnDirective field="address" headerText="Address" width="35%" allowFiltering={false} />
-                        <ColumnDirective field="website" headerText="Website" width="25%" disableHtmlEncode={true} template={this.websiteColumnTemplate} allowFiltering={false} />
-                        <ColumnDirective field="distanceInMiles" headerText="Distance (Miles)" width="15%" template={this.distanceInMilesColumnTemplate} />
+                        <ColumnDirective field="name" headerText="Club Name" width="25%" type="string" />
+                        <ColumnDirective field="address" headerText="Address" width="35%" allowFiltering={false} type="string" />
+                        <ColumnDirective field="website" headerText="Website" width="25%" disableHtmlEncode={true} template={this.websiteColumnTemplate} allowFiltering={false} type="string" />
+                        <ColumnDirective field="distanceInMiles" headerText="Distance (Miles)" width="15%" template={this.distanceInMilesColumnTemplate} type="number" />
                     </ColumnsDirective>
                     <Inject services={[Page, Filter]} />
                 </GridComponent>
