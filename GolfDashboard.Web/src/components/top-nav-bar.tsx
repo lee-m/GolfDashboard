@@ -8,10 +8,12 @@ export class TopNavBar extends React.Component {
     
     render() {
         return (
-            <div className="container-fluid p-3 d-flex">
+            <div className="container-fluid p-3 top-nav-bar">
                 <span className="top-nav-title text-white-tinted align-self-center">Golf Dashboard</span>
-                <SearchBox />
-                <LoggedInUser />
+                <div className="d-flex flex-grow-1 top-nav-bar-content justify-content-between">
+                    <SearchBox />
+                    <LoggedInUser />
+                </div>
             </div>
         );
     }

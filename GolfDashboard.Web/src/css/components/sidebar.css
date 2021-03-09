@@ -1,6 +1,6 @@
 .sidebar {
     background: var(--color-primary-800);
-    padding-top: 4.125em;
+    width: var(--sidebar-width);
 }
 
 .sidebar-selected-item {
@@ -11,4 +11,5 @@
 .sidebar-item-logo {
     width: 20px;
     height: 20px;
+    opacity: 0.8;
 }

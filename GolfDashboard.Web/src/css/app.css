@@ -2,7 +2,6 @@
 
 :root 
 {
-
     /* Primary Colour Shades */
     --color-primary-100: #E3E8E5; 
     --color-primary-200: #C6D2CB;
@@ -39,6 +38,9 @@
     --color-accent-green: #6CDA98;
     --color-accent-red: #DA6C6C;
     --color-accent-blue: #3E517A;
+
+    /* Sidebar */
+    --sidebar-width: 12.5em;
 }
 
 html 
@@ -78,9 +80,8 @@ a:hover
 
 .root-content 
 {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: 1fr;
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
 }
 
@@ -88,8 +89,9 @@ a:hover
 {
     background-color: var(--color-primary-800);
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr;
+    height: 100%;
 }
 
 .main-content-body 
