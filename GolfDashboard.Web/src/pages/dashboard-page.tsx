@@ -54,7 +54,7 @@ export class DashboardPage extends React.Component {
                         <div className="d-flex">
                             <span>Recent Rounds</span>
                             <div className="ml-auto">
-                                <button className="e-btn e-lib e-flat e-primary e-small align-self-end font-size-small">Add Round</button>
+                                <button className="e-btn e-lib e-flat e-primary e-small align-self-end font-size-small font-weight-bold">Add Round</button>
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@ export class DashboardPage extends React.Component {
                         <div className="d-flex">
                             <span>Notes</span>
                             <div className="ml-auto">
-                                <button className="e-btn e-lib e-flat e-primary e-small align-self-end font-size-small" onClick={this.addNoteClick}>Add Note</button>
+                                <button className="e-btn e-lib e-flat e-primary e-small align-self-end font-size-small font-weight-bold" onClick={this.addNoteClick}>Add Note</button>
                             </div>
                         </div>
                     </div>

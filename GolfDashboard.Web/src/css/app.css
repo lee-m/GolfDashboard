@@ -43,50 +43,44 @@
     --sidebar-width: 12.5em;
 }
 
-html 
-{
+html {
     height: 100%;
 }
 
 body,
-.e-control 
-{
+.e-control,
+.e-btn,
+.e-css.e-btn {
     font-family: 'Nunito', sans-serif !important;
 }
 
-body 
-{
+body {
     min-height: 100%;
     display: flex;
 }
 
-.btn-primary 
-{
+.btn-primary {
     background-color: var(--color-accent-blue);
     color: white;
 }
 
-#root 
-{
+#root {
     flex-grow: 1;
     display: flex;
 }
 
 a,
-a:hover 
-{
+a:hover {
     color: inherit;
 }
 
-.root-content 
-{
+.root-content {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
 }
 
-.main-content 
-{
+.main-content {
     background-color: var(--color-primary-800);
     display: grid;
     grid-template-columns: auto 1fr;
@@ -94,17 +88,14 @@ a:hover
     height: 100%;
 }
 
-.main-content-body 
-{
+.main-content-body {
     background-color: var(--color-grey-100);
 }
 
-.text-white-tinted 
-{
+.text-white-tinted {
     color: var(--color-white-tinted);
 }
 
-.font-size-small 
-{
+.font-size-small {
     font-size: small;
 }
