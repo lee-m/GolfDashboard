@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@syncfusion/ej2-react-dropdowns": "^18.4.47",
     "@syncfusion/ej2-react-grids": "^18.4.43",
     "@syncfusion/ej2-react-notifications": "^18.4.39",
     "@syncfusion/ej2-react-popups": "^18.4.43",

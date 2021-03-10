@@ -3,6 +3,11 @@
     flex-direction: column;
 }
 
+.notes-save-button {
+    background-color: var(--color-accent-blue) !important;
+    color: white !important;
+}
+
 .e-richtexteditor {
     display: flex !important;
     flex-direction: column;
