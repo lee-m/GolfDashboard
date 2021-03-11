@@ -1,5 +1,5 @@
-﻿using GolfDashboard.Data;
-using GolfDashboard.Models;
+﻿using GolfDashboard.API.DTO;
+using GolfDashboard.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,18 +9,17 @@ namespace GolfDashboard.API.Controllers
     [Route("[controller]")]
     public class NoteController : Controller
     {
-        private readonly GolfDashboardDbContext _dbContext;
+        private readonly INotesRepository _notesRepository;
 
-        public NoteController(GolfDashboardDbContext dbContext)
+        public NoteController(INotesRepository notesRepository)
         {
-            _dbContext = dbContext;
+            _notesRepository = notesRepository;
         }
 
         [HttpPost]
-        public void Add(Note newNote)
+        public void Add(AddNoteDTO newNote)
         {
-            _dbContext.Notes.Add(newNote);
-            _dbContext.SaveChanges();
+            _notesRepository.Add(newNote.ToNoteModel());
         }
     }
 }

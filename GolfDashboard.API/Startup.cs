@@ -1,4 +1,6 @@
 using GolfDashboard.Data;
+using GolfDashboard.Data.Repositories;
+using GolfDashboard.Interfaces;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +36,8 @@ namespace GolfDashboard.API
                              .WithHeaders("Content-Type");
                 });
             });
+
+            services.AddScoped<INotesRepository, NotesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

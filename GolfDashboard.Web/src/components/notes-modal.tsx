@@ -1,11 +1,12 @@
 import React, { ChangeEvent } from 'react';
 import { AnimationSettingsModel, ButtonPropsModel, DialogComponent } from '@syncfusion/ej2-react-popups';
 import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
-import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
+import { MultiSelectComponent, SelectEventArgs } from '@syncfusion/ej2-react-dropdowns';
 
 import { APIService } from '../services/apiService';
 
 import '../css/components/notes-modal.css';
+import { Tag } from '../models/tag';
 
 interface OnSaveCallback { 
     (success: boolean): void 
@@ -64,14 +65,19 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
     async componentDidMount() {
 
-        let tags = await this._apiService.getTags();
+        try
+        {
+            let tags = await this._apiService.getTags();
 
-        tags.forEach(t => {
-            this._tagsDataSource.push({
-                text: t.text,
-                id: t.id
+            tags.forEach(t => {
+                this._tagsDataSource.push({
+                    text: t.text,
+                    id: t.id
+                });
             });
-        });
+        }
+        catch
+        { }
     }
 
     show() {
@@ -99,6 +105,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                         <MultiSelectComponent dataSource={this._tagsDataSource} 
                                               fields={this._tagFields} 
                                               allowCustomValue={true}
+                                              mode="Box"
                                               placeholder="No Tags Selected" />
                     </div>
                     <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor}>
@@ -118,9 +125,13 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
     async saveNewNote() {
 
+        var tags: Tag[] = [];
+
+
         var noteContents = {
             title: this.state.title,
-            content: this._rteEditor!.getHtml()
+            content: this._rteEditor!.getHtml(),
+            tags: tags
         };
 
         try 

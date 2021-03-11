@@ -41,7 +41,6 @@ namespace GolfDashboard.API.Controllers
                 DistanceInMiles = DistanceUtils.DistanceBetweenPositionsInMiles(x.Latitude, x.Longitude, lat.Value, lng.Value)
             });
 
-            //https: //localhost:5001/golfclubs?lat=52.7225537&lng=-2.4203989999999997
             return Json(clubs.OrderBy(x => x.DistanceInMiles));
         }
     }

@@ -1,6 +1,6 @@
 ﻿// ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
 
-namespace GolfDashboard.Models
+﻿namespace GolfDashboard.Models
 {
     public class GolfClub
     {
