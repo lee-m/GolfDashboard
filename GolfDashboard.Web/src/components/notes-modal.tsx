@@ -6,7 +6,7 @@ import { MultiSelectComponent, SelectEventArgs } from '@syncfusion/ej2-react-dro
 import { APIService } from '../services/apiService';
 
 import '../css/components/notes-modal.css';
-import { Tag } from '../models/tag';
+import { Tag as NoteTag } from '../models/tag';
 
 interface OnSaveCallback { 
     (success: boolean): void 
@@ -31,12 +31,14 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
     private _tagsDataSource: { [key: string]: Object }[] = [];
     private _tagFields: object;
+    private _tagEditor: MultiSelectComponent | null;
 
     constructor(props: NotesProps) {
 
         super(props);
     
         this._rteEditor = null;
+        this._tagEditor = null;
         this._apiService = new APIService();
         this._tagsDataSource = [];
         this._tagFields = {
@@ -102,7 +104,8 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                     <input id="noteTitle" type="text" placeholder="Title" className="mb-2" value={this.state.title} onChange={(e) => this.onTitleChanged(e)} />
                     <div className="d-flex mt-1 mb-2 w-50">
                         <span className="align-self-center mr-2">Tags:</span>
-                        <MultiSelectComponent dataSource={this._tagsDataSource} 
+                        <MultiSelectComponent ref={e => this._tagEditor = e}
+                                              dataSource={this._tagsDataSource} 
                                               fields={this._tagFields} 
                                               allowCustomValue={true}
                                               mode="Box"
@@ -125,8 +128,18 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
     async saveNewNote() {
 
-        var tags: Tag[] = [];
+        var tags: NoteTag[] = [];
 
+        if(this._tagEditor?.value != null) {
+
+            this._tagEditor.value.forEach((tagID: any) => {
+
+                var tag = this._tagEditor?.getDataByValue(tagID) as { id: number, text: string};
+                tags.push(tag);
+
+            });
+
+        }
 
         var noteContents = {
             title: this.state.title,
@@ -139,6 +152,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
             if(await this._apiService.saveNewNote(noteContents)) {
 
                 this._rteEditor!.value = "";
+                this._tagEditor!.value = [];
                 this.setState({ title: "" });
 
                 this.props.onSaveCallback(true);
