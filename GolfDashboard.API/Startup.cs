@@ -27,6 +27,8 @@ namespace GolfDashboard.API
         {
             services.AddControllers();
             services.AddDbContext<GolfDashboardDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+            services.AddAutoMapper(GetType().Assembly);
+
             services.AddCors((options) =>
             {
                 options.AddPolicy(CORSPolicyName, configure =>

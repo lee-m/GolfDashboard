@@ -5,7 +5,7 @@ using GolfDashboard.Models;
 
 namespace GolfDashboard.API.DTO
 {
-    public class AddNoteDTO
+    public class NoteDTO
     {
         public Note ToNoteModel()
         {

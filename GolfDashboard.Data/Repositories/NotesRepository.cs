@@ -4,6 +4,8 @@ using System.Linq;
 using GolfDashboard.Interfaces;
 using GolfDashboard.Models;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace GolfDashboard.Data.Repositories
 {
     public class NotesRepository : INotesRepository
@@ -35,5 +37,9 @@ namespace GolfDashboard.Data.Repositories
             _context.Notes.Add(new Note(0, note.Title, note.Content, tags));
             _context.SaveChanges();
         }
+
+        public IEnumerable<Note> Get()
+            => _context.Notes.Include(n => n.Tags);
+
     }
 }
