@@ -1,12 +1,10 @@
 import React, { ChangeEvent } from 'react';
 import { AnimationSettingsModel, ButtonPropsModel, DialogComponent } from '@syncfusion/ej2-react-popups';
 import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
-import { MultiSelectComponent, SelectEventArgs } from '@syncfusion/ej2-react-dropdowns';
-
+import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 import { APIService } from '../services/apiService';
 
 import '../css/components/notes-modal.css';
-import { Tag as NoteTag } from '../models/tag';
 
 interface OnSaveCallback { 
     (success: boolean): void 
@@ -19,6 +17,8 @@ interface NotesProps {
 
 interface NotesState {
     title: string;
+    titleErrorCSSClass: string;
+    contentErrorCSSClass: string;
 }
 
 export class NotesModal extends React.Component<NotesProps, NotesState> {
@@ -48,12 +48,19 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         
         this._notesDialogButtons = [{
             buttonModel: {
+                content: "Cancel",
+                isPrimary: false,
+                cssClass: "e-primary font-weight-bold"
+            },
+            click: () => this._notesDialog?.hide()
+        }, {
+            buttonModel: {
                 content: "Save",
                 isPrimary: false,
                 cssClass: "notes-save-button"
             },
             click: () => this.saveNewNote()
-        }];
+        }]
 
         this._animationSettings = {
             effect: "FadeZoom",
@@ -61,7 +68,9 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         };
 
         this.state = {
-            title: ""
+            title: "",
+            titleErrorCSSClass: "",
+            contentErrorCSSClass: ""
         };
    }
 
@@ -83,6 +92,11 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
     }
 
     show() {
+
+        this._rteEditor!.value = "";
+        this._tagEditor!.value = [];
+        this.setState({ title: "" });
+
         this._notesDialog?.show();
     }
 
@@ -101,7 +115,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                              buttons={this._notesDialogButtons} 
                              ref={dialog => this._notesDialog = dialog}>
                 <div className="notes-main-content h-100">
-                    <input id="noteTitle" type="text" placeholder="Title" className="mb-2" value={this.state.title} onChange={(e) => this.onTitleChanged(e)} />
+                    <input id="noteTitle" type="text" placeholder="Title" className={"mb-2 e-input " + this.state.titleErrorCSSClass} value={this.state.title} onChange={(e) => this.onTitleChanged(e)} />
                     <div className="d-flex mt-1 mb-2 w-50">
                         <span className="align-self-center mr-2">Tags:</span>
                         <MultiSelectComponent ref={e => this._tagEditor = e}
@@ -111,9 +125,11 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                                               mode="Box"
                                               placeholder="No Tags Selected" />
                     </div>
-                    <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor}>
-                        <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
-                    </RichTextEditorComponent>
+                    <div className={"d-flex flex-grow-1 " + this.state.contentErrorCSSClass}>
+                        <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor} >
+                            <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
+                        </RichTextEditorComponent>
+                    </div>
                 </div>
             </DialogComponent>
         );
@@ -128,33 +144,20 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
     async saveNewNote() {
 
-        var tags: NoteTag[] = [];
-
-        if(this._tagEditor?.value != null) {
-
-            this._tagEditor.value.forEach((tagID: any) => {
-
-                var tag = this._tagEditor?.getDataByValue(tagID) as { id: number, text: string};
-                tags.push(tag);
-
-            });
-
+        //Check something has been entered before allowing the note to be saved
+        if(!this.validate()) {
+            return;
         }
 
         var noteContents = {
             title: this.state.title,
             content: this._rteEditor!.getHtml(),
-            tags: tags
+            tags: this.getSelectedTags()
         };
 
         try 
         {
             if(await this._apiService.saveNewNote(noteContents)) {
-
-                this._rteEditor!.value = "";
-                this._tagEditor!.value = [];
-                this.setState({ title: "" });
-
                 this.props.onSaveCallback(true);
                 this._notesDialog?.hide();
             }
@@ -165,14 +168,43 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         }
     }
 
-    /*enableDisableSaveButton(): void {
+    validate(): boolean {
 
-        let canSave = this.state.title != null 
-                      && this.state.title.trim().length > 0 
-                      && this._rteEditor!.value.length > 0;
+        var titleMissing = !this.state.title;
+        var contentMissing = (this._rteEditor!.value?.length ?? 0) === 0;
 
-        this._notesDialogButtons[0].buttonModel!.disabled = !canSave;
-        this._notesDialog!.buttons = this._notesDialogButtons;
-        this._notesDialog!.dataBind();
-    }*/
+        if(titleMissing || contentMissing) {
+
+            this.setState({
+                titleErrorCSSClass: titleMissing ? "e-error" : "",
+                contentErrorCSSClass: contentMissing ? "notes-error-border" : ""
+            });
+
+            return false;
+        }
+
+        return true;
+    }
+
+    getSelectedTags(): string[] {
+
+        var tags: string[] = [];
+
+        if(this._tagEditor?.value != null) {
+
+            this._tagEditor.value.forEach((tagID: any) => {
+
+                if(!tagID) {
+                    return;
+                }
+
+                var tag = this._tagEditor?.getDataByValue(tagID) as { id: number, text: string};
+                tags.push(tag.text);
+
+            });
+
+        }
+
+        return tags;
+    }
 }

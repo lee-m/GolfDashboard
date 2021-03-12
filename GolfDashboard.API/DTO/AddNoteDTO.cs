@@ -9,13 +9,13 @@ namespace GolfDashboard.API.DTO
     {
         public Note ToNoteModel()
         {
-            var tagModels = Tags?.Select(t => new Tag(t.ID, t.Text, null));
+            var tagModels = Tags?.Select(t => new Tag(0, t, null));
             return new Note(ID, Title, Content, tagModels);
         }
 
         public int ID { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public List<TagDTO> Tags { get; set; }
+        public List<string> Tags { get; set; }
     }
 }

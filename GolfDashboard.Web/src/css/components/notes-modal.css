@@ -8,6 +8,10 @@
     color: white !important;
 }
 
+.notes-error-border {
+    border: 1px solid #f44336;
+}
+
 .e-richtexteditor {
     display: flex !important;
     flex-direction: column;
