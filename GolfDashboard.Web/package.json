@@ -18,7 +18,7 @@
     "@types/react-router-dom": "5.1.7",
     "bootstrap": "^4.6.0",
     "bootstrap-icons": "^1.4.0",
-    "jquery": "^1.12.4",
+    "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
