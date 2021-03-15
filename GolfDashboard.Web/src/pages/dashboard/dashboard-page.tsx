@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { ToastComponent  } from '@syncfusion/ej2-react-notifications';
-import { NotesModal } from '../components/notes-modal'
+import { NotesModal } from '../notes';
 
-import '../css/pages/dashboard-page.css';
+import './dashboard-page.css';
 
 export class DashboardPage extends React.Component {
 

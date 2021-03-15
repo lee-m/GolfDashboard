@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { SideNavItem } from '../components/side-nav-item';
+import { SideNavItem } from './side-nav-item';
 
-import "../css/components/sidebar.css";
+import "./sidebar.css";
 
 import HomeLogo from '../images/home.svg';
 import GolfCourseLogo from '../images/golf_course.svg';

@@ -2,10 +2,10 @@ import * as React from 'react';
 import { ToastComponent, ToastPositionModel } from '@syncfusion/ej2-react-notifications';
 import { ColumnDirective, ColumnsDirective, GridComponent, Inject, Page, PageSettingsModel, Filter, FilterSettingsModel } from '@syncfusion/ej2-react-grids';
 import { getValue } from '@syncfusion/ej2-base';
-import { GolfClub } from '../models/golfClub';
-import { APIService } from '../services/apiService';
+import { GolfClub } from '../../models';
+import { APIService } from '../../services';
 
-import '../css/pages/clubs-page.css';
+import './clubs-page.css';
 
 interface ClubsPageProps {
 };

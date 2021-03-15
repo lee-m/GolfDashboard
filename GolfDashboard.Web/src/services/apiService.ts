@@ -1,6 +1,4 @@
-import { GolfClub } from '../models/golfClub';
-import { Note } from '../models/note';
-import { Tag } from '../models/tag';
+import { GolfClub, Note, Tag } from '../models';
 
 export class APIService {
 

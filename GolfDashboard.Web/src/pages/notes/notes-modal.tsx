@@ -2,9 +2,9 @@ import React, { ChangeEvent } from 'react';
 import { AnimationSettingsModel, ButtonPropsModel, DialogComponent } from '@syncfusion/ej2-react-popups';
 import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
-import { APIService } from '../services/apiService';
+import { APIService } from '../../services';
 
-import '../css/components/notes-modal.css';
+import './notes-modal.css';
 
 interface OnSaveCallback { 
     (success: boolean): void 

@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { TopNavBar } from './components/top-nav-bar';
-import { Sidebar } from './components/sidebar';
 import { Route } from 'react-router-dom';
-import { ClubsPage } from "./pages/clubs-page";
-import { DashboardPage } from "./pages/dashboard-page";
-import { RoundsPage } from "./pages/rounds-page";
+
+import { TopNavBar } from './navbar'
+import { Sidebar } from './sidebar';
+import { ClubsPage, DashboardPage, RoundsPage } from "./pages";
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
