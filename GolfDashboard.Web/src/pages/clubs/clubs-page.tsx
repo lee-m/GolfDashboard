@@ -86,7 +86,7 @@ export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
     render() {
         return (
             <div>
-                <ToastComponent ref={toast => this._toastComponent = toast} position={this._toastPosition} />
+                <ToastComponent ref={(toast: ToastComponent) => this._toastComponent = toast} position={this._toastPosition} />
                 <GridComponent allowPaging={true}
                     allowFiltering={true}
                     pageSettings={this._pageSettings}
