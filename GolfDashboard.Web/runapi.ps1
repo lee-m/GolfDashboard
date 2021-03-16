@@ -1,0 +1,1 @@
+dotnet run --project ..\GolfDashboard.API\GolfDashboard.API.csproj
