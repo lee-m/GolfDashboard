@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import CaretLogo from '../images/caret-right-fill.svg';
