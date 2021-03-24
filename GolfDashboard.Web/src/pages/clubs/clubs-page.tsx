@@ -1,31 +1,24 @@
 import * as React from 'react';
-import { ToastComponent, ToastPositionModel } from '@syncfusion/ej2-react-notifications';
 import { ColumnDirective, ColumnsDirective, GridComponent, Inject, Page, PageSettingsModel, Filter, FilterSettingsModel } from '@syncfusion/ej2-react-grids';
+import { DataManager, WebApiAdaptor } from '@syncfusion/ej2-data';
 import { getValue } from '@syncfusion/ej2-base';
 import { GolfClub } from '../../models';
 import { APIService } from '../../services';
 
 import './clubs-page.css';
 
-interface ClubsPageProps {
-};
+export class ClubsPage extends React.Component {
 
-interface ClubsPageState {
-    clubs: GolfClub[]
-};
-
-export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
-
+    private _gridComponent: GridComponent | null;
     private _pageSettings: PageSettingsModel;
     private _filterSettings: FilterSettingsModel;
-    private _toastComponent: ToastComponent | null;
-    private _toastPosition: ToastPositionModel;
     private _apiService: APIService;
 
-    constructor(props: ClubsPageProps) {
+    constructor(props: {}) {
 
         super(props);
 
+        this._gridComponent = null;
         this._pageSettings = {
             pageSize: 30
         };
@@ -35,29 +28,25 @@ export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
         this.state = {
             clubs: [],
         };
-        this._toastComponent = null;
-        this._toastPosition = { X: 'Right', Y: 'Bottom' };
         this._apiService = new APIService();
-
     }
 
     componentDidMount() {
+
         navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => this.fetchClubsData(position),
             () => this.fetchClubsData(null));
     }
 
     async fetchClubsData(position: GeolocationPosition | null) {
 
-        try 
-        {
-            this.setState({
-                clubs: await this._apiService.getGolfClubs(position)
-            });
-        }
-        catch(e)
-        {
-            this._toastComponent!.show({ content: 'Unable to retrieve the list of golf clubs. Please check your network connection and try again.', cssClass: 'e-toast-danger' });
-        }
+        let dataSource = new DataManager({
+            adaptor: new WebApiAdaptor(),
+            url: this._apiService.clubsURL(position),
+            offline: true
+        });
+
+        this._gridComponent!.dataSource = dataSource;
+        this._gridComponent!.refresh();
     }
 
     websiteColumnTemplate(args: any) {
@@ -86,12 +75,12 @@ export class ClubsPage extends React.Component<ClubsPageProps, ClubsPageState> {
     render() {
         return (
             <div>
-                <ToastComponent ref={(toast: ToastComponent) => this._toastComponent = toast} position={this._toastPosition} />
-                <GridComponent allowPaging={true}
+                <GridComponent
+                    ref={grid => this._gridComponent = grid}
+                    allowPaging={true}
                     allowFiltering={true}
                     pageSettings={this._pageSettings}
-                    filterSettings={this._filterSettings}
-                    dataSource={this.state.clubs}>
+                    filterSettings={this._filterSettings}>
                     <ColumnsDirective>
                         <ColumnDirective field="name" headerText="Club Name" width="25%" type="string" />
                         <ColumnDirective field="address" headerText="Address" width="35%" allowFiltering={false} type="string" />
