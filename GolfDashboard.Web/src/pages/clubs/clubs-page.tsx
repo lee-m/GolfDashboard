@@ -3,7 +3,7 @@ import { ColumnDirective, ColumnsDirective, GridComponent, Inject, Page, PageSet
 import { DataManager, WebApiAdaptor } from '@syncfusion/ej2-data';
 import { getValue } from '@syncfusion/ej2-base';
 import { GolfClub } from '../../models';
-import { APIService } from '../../services';
+import { ClubsService } from '../../services';
 
 import './clubs-page.css';
 
@@ -12,7 +12,7 @@ export class ClubsPage extends React.Component {
     private _gridComponent: GridComponent | null;
     private _pageSettings: PageSettingsModel;
     private _filterSettings: FilterSettingsModel;
-    private _apiService: APIService;
+    private _apiService: ClubsService;
 
     constructor(props: {}) {
 
@@ -28,7 +28,7 @@ export class ClubsPage extends React.Component {
         this.state = {
             clubs: [],
         };
-        this._apiService = new APIService();
+        this._apiService = new ClubsService();
     }
 
     componentDidMount() {

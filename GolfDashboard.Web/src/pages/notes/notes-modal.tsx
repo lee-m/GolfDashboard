@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { AnimationSettingsModel, ButtonPropsModel, DialogComponent } from '@syncfusion/ej2-react-popups';
 import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
-import { APIService } from '../../services';
+import { NotesService } from '../../services';
 
 import './notes-modal.css';
 
@@ -27,7 +27,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
     private _notesDialogButtons: Array<ButtonPropsModel>;
     private _animationSettings: AnimationSettingsModel;
     private _rteEditor: RichTextEditorComponent | null;
-    private _apiService: APIService;
+    private _apiService: NotesService;
 
     private _tagsDataSource: { [key: string]: Object }[] = [];
     private _tagFields: object;
@@ -39,7 +39,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
     
         this._rteEditor = null;
         this._tagEditor = null;
-        this._apiService = new APIService();
+        this._apiService = new NotesService();
         this._tagsDataSource = [];
         this._tagFields = {
             text: "text",
