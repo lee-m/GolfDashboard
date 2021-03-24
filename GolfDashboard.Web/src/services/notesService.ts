@@ -23,4 +23,13 @@ export class NotesService extends ServiceBase {
 
         return response.ok;
     }
+
+    async deleteNote(id: number): Promise<boolean> {
+
+        let response = await fetch(this.getURL("/note?id=" + id.toString()), {
+            method: "DELETE"
+        });
+
+        return response.ok;
+    }
 }
