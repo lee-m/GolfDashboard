@@ -16,7 +16,7 @@ export class ClubsPage extends React.Component {
 
     private _pageSettings: PageSettingsModel;
     private _filterSettings: FilterSettingsModel;
-    private _apiService: ClubsService;
+    private _clubsService: ClubsService;
 
     constructor(props: {}) {
 
@@ -34,7 +34,7 @@ export class ClubsPage extends React.Component {
         this.state = {
             clubs: [],
         };
-        this._apiService = new ClubsService();
+        this._clubsService = new ClubsService();
     }
 
     componentDidMount() {
@@ -61,7 +61,7 @@ export class ClubsPage extends React.Component {
 
         let dataSource = new DataManager({
             adaptor: new WebApiAdaptor(),
-            url: this._apiService.clubsURL(position),
+            url: this._clubsService.clubsURL(position),
             offline: true
         });
 

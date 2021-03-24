@@ -27,7 +27,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
     private _notesDialogButtons: Array<ButtonPropsModel>;
     private _animationSettings: AnimationSettingsModel;
     private _rteEditor: RichTextEditorComponent | null;
-    private _apiService: NotesService;
+    private _notesService: NotesService;
 
     private _tagsDataSource: { [key: string]: Object }[] = [];
     private _tagFields: object;
@@ -39,7 +39,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
     
         this._rteEditor = null;
         this._tagEditor = null;
-        this._apiService = new NotesService();
+        this._notesService = new NotesService();
         this._tagsDataSource = [];
         this._tagFields = {
             text: "text",
@@ -78,7 +78,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
         try
         {
-            let tags = await this._apiService.getTags();
+            let tags = await this._notesService.getTags();
 
             tags.forEach(t => {
                 this._tagsDataSource.push({
@@ -157,7 +157,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
         try 
         {
-            if(await this._apiService.saveNewNote(noteContents)) {
+            if(await this._notesService.saveNewNote(noteContents)) {
                 this.props.onSaveCallback(true);
                 this._notesDialog?.hide();
             }
