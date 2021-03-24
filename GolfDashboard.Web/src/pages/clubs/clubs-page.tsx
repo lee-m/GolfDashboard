@@ -2,6 +2,8 @@ import * as React from 'react';
 import { ColumnDirective, ColumnsDirective, GridComponent, Inject, Page, PageSettingsModel, Filter, FilterSettingsModel } from '@syncfusion/ej2-react-grids';
 import { DataManager, WebApiAdaptor } from '@syncfusion/ej2-data';
 import { getValue } from '@syncfusion/ej2-base';
+import { createSpinner, hideSpinner, showSpinner } from '@syncfusion/ej2-popups';
+
 import { GolfClub } from '../../models';
 import { ClubsService } from '../../services';
 
@@ -10,6 +12,8 @@ import './clubs-page.css';
 export class ClubsPage extends React.Component {
 
     private _gridComponent: GridComponent | null;
+    private _spinnerElement: HTMLDivElement | null;
+
     private _pageSettings: PageSettingsModel;
     private _filterSettings: FilterSettingsModel;
     private _apiService: ClubsService;
@@ -19,6 +23,8 @@ export class ClubsPage extends React.Component {
         super(props);
 
         this._gridComponent = null;
+        this._spinnerElement = null;
+
         this._pageSettings = {
             pageSize: 30
         };
@@ -33,11 +39,25 @@ export class ClubsPage extends React.Component {
 
     componentDidMount() {
 
+        if(this._spinnerElement != null) {
+
+            createSpinner({
+                target: this._spinnerElement,
+                label: "Fetching Golf Clubs"
+            });
+            showSpinner(this._spinnerElement);
+
+        }
+
         navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => this.fetchClubsData(position),
             () => this.fetchClubsData(null));
     }
 
     async fetchClubsData(position: GeolocationPosition | null) {
+
+        if(this._spinnerElement != null) {
+            hideSpinner(this._spinnerElement);
+        }
 
         let dataSource = new DataManager({
             adaptor: new WebApiAdaptor(),
@@ -74,13 +94,15 @@ export class ClubsPage extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="h-100">
+                <div ref={spinner => this._spinnerElement = spinner} id="spinner"/>
                 <GridComponent
                     ref={grid => this._gridComponent = grid}
                     allowPaging={true}
                     allowFiltering={true}
                     pageSettings={this._pageSettings}
-                    filterSettings={this._filterSettings}>
+                    filterSettings={this._filterSettings}
+                    height="100%">
                     <ColumnsDirective>
                         <ColumnDirective field="name" headerText="Club Name" width="25%" type="string" />
                         <ColumnDirective field="address" headerText="Address" width="35%" allowFiltering={false} type="string" />
