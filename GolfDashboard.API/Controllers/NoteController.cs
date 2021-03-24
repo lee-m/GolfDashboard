@@ -35,5 +35,11 @@ namespace GolfDashboard.API.Controllers
         {
             return _mapper.Map<List<NoteDTO>>(_notesRepository.Get());
         }
+
+        [HttpDelete]
+        public void Delete(int id)
+        {
+            _notesRepository.Delete(id);
+        }
     }
 }

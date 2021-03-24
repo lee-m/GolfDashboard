@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using GolfDashboard.Interfaces;
@@ -35,6 +36,17 @@ namespace GolfDashboard.Data.Repositories
             }
 
             _context.Notes.Add(new Note(0, note.Title, note.Content, tags));
+            _context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var note = _context.Notes.Find(id);
+
+            if (note == null)
+                throw new ArgumentException($"No note with ID {id} found for deletion");
+
+            _context.Notes.Remove(note);
             _context.SaveChanges();
         }
 
