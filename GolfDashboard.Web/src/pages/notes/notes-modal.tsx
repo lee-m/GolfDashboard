@@ -116,7 +116,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                              ref={dialog => this._notesDialog = dialog}>
                 <div className="notes-main-content h-100">
                     <input id="noteTitle" type="text" placeholder="Title" className={"mb-2 e-input " + this.state.titleErrorCSSClass} value={this.state.title} onChange={(e) => this.onTitleChanged(e)} />
-                    <div className="d-flex mt-1 mb-2 w-50">
+                    <div className="d-flex mt-1 mb-2 w-100">
                         <span className="align-self-center mr-2">Tags:</span>
                         <MultiSelectComponent ref={e => this._tagEditor = e}
                                               dataSource={this._tagsDataSource} 
