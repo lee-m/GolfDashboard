@@ -199,7 +199,10 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                 }
 
                 var tag = this._tagEditor?.getDataByValue(tagID) as { id: number, text: string};
-                tags.push(tag.text);
+
+                if(tag) {
+                    tags.push(tag.text);
+                }
 
             });
 
