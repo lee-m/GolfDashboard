@@ -175,7 +175,9 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
         return (
             <div className="notes-container">
                 <div ref={spinner => this._spinnerElement = spinner} id="spinner"/>
-                {noteElements}
+                <div>
+                    {noteElements}
+                </div>
                 <ToastComponent ref={toast => this._toastComponent = toast!} position={{X: "Right", Y: "Bottom"}} />
                 <NotesModal target="#root" onSaveCallback={(success: boolean) => this.onNoteSaved(success)} ref={dialog => this._notesDialog = dialog} />
             </div>
