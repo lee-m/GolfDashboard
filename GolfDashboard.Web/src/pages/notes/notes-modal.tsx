@@ -114,7 +114,6 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
     beforeDialogClose() {
 
-        debugger;
         let dialogOverlay = document.querySelector(".e-dlg-overlay");
         
         if(dialogOverlay) {
