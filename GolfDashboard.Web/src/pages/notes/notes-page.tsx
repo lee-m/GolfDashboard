@@ -8,6 +8,7 @@ import { NotesService } from '../../services';
 
 import "./notes-page.css";
 import { ToastComponent } from '@syncfusion/ej2-react-notifications';
+import { NotesModal } from './notes-modal';
 
 type NotesPageState = {
     notes: Note[]
@@ -18,6 +19,7 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
     private _notesService: NotesService;
     private _spinnerElement: HTMLDivElement | null;
     private _toastComponent: ToastComponent | null;
+    private _notesDialog: NotesModal | null;
 
     constructor(props: any) {
 
@@ -25,6 +27,7 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
 
         this._spinnerElement = null;
         this._toastComponent = null;
+        this._notesDialog = null;
         this._notesService = new NotesService();
 
         this.state = {
@@ -33,6 +36,10 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
     }
 
     async componentDidMount() {
+        await this.refresh();
+    }
+
+    async refresh() {
 
         if(this._spinnerElement != null) {
 
@@ -70,7 +77,31 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
     }
 
     editClick(noteID: number) {
-        alert("edit click " + noteID);
+
+        let selectedNote = this.state.notes.find((note) => note.id! === noteID);
+        this._notesDialog?.show(selectedNote);
+
+    }
+
+    async onNoteSaved(success: boolean) {
+
+        if(success) {
+
+            this._toastComponent?.show({
+                content: "Note saved",
+                cssClass: "e-toast-success"
+            });
+
+            await this.refresh();
+
+        } else {
+
+            this._toastComponent?.show({
+                content: "Error saving note",
+                cssClass: "e-toast-danger"
+            });
+
+        }
     }
 
     async deleteClick(noteID: number) {
@@ -146,6 +177,7 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
                 <div ref={spinner => this._spinnerElement = spinner} id="spinner"/>
                 {noteElements}
                 <ToastComponent ref={toast => this._toastComponent = toast!} position={{X: "Right", Y: "Bottom"}} />
+                <NotesModal target="#root" onSaveCallback={(success: boolean) => this.onNoteSaved(success)} ref={dialog => this._notesDialog = dialog} />
             </div>
         );
     }

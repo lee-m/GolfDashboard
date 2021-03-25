@@ -9,7 +9,7 @@ namespace GolfDashboard.Models
         private Note()
         { }
 
-        public Note(int id, string title, string content, IEnumerable<Tag> tags)
+        public Note(int id, string title, string content, ICollection<Tag> tags)
         {
             ID = id;
             Title = title;
@@ -18,8 +18,8 @@ namespace GolfDashboard.Models
         }
 
         public int ID { get; private set; }
-        public string Title { get; private set; }
-        public string Content { get; private set; }
-        public IEnumerable<Tag> Tags { get; private set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public ICollection<Tag> Tags { get; set; }
     }
 }

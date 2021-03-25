@@ -11,7 +11,7 @@ export class NotesService extends ServiceBase {
         return await this.getResponseJSON<Array<Note>>("/note");
     }
 
-    async saveNewNote(note: Note): Promise<boolean> {
+    async saveNote(note: Note): Promise<boolean> {
 
         let response = await fetch(this.getURL("/note"), {
             method: "POST",

@@ -2,7 +2,9 @@ import React, { ChangeEvent } from 'react';
 import { AnimationSettingsModel, ButtonPropsModel, DialogComponent } from '@syncfusion/ej2-react-popups';
 import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
+
 import { NotesService } from '../../services';
+import { Note } from '../../models/note';
 
 import './notes-modal.css';
 
@@ -91,11 +93,21 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         { }
     }
 
-    show() {
+    show(note?: Note) {
 
-        this._rteEditor!.value = "";
-        this._tagEditor!.value = [];
-        this.setState({ title: "" });
+        if(note) {
+
+            this._rteEditor!.value = note.content;
+            this._tagEditor!.value = note.tags;
+            this.setState({ title: note.title });
+
+        } else {
+
+            this._rteEditor!.value = "";
+            this._tagEditor!.value = [];
+            this.setState({ title: "" });
+
+        }
 
         this._notesDialog?.show();
     }
@@ -168,7 +180,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
         try 
         {
-            if(await this._notesService.saveNewNote(noteContents)) {
+            if(await this._notesService.saveNote(noteContents)) {
                 this.props.onSaveCallback(true);
                 this._notesDialog?.hide();
             }
@@ -201,7 +213,11 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
         var tags: string[] = [];
 
-        if(this._tagEditor?.value != null) {
+        if(!this._tagEditor) {
+            return tags;
+        }
+
+        if(this._tagEditor.value != null) {
 
             this._tagEditor.value.forEach((tagID: any) => {
 

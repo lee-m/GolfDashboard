@@ -25,9 +25,12 @@ namespace GolfDashboard.API.Controllers
         }
 
         [HttpPost]
-        public void Add(NoteDTO newNote)
+        public void AddOrUpdate(NoteDTO newNote)
         {
-            _notesRepository.Add(newNote.ToNoteModel());
+            if (newNote.ID == 0)
+                _notesRepository.Add(newNote.ToNoteModel());
+            else
+                _notesRepository.Update(newNote.ToNoteModel());
         }
 
         [HttpGet]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 using GolfDashboard.Interfaces;
 using GolfDashboard.Models;
@@ -20,6 +21,64 @@ namespace GolfDashboard.Data.Repositories
 
         public void Add(Note note)
         {
+            _context.Notes.Add(new Note(0, note.Title, note.Content, GetNewNoteTags(note)));
+            _context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var note = _context.Notes.Find(id);
+
+            if (note == null)
+                throw new ArgumentException($"No note with ID {id} found for deletion");
+
+            _context.Notes.Remove(note);
+            _context.SaveChanges();
+        }
+
+        public void Update(Note note)
+        {
+            var existingNote = _context.Notes.Include(n => n.Tags).FirstOrDefault(n => n.ID == note.ID);
+
+            if (note == null)
+                throw new ArgumentException($"No note with ID {note.ID} found for deletion");
+
+            existingNote.Title = note.Title;
+            existingNote.Content = note.Content;
+
+            //Delete any removed tags
+            foreach(var existingTag in existingNote.Tags)
+            {
+                if (note.Tags.All(t => t.Text != existingTag.Text))
+                    existingNote.Tags.Remove(existingTag);
+            }
+
+            //Add new tags
+            foreach(var incomingTag in note.Tags)
+            {
+                if (existingNote.Tags.Any(t => t.Text == incomingTag.Text))
+                    continue;
+
+                //New tag. Might need to add a new one if we haven't seen it before
+                var tag = _context.Tags.FirstOrDefault(t => t.Text == incomingTag.Text);
+
+                if (tag != null)
+                    existingNote.Tags.Add(tag);
+                else
+                {
+                    var tagEntry = _context.Tags.Add(incomingTag);
+                    existingNote.Tags.Add(tagEntry.Entity);
+                }
+            }
+
+            _context.SaveChanges();
+        }
+
+        public IEnumerable<Note> Get()
+            => _context.Notes.Include(n => n.Tags);
+
+        private ICollection<Tag> GetNewNoteTags(Note note)
+        {
             var tags = new List<Tag>();
 
             foreach (var tagToAdd in note.Tags)
@@ -35,23 +94,7 @@ namespace GolfDashboard.Data.Repositories
                 tags.Add(existingTag);
             }
 
-            _context.Notes.Add(new Note(0, note.Title, note.Content, tags));
-            _context.SaveChanges();
+            return tags;
         }
-
-        public void Delete(int id)
-        {
-            var note = _context.Notes.Find(id);
-
-            if (note == null)
-                throw new ArgumentException($"No note with ID {id} found for deletion");
-
-            _context.Notes.Remove(note);
-            _context.SaveChanges();
-        }
-
-        public IEnumerable<Note> Get()
-            => _context.Notes.Include(n => n.Tags);
-
     }
 }

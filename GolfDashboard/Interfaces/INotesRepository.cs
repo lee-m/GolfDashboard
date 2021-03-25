@@ -8,6 +8,7 @@ namespace GolfDashboard.Interfaces
     {
         void Add(Note note);
         void Delete(int id);
+        void Update(Note note);
         IEnumerable<Note> Get();
     }
 }
