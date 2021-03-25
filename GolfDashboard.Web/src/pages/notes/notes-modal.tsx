@@ -18,6 +18,7 @@ interface NotesProps {
 };
 
 interface NotesState {
+    existingNote: Note | null,
     title: string;
     titleErrorCSSClass: string;
     contentErrorCSSClass: string;
@@ -70,6 +71,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         };
 
         this.state = {
+            existingNote: null,
             title: "",
             titleErrorCSSClass: "",
             contentErrorCSSClass: ""
@@ -99,7 +101,10 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
             this._rteEditor!.value = note.content;
             this._tagEditor!.value = note.tags;
-            this.setState({ title: note.title });
+            this.setState({ 
+                title: note.title,
+                existingNote: note 
+            });
 
         } else {
 
@@ -172,6 +177,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         }
 
         var noteContents = {
+            id: this.state.existingNote?.id,
             title: this.state.title,
             content: this._rteEditor!.getHtml(),
             tags: this.getSelectedTags()
