@@ -22,10 +22,6 @@
     flex-grow: 1;
 }
 
-.e-dlg-overlay {
-    background-color: transparent !important;
-}
-
 .e-dialog .e-dlg-content {
     padding-bottom: 0 !important;
 }

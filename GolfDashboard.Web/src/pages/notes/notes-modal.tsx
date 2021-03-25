@@ -100,6 +100,16 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         this._notesDialog?.show();
     }
 
+    beforeDialogClose() {
+
+        debugger;
+        let dialogOverlay = document.querySelector(".e-dlg-overlay");
+        
+        if(dialogOverlay) {
+            dialogOverlay.classList.add("e-fade");
+        }
+    }
+
     render() {
         return (
             <DialogComponent width='60%' 
@@ -110,6 +120,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                              isModal={true}
                              header='Add New Note'
                              closeOnEscape={false} 
+                             beforeClose={() => this.beforeDialogClose()}
                              animationSettings={this._animationSettings}
                              position={{ X: 'center', Y: 'center' }}
                              buttons={this._notesDialogButtons} 
