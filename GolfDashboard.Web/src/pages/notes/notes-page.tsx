@@ -14,6 +14,7 @@ import { Tag } from '../../models';
 
 interface NotesPageState {
     notes: Note[];
+    allNotes: Note[];
     allTags: Tag[];
 };
 
@@ -24,6 +25,7 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
     private _toastComponent: ToastComponent | null;
     private _notesDialog: NotesModal | null;
     private _confirmationDialog: ConfirmationDialog | null;
+    private _tagListComponent: ChipListComponent | null;
 
     constructor(props: any) {
 
@@ -33,10 +35,12 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
         this._toastComponent = null;
         this._notesDialog = null;
         this._confirmationDialog = null;
+        this._tagListComponent = null;
         this._notesService = new NotesService();
 
         this.state = {
             notes: [],
+            allNotes: [],
             allTags: []
         };
     }
@@ -57,14 +61,14 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
         }
 
         try {
-            let x = await this._notesService.getNotes();
-            let y = await this._notesService.getTags();
 
-            debugger;
+            let notes = await this._notesService.getNotes();
+            let tags = await this._notesService.getTags();
 
             this.setState({
-                notes: x,
-                allTags: y
+                notes: notes,
+                allNotes: notes,
+                allTags: tags
             });
         }
         catch {
@@ -184,6 +188,34 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
 
     }
 
+    updateFilter() {
+
+        let selectectedChips = this._tagListComponent?.getSelectedChips();
+
+        if(selectectedChips) {
+
+            let selectedTags = (selectectedChips.data as ChipModel[]).map(t => t.text);
+            let notePassesFilter = (note: Note) : boolean => {
+                return note.tags.some((noteTag: string) => selectedTags.find(selectedTag => selectedTag === noteTag));
+            }
+
+            this.setState({
+                allNotes: this.state.allNotes,
+                allTags: this.state.allTags,
+                notes: this.state.allNotes.filter(notePassesFilter)
+            });
+
+        } else {
+
+            this.setState({
+                allNotes: this.state.allNotes,
+                allTags: this.state.allTags,
+                notes: this.state.allNotes
+            });
+
+        }
+    }
+
     render() {
 
         let noteElements: React.ReactElement[] = [];
@@ -224,14 +256,23 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
             );
         });
 
+        let tagDirectives: React.ReactElement[] = [];
+        
+        this.state.allTags.forEach((t, i) => {
+            tagDirectives.push(<ChipDirective text={t.text} value={t.id} key={t.id}></ChipDirective>);
+        });
+
         return (
             <div className="notes-container">
-                
                 <div className="d-flex">
                     <h6 className="font-bold align-self-center pl-2 pr-2 mb-0">Filter by Tag:</h6>
-                    <ChipListComponent selection="Multiple" enableDelete={true} delete={(e) => this.beforeTagDeleted(e)}>
+                    <ChipListComponent selection="Multiple" 
+                                       enableDelete={true} 
+                                       delete={(e) => this.beforeTagDeleted(e)}
+                                       click={() => this.updateFilter()}
+                                       ref={tagList => this._tagListComponent = tagList}>
                         <ChipsDirective>
-                            {this.state.allTags.map(t => <ChipDirective text={t.text} value={t.id} key={t.id}></ChipDirective>)}
+                            {tagDirectives}
                         </ChipsDirective>
                     </ChipListComponent>
                 </div>
