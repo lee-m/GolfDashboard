@@ -47,13 +47,6 @@ html {
     height: 100%;
 }
 
-body,
-.e-control,
-.e-btn,
-.e-css.e-btn {
-    font-family: 'Montserrat', sans-serif !important;
-}
-
 body {
     min-height: 100%;
     display: flex;
