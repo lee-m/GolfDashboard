@@ -1,69 +1,75 @@
 import * as React from 'react';
-import { ButtonPropsModel, DialogComponent } from '@syncfusion/ej2-react-popups';
+import { DialogComponent } from '@syncfusion/ej2-react-popups';
 
-interface ConfirmationDialogProps<TParam> {
+interface ConfirmationDialogProps {
+    target: string,
+}
+
+interface ConfirmationDialogState {
+    content: string,
+}
+
+interface ConfirmationDialogModel {
     title: string,
     content: string,
     width: string,
-    target: string,
     primaryButtonText: string,
-    primaryButtonClick: (params?: TParam) => void
+    primaryButtonClick: () => void
 }
 
-interface ConfirmationDialogState<TParam> {
-    customParams?: TParam
-}
+export class ConfirmationDialog extends React.Component<ConfirmationDialogProps, ConfirmationDialogState> {
 
-export class ConfirmationDialog<TParam> extends React.Component<ConfirmationDialogProps<TParam>, ConfirmationDialogState<TParam>> {
-
-    private _dialogButtons: Array<ButtonPropsModel>;
     private _dialog: DialogComponent | null;
 
-    constructor(props: ConfirmationDialogProps<TParam>) {
+    constructor(props: ConfirmationDialogProps) {
         
         super(props);
 
-        this.state = {};
+        this.state = { content: "", };
         this._dialog = null;
-        this._dialogButtons = [{
-            buttonModel: {
-                content: this.props.primaryButtonText,
-                isPrimary: true
-            },
-            click: () => { 
-                this._dialog?.hide(); 
-                this.props.primaryButtonClick(this.state.customParams); 
-            }
-        }, {
-            buttonModel: {
-                content: "Cancel",
-                isPrimary: false,
-            },
-            click: () => this._dialog?.hide()
-        }]
 
     }
 
-    show(params?: TParam) {
+    show(params: ConfirmationDialogModel) {
 
-        this.setState({ customParams: params });
-        this._dialog?.show();
+        this.setState({ content: params.content, });
+
+        if(this._dialog != null) {
+
+            this._dialog.header = params.title;
+            this._dialog.width = params.width;
+            this._dialog.buttons = [{
+                buttonModel: {
+                    content: params.primaryButtonText,
+                    isPrimary: true
+                },
+                click: () => { 
+                    this._dialog?.hide(); 
+                    params.primaryButtonClick(); 
+                }
+            }, {
+                buttonModel: {
+                    content: "Cancel",
+                    isPrimary: false,
+                },
+                click: () => this._dialog?.hide()
+            }];
+
+            this._dialog.show();
+        }
     }
 
     render() {
         return (
             <DialogComponent target={this.props.target}
-                             width={this.props.width}
                              visible={false} 
                              isModal={true}
-                             header={this.props.title}
                              closeOnEscape={true} 
                              animationSettings={{ effect: "FadeZoom", delay: 0}}
                              position={{ X: 'center', Y: 'top' }}
-                             ref={dialog => this._dialog = dialog}
-                             buttons={this._dialogButtons}>
+                             ref={dialog => this._dialog = dialog}>
                 <p>
-                    {this.props.content}
+                    {this.state.content}
                 </p>
             </DialogComponent>
         );

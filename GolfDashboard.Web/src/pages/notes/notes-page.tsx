@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChipDirective, ChipListComponent, ChipsDirective } from '@syncfusion/ej2-react-buttons';
+import { ChipDirective, ChipListComponent, ChipModel, ChipsDirective, DeleteEventArgs } from '@syncfusion/ej2-react-buttons';
 import { createSpinner, hideSpinner, showSpinner } from '@syncfusion/ej2-popups';
 import { IconButton } from '../../icon-button';
 
@@ -10,9 +10,11 @@ import { ConfirmationDialog } from '../../confirmation-dialog';
 import "./notes-page.css";
 import { ToastComponent } from '@syncfusion/ej2-react-notifications';
 import { NotesModal } from './notes-modal';
+import { Tag } from '../../models';
 
-type NotesPageState = {
-    notes: Note[]
+interface NotesPageState {
+    notes: Note[];
+    allTags: Tag[];
 };
 
 export class NotesPage extends React.Component<{}, NotesPageState> {
@@ -21,7 +23,7 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
     private _spinnerElement: HTMLDivElement | null;
     private _toastComponent: ToastComponent | null;
     private _notesDialog: NotesModal | null;
-    private _confirmationDialog: ConfirmationDialog<number> | null;
+    private _confirmationDialog: ConfirmationDialog | null;
 
     constructor(props: any) {
 
@@ -34,7 +36,8 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
         this._notesService = new NotesService();
 
         this.state = {
-            notes: []
+            notes: [],
+            allTags: []
         };
     }
 
@@ -54,8 +57,14 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
         }
 
         try {
+            let x = await this._notesService.getNotes();
+            let y = await this._notesService.getTags();
+
+            debugger;
+
             this.setState({
-                notes: await this._notesService.getNotes()
+                notes: x,
+                allTags: y
             });
         }
         catch {
@@ -108,7 +117,15 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
     }
 
     deleteClick(noteID: number) {
-        this._confirmationDialog?.show(noteID);
+
+        this._confirmationDialog?.show({
+            content: "This note will be deleted. Do you wish to continue?",
+            title: "Confirm Note Deletion",
+            width: "25%",
+            primaryButtonText: "Delete",
+            primaryButtonClick: () => this.deleteNote(noteID) 
+        });
+
     }
 
     async deleteNote(noteID: number) {
@@ -144,6 +161,29 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
         }
     }
 
+    beforeTagDeleted(e: DeleteEventArgs | undefined) : void {
+
+        if(e) {
+
+            e.cancel = true;
+
+            let tagModel = e.data as ChipModel;
+
+            this._confirmationDialog?.show({
+                content: `The tag '${tagModel.text}' will be deleted and removed from any notes currently using it. Do you wish to continue?`,
+                title: "Confirm Tag Deletion",
+                width: "25%",
+                primaryButtonText: "Delete",
+                primaryButtonClick: async () => {
+                    await this._notesService.deleteTag(tagModel.value as number);
+                    this.refresh();
+                }
+            });
+
+        }
+
+    }
+
     render() {
 
         let noteElements: React.ReactElement[] = [];
@@ -153,14 +193,12 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
             let tagComponent;
 
             if(note.tags != null && note.tags.length > 0) {
-
                 tagComponent = 
-                    <ChipListComponent >
+                    <ChipListComponent className="p-0">
                         <ChipsDirective>
-                            {note.tags.map(t => <ChipDirective text={t} enabled={false} cssClass="notes-tag"></ChipDirective>)}
+                            {note.tags.map((t, i) => <ChipDirective text={t} enabled={false} key={t} cssClass={"notes-tag" + (i === 0 ? " ml-0" : "")}></ChipDirective>)}
                         </ChipsDirective>
                     </ChipListComponent>;
-                
             }
 
             noteElements.push(
@@ -188,6 +226,16 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
 
         return (
             <div className="notes-container">
+                
+                <div className="d-flex">
+                    <h6 className="font-bold align-self-center pl-2 pr-2 mb-0">Filter by Tag:</h6>
+                    <ChipListComponent selection="Multiple" enableDelete={true} delete={(e) => this.beforeTagDeleted(e)}>
+                        <ChipsDirective>
+                            {this.state.allTags.map(t => <ChipDirective text={t.text} value={t.id} key={t.id}></ChipDirective>)}
+                        </ChipsDirective>
+                    </ChipListComponent>
+                </div>
+                <hr />
                 <div>
                     <div ref={spinner => this._spinnerElement = spinner} id="spinner"/>
                     <div>
@@ -198,14 +246,7 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
                 <NotesModal target=".main-content-body" 
                             onSaveCallback={(success: boolean) => this.onNoteSaved(success)} 
                             ref={dialog => this._notesDialog = dialog} />
-                <ConfirmationDialog<number>
-                    content="This note will be deleted. Do you wish to continue?"
-                    title="Confirm Note Deletion"
-                    width="25%"
-                    target=".main-content-body"
-                    primaryButtonText="Delete"
-                    primaryButtonClick={(noteID: number|undefined) => this.deleteNote(noteID!)} 
-                    ref={confirmDialog => this._confirmationDialog = confirmDialog} />
+                <ConfirmationDialog target=".main-content-body" ref={confirmDialog => this._confirmationDialog = confirmDialog} />
             </div>
         );
     }

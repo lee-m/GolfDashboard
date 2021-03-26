@@ -32,7 +32,6 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
     private _rteEditor: RichTextEditorComponent | null;
     private _notesService: NotesService;
 
-    private _tagsDataSource: { [key: string]: Object }[] = [];
     private _tagFields: object;
     private _tagEditor: MultiSelectComponent | null;
 
@@ -43,7 +42,6 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         this._rteEditor = null;
         this._tagEditor = null;
         this._notesService = new NotesService();
-        this._tagsDataSource = [];
         this._tagFields = {
             text: "text",
             value: "id"
@@ -79,23 +77,30 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
    }
 
     async componentDidMount() {
+        await this.refreshTags();
+    }
+
+    async refreshTags() {
 
         try
         {
             let tags = await this._notesService.getTags();
+            let tagsDataSource: { text: string; id: number; }[] = [];
 
             tags.forEach(t => {
-                this._tagsDataSource.push({
+                tagsDataSource.push({
                     text: t.text,
                     id: t.id
                 });
             });
+
+            this._tagEditor!.dataSource = tagsDataSource;
         }
         catch
         { }
     }
 
-    show(note?: Note) {
+    async show(note?: Note) {
 
         if(note) {
 
@@ -114,6 +119,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
 
         }
 
+        await this.refreshTags();
         this._notesDialog?.show();
     }
 
@@ -137,7 +143,6 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                     <div className="d-flex mt-1 mb-2 w-100">
                         <span className="align-self-center mr-2">Tags:</span>
                         <MultiSelectComponent ref={e => this._tagEditor = e}
-                                              dataSource={this._tagsDataSource} 
                                               fields={this._tagFields} 
                                               allowCustomValue={true}
                                               mode="Box"
