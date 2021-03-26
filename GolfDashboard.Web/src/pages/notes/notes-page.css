@@ -2,21 +2,10 @@
     padding: 0.5em;
 }
 
-.notes-page-tags {
-    cursor: default !important;
-    border-bottom: none !important;
-}
-
 .notes-container .card {
     margin-bottom: 0.5em;
 }
 
-.e-multiselect,
-.e-dropdownbase,
-.e-searcher,
-.e-multi-select-wrapper,
-.e-chips,
-.e-chips-collection,
-.e-chipcontent {
-    cursor: default !important;
+.notes-tag {
+    color: rgb(33, 37, 41) !important
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
+import { ChipDirective, ChipListComponent, ChipsDirective } from '@syncfusion/ej2-react-buttons';
 import { createSpinner, hideSpinner, showSpinner } from '@syncfusion/ej2-popups';
 import { IconButton } from '../../icon-button';
 
@@ -146,7 +146,14 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
             let tagComponent;
 
             if(note.tags != null && note.tags.length > 0) {
-                tagComponent = <MultiSelectComponent value={note.tags} dataSource={note.tags} mode="Box" enabled={false} cssClass="notes-page-tags" />;
+
+                tagComponent = 
+                    <ChipListComponent >
+                        <ChipsDirective>
+                            {note.tags.map(t => <ChipDirective text={t} enabled={false} cssClass="notes-tag"></ChipDirective>)}
+                        </ChipsDirective>
+                    </ChipListComponent>;
+                
             }
 
             noteElements.push(
