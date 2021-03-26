@@ -134,6 +134,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                              visible={false} 
                              showCloseIcon={true} 
                              isModal={true}
+                             allowDragging={true}
                              header='Add New Note'
                              closeOnEscape={false} 
                              beforeClose={() => this.beforeDialogClose()}
