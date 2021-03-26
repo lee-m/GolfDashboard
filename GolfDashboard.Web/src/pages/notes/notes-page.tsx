@@ -5,6 +5,7 @@ import { IconButton } from '../../icon-button';
 
 import { Note } from '../../models/note';
 import { NotesService } from '../../services';
+import { ConfirmationDialog } from '../../confirmation-dialog';
 
 import "./notes-page.css";
 import { ToastComponent } from '@syncfusion/ej2-react-notifications';
@@ -20,6 +21,7 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
     private _spinnerElement: HTMLDivElement | null;
     private _toastComponent: ToastComponent | null;
     private _notesDialog: NotesModal | null;
+    private _confirmationDialog: ConfirmationDialog<number> | null;
 
     constructor(props: any) {
 
@@ -28,6 +30,7 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
         this._spinnerElement = null;
         this._toastComponent = null;
         this._notesDialog = null;
+        this._confirmationDialog = null;
         this._notesService = new NotesService();
 
         this.state = {
@@ -104,7 +107,11 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
         }
     }
 
-    async deleteClick(noteID: number) {
+    deleteClick(noteID: number) {
+        this._confirmationDialog?.show(noteID);
+    }
+
+    async deleteNote(noteID: number) {
 
         try {
             
@@ -181,12 +188,24 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
 
         return (
             <div className="notes-container">
-                <div ref={spinner => this._spinnerElement = spinner} id="spinner"/>
                 <div>
-                    {noteElements}
+                    <div ref={spinner => this._spinnerElement = spinner} id="spinner"/>
+                    <div>
+                        {noteElements}
+                    </div>
+                    <ToastComponent ref={toast => this._toastComponent = toast!} position={{X: "Right", Y: "Bottom"}} />
                 </div>
-                <ToastComponent ref={toast => this._toastComponent = toast!} position={{X: "Right", Y: "Bottom"}} />
-                <NotesModal target="#root" onSaveCallback={(success: boolean) => this.onNoteSaved(success)} ref={dialog => this._notesDialog = dialog} />
+                <NotesModal target=".main-content-body" 
+                            onSaveCallback={(success: boolean) => this.onNoteSaved(success)} 
+                            ref={dialog => this._notesDialog = dialog} />
+                <ConfirmationDialog<number>
+                    content="This note will be deleted. Do you wish to continue?"
+                    title="Confirm Note Deletion"
+                    width="25%"
+                    target=".main-content-body"
+                    primaryButtonText="Delete"
+                    primaryButtonClick={(noteID: number|undefined) => this.deleteNote(noteID!)} 
+                    ref={confirmDialog => this._confirmationDialog = confirmDialog} />
             </div>
         );
     }
