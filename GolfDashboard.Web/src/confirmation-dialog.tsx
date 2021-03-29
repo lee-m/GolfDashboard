@@ -59,6 +59,16 @@ export class ConfirmationDialog extends React.Component<ConfirmationDialogProps,
         }
     }
 
+
+    beforeDialogClose() {
+
+        if(this._dialog) {
+
+            let overlay = this._dialog.element!.parentElement!.querySelector(".e-dlg-overlay")!;
+            overlay.classList.add("e-fade");
+        }
+    }
+
     render() {
         return (
             <DialogComponent target={this.props.target}
@@ -67,6 +77,7 @@ export class ConfirmationDialog extends React.Component<ConfirmationDialogProps,
                              closeOnEscape={true} 
                              animationSettings={{ effect: "FadeZoom", delay: 0}}
                              position={{ X: 'center', Y: 'top' }}
+                             beforeClose={() => this.beforeDialogClose()}
                              ref={dialog => this._dialog = dialog}>
                 <p>
                     {this.state.content}

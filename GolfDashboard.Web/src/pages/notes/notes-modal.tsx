@@ -123,6 +123,15 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         this._notesDialog?.show();
     }
 
+    beforeDialogClose() {
+
+        if(this._notesDialog) {
+
+            let overlay = this._notesDialog.element!.parentElement!.querySelector(".e-dlg-overlay")!;
+            overlay.classList.add("e-fade");
+        }
+    }
+
     render() {
         return (
             <DialogComponent width='60%' 
@@ -137,6 +146,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                              animationSettings={this._animationSettings}
                              position={{ X: 'center', Y: 'center' }}
                              buttons={this._notesDialogButtons} 
+                             beforeClose={() => this.beforeDialogClose()}
                              ref={dialog => this._notesDialog = dialog}>
                 <div className="notes-main-content h-100">
                     <input id="noteTitle" type="text" placeholder="Title" className={"mb-2 e-input " + this.state.titleErrorCSSClass} value={this.state.title} onChange={(e) => this.onTitleChanged(e)} />

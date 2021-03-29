@@ -10,6 +10,6 @@
     color: rgb(33, 37, 41) !important
 }
 
-.e-dlg-overlay {
-    background-color: transparent !important;
+.filter-by-tag-label {
+    height: 28px;
 }
