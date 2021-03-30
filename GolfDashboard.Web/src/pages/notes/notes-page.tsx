@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChipDirective, ChipListComponent, ChipModel, ChipsDirective, DeleteEventArgs } from '@syncfusion/ej2-react-buttons';
 import { createSpinner, hideSpinner, showSpinner } from '@syncfusion/ej2-popups';
-import { IconButton } from '../../icon-button';
+import { NoteListItem } from './note-list-item'
 
 import { Note } from '../../models/note';
 import { NotesService } from '../../services';
@@ -218,48 +218,15 @@ export class NotesPage extends React.Component<{}, NotesPageState> {
 
     render() {
 
-        let noteElements: React.ReactElement[] = [];
-
-        this.state.notes.forEach(note => {
-
-            let tagComponent;
-
-            if(note.tags != null && note.tags.length > 0) {
-                tagComponent = 
-                    <ChipListComponent className="p-0">
-                        <ChipsDirective>
-                            {note.tags.map((t, i) => <ChipDirective text={t} enabled={false} key={t} cssClass={"notes-tag" + (i === 0 ? " ml-0" : "")}></ChipDirective>)}
-                        </ChipsDirective>
-                    </ChipListComponent>;
-            }
-
-            noteElements.push(
-                <div className="card" key={note.id}>
-                    <div className="card-body pb-3 pt-3">
-                        <div className="d-flex justify-content-between">
-                            <h4 className="card-title">{note.title}</h4>
-                            <div>
-                                <IconButton 
-                                    title="Edit" 
-                                    iconCSSClass="bi-pencil-square"
-                                    clickHandler={() => this.editClick(note.id!)} />
-                                <IconButton 
-                                    title="Delete"  
-                                    iconCSSClass="bi-x-square"
-                                    clickHandler={() => this.deleteClick(note.id!)} />
-                            </div>
-                        </div>
-                        <div dangerouslySetInnerHTML={{__html: note.content}}></div>
-                        {tagComponent}
-                    </div>
-                </div>
-            );
+        let noteElements = this.state.notes.map(note => {
+            return (<NoteListItem key={note.id}
+                                  note={note} 
+                                  onDelete={(noteID) => this.deleteClick(noteID)} 
+                                  onEdit={(noteID) => this.editClick(noteID)} />);
         });
 
-        let tagDirectives: React.ReactElement[] = [];
-        
-        this.state.allTags.forEach((t, i) => {
-            tagDirectives.push(<ChipDirective text={t.text} value={t.id} key={t.id}></ChipDirective>);
+        let tagDirectives = this.state.allTags.map((t, i) => {
+            return (<ChipDirective text={t.text} value={t.id} key={t.id}></ChipDirective>);
         });
 
         return (
