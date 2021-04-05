@@ -83,6 +83,7 @@ a:hover {
 
 .main-content-body {
     background-color: var(--color-grey-100);
+    display: flex;
 }
 
 .text-white-tinted {

@@ -45,7 +45,7 @@ export class DashboardPage extends React.Component {
 
     render() {
         return (
-            <div className="h-100">
+            <div className="flex-grow-1">
                 <div id="dashboardRoot" className="dashboard h-100 p-3">
                     <div>Handicap History</div>
                     <div>Average Score by Par</div>

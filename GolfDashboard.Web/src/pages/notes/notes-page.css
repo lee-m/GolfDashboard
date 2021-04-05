@@ -13,3 +13,7 @@
 .filter-by-tag-label {
     height: 28px;
 }
+
+.notes-error-toast-background {
+    background: var(--color-warning-500);
+}

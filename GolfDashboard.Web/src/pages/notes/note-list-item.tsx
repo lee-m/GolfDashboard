@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChipDirective, ChipListComponent, ChipsDirective } from '@syncfusion/ej2-react-buttons';
 
 import { Note } from '../../models/note';
@@ -23,25 +23,30 @@ export function NoteListItem(props: NoteListItemProps) {
             </ChipListComponent>;
     }
 
+    let [visible, setVisible] = useState(true);
+
     return (
-        <div className="card" key={props.note.id}>
-            <div className="card-body pb-3 pt-3">
-                <div className="d-flex justify-content-between">
-                    <h4 className="card-title">{props.note.title}</h4>
-                    <div>
-                        <IconButton 
-                            title="Edit" 
-                            iconCSSClass="bi-pencil-square"
-                            clickHandler={() => props.onEdit(props.note.id!)} />
-                        <IconButton 
-                            title="Delete"  
-                            iconCSSClass="bi-x-square"
-                            clickHandler={() => props.onDelete(props.note.id!)} />
+            <div className="card" key={props.note.id}>
+                <div className="card-body pb-3 pt-3">
+                    <div className="d-flex justify-content-between">
+                        <h4 className="card-title">{props.note.title}</h4>
+                        <div>
+                            <IconButton 
+                                title="Edit" 
+                                iconCSSClass="bi-pencil-square"
+                                clickHandler={() => props.onEdit(props.note.id!)} />
+                            <IconButton 
+                                title="Delete"  
+                                iconCSSClass="bi-x-square"
+                                clickHandler={() => {
+                                    setVisible(false);
+                                    props.onDelete(props.note.id!)} 
+                                } />
+                        </div>
                     </div>
+                    <div dangerouslySetInnerHTML={{__html: props.note.content}}></div>
+                    {tagComponent}
                 </div>
-                <div dangerouslySetInnerHTML={{__html: props.note.content}}></div>
-                {tagComponent}
             </div>
-        </div>
     );
 }

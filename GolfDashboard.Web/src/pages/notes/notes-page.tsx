@@ -1,261 +1,82 @@
-import * as React from 'react';
-import { ChipDirective, ChipListComponent, ChipModel, ChipsDirective, DeleteEventArgs } from '@syncfusion/ej2-react-buttons';
-import { createSpinner, hideSpinner, showSpinner } from '@syncfusion/ej2-popups';
+import { useEffect, useState } from 'react';
+import ScaleLoader from 'react-spinners/ScaleLoader';
+import { ToastContainer, toast } from 'react-toastify';
+
+import { Note } from '../../models';
+import { NotesService } from '../../services';
 import { NoteListItem } from './note-list-item'
 
-import { Note } from '../../models/note';
-import { NotesService } from '../../services';
-import { ConfirmationDialog } from '../../confirmation-dialog';
-
+import 'react-toastify/dist/ReactToastify.css';
 import "./notes-page.css";
-import { ToastComponent } from '@syncfusion/ej2-react-notifications';
-import { NotesModal } from './notes-modal';
-import { Tag } from '../../models';
+import { animated, config, useTrail, useSpring } from 'react-spring';
 
-interface NotesPageState {
-    notes: Note[];
-    allNotes: Note[];
-    allTags: Tag[];
-};
+export function NotesPage(props: {}) {
 
-export class NotesPage extends React.Component<{}, NotesPageState> {
+    const [loading, setLoading] = useState(true);
+    const [notes, setNotes] = useState<Note[]>([]);
 
-    private _notesService: NotesService;
-    private _spinnerElement: HTMLDivElement | null;
-    private _toastComponent: ToastComponent | null;
-    private _notesDialog: NotesModal | null;
-    private _confirmationDialog: ConfirmationDialog | null;
-    private _tagListComponent: ChipListComponent | null;
+    //Apply a staggered fade in animation to each note after it's been loaded
+    const trail = useTrail(notes.length, {
+        config: config.default,
+        from: { opacity: 0 },
+        to: { opacity: 1 }
+    });
 
-    constructor(props: any) {
+    const loadingAnim = useSpring({
+        from: { opacity: loading ? 0 : 1 },
+        to: { opacity: loading ? 1 : 0 }
+    });
 
-        super(props);
+    useEffect(() => {
 
-        this._spinnerElement = null;
-        this._toastComponent = null;
-        this._notesDialog = null;
-        this._confirmationDialog = null;
-        this._tagListComponent = null;
-        this._notesService = new NotesService();
+        const getNotes = async () => {
 
-        this.state = {
-            notes: [],
-            allNotes: [],
-            allTags: []
-        };
-    }
+            try {
 
-    async componentDidMount() {
-        await this.refresh();
-    }
+                let notesService = new NotesService();
+                setNotes(await notesService.getNotes());
 
-    async refresh() {
+            } catch {
 
-        if(this._spinnerElement != null) {
-
-            createSpinner({
-                target: this._spinnerElement,
-                label: "Fetching Notes"
-            });
-            showSpinner(this._spinnerElement);
-        }
-
-        try {
-
-            let notes = await this._notesService.getNotes();
-            let tags = await this._notesService.getTags();
-
-            this.setState({
-                notes: notes,
-                allNotes: notes,
-                allTags: tags
-            });
-        }
-        catch {
-
-            if(this._toastComponent != null) {
-
-                this._toastComponent.show({
-                    content: "Error Fetching Notes",
-                    cssClass: "e-toast-danger"
-                });
-            
-            }
-
-        }
-        finally {
-
-            if(this._spinnerElement != null) {
-                hideSpinner(this._spinnerElement);
-            }
-
-        }
-    }
-
-    editClick(noteID: number) {
-
-        let selectedNote = this.state.notes.find((note) => note.id! === noteID);
-        this._notesDialog?.show(selectedNote);
-
-    }
-
-    async onNoteSaved(success: boolean) {
-
-        if(success) {
-
-            this._toastComponent?.show({
-                content: "Note saved",
-                cssClass: "e-toast-success"
-            });
-
-            await this.refresh();
-
-        } else {
-
-            this._toastComponent?.show({
-                content: "Error saving note",
-                cssClass: "e-toast-danger"
-            });
-
-        }
-    }
-
-    deleteClick(noteID: number) {
-
-        this._confirmationDialog?.show({
-            content: "This note will be deleted. Do you wish to continue?",
-            title: "Confirm Note Deletion",
-            width: "25%",
-            primaryButtonText: "Delete",
-            primaryButtonClick: () => this.deleteNote(noteID) 
-        });
-
-    }
-
-    async deleteNote(noteID: number) {
-
-        try {
-            
-            if(await this._notesService.deleteNote(noteID)) {
-
-                this.setState({
-                    notes: this.state.notes.filter((note => note.id! !== noteID))
+                toast("Error loading notes", {
+                    type: "error",
+                    className: "notes-error-toast-background"
                 });
 
-                if(this._toastComponent != null) {
-
-                    this._toastComponent.show({
-                        content: "Note Deleted",
-                        cssClass: "e-toast-success"
-                    });
-
-                }
+            } finally {
+                setLoading(false);
             }
-
-        } catch {
-
-            if(this._toastComponent != null) {
-
-                this._toastComponent.show({
-                    content: "Error Deleting Note",
-                    cssClass: "e-toast-danger"
-                });
-
-            }
-        }
-    }
-
-    beforeTagDeleted(e: DeleteEventArgs | undefined) : void {
-
-        if(e) {
-
-            e.cancel = true;
-
-            let tagModel = e.data as ChipModel;
-
-            this._confirmationDialog?.show({
-                content: `The tag '${tagModel.text}' will be deleted and removed from any notes currently using it. Do you wish to continue?`,
-                title: "Confirm Tag Deletion",
-                width: "25%",
-                primaryButtonText: "Delete",
-                primaryButtonClick: async () => {
-                    await this._notesService.deleteTag(tagModel.value as number);
-                    this.refresh();
-                }
-            });
 
         }
 
-    }
+        getNotes();
 
-    updateFilter() {
+    }, []);
 
-        let selectectedChips = this._tagListComponent?.getSelectedChips();
-
-        if(selectectedChips) {
-
-            let selectedTags = (selectectedChips.data as ChipModel[]).map(t => t.text);
-            let notePassesFilter = (note: Note) : boolean => {
-                return note.tags.some((noteTag: string) => selectedTags.find(selectedTag => selectedTag === noteTag));
-            }
-
-            this.setState({
-                allNotes: this.state.allNotes,
-                allTags: this.state.allTags,
-                notes: this.state.allNotes.filter(notePassesFilter)
-            });
-
-        } else {
-
-            this.setState({
-                allNotes: this.state.allNotes,
-                allTags: this.state.allTags,
-                notes: this.state.allNotes
-            });
-
-        }
-    }
-
-    render() {
-
-        let noteElements = this.state.notes.map(note => {
-            return (<NoteListItem key={note.id}
-                                  note={note} 
-                                  onDelete={(noteID) => this.deleteClick(noteID)} 
-                                  onEdit={(noteID) => this.editClick(noteID)} />);
-        });
-
-        let tagDirectives = this.state.allTags.map((t, i) => {
-            return (<ChipDirective text={t.text} value={t.id} key={t.id}></ChipDirective>);
-        });
-
-        return (
-            <div className="notes-container">
-                <div className="d-flex">
-                    <h6 className="font-bold align-self-center pl-2 pr-2 mb-0">Filter by Tag:</h6>
-                    <ChipListComponent selection="Multiple" 
-                                       enableDelete={true} 
-                                       delete={(e) => this.beforeTagDeleted(e)}
-                                       click={() => this.updateFilter()}
-                                       ref={tagList => this._tagListComponent = tagList}>
-                        <ChipsDirective>
-                            {tagDirectives}
-                        </ChipsDirective>
-                    </ChipListComponent>
+    return (
+        <div className="position-relative w-100">
+            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={true} />
+            <div className="position-absolute w-100 h-100">
+                <div className="d-flex justify-content-center align-items-center h-100">
+                    <animated.div className="notes-loading" style={loadingAnim}>
+                        <ScaleLoader loading={loading} height={35} width={4} radius={2} margin={2} color={"#3E517A"} />
+                    </animated.div>
                 </div>
-                <hr />
-                <div>
-                    <div ref={spinner => this._spinnerElement = spinner} id="spinner"/>
-                    <div>
-                        {noteElements}
-                    </div>
-                    <ToastComponent ref={toast => this._toastComponent = toast!} position={{X: "Right", Y: "Bottom"}} />
-                </div>
-                <NotesModal target=".main-content-body" 
-                            onSaveCallback={(success: boolean) => this.onNoteSaved(success)} 
-                            ref={dialog => this._notesDialog = dialog} />
-                <ConfirmationDialog target=".main-content-body" ref={confirmDialog => this._confirmationDialog = confirmDialog} />
             </div>
-        );
-    }
+            <div className="notes-container flex-grow-1">
+                <div>
+                    {trail.map((props, i) => (
+                        <animated.div key={notes[i].id} style={props}>
+                            <animated.div>
+                                <NoteListItem key={notes[i].id}
+                                            note={notes[i]} 
+                                            onDelete={(noteID) => alert("delete note " + noteID)} 
+                                            onEdit={(noteID) => alert("edit note " + noteID)} />
+                            </animated.div>
+                        </animated.div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
 }
