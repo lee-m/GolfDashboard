@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import { ToastContainer, toast } from 'react-toastify';
 
-import { Note } from '../../models';
+import { Note, Tag } from '../../models';
 import { NotesService } from '../../services';
 import { NoteListItem } from './note-list-item'
+import { NotesFilter } from './notes-filter';
+import { NotesContext } from './notes-context';
 
 import 'react-toastify/dist/ReactToastify.css';
 import "./notes-page.css";
@@ -14,6 +16,7 @@ export function NotesPage(props: {}) {
 
     const [loading, setLoading] = useState(true);
     const [notes, setNotes] = useState<Note[]>([]);
+    const [tags, setTags] = useState<Tag[]>([]);
 
     //Apply a staggered fade in animation to each note after it's been loaded
     const trail = useTrail(notes.length, {
@@ -35,6 +38,7 @@ export function NotesPage(props: {}) {
 
                 let notesService = new NotesService();
                 setNotes(await notesService.getNotes());
+                setTags(await notesService.getTags());
 
             } catch {
 
@@ -63,20 +67,23 @@ export function NotesPage(props: {}) {
                     </animated.div>
                 </div>
             </div>
-            <div className="notes-container flex-grow-1">
-                <div>
-                    {trail.map((props, i) => (
-                        <animated.div key={notes[i].id} style={props}>
-                            <animated.div>
-                                <NoteListItem key={notes[i].id}
-                                            note={notes[i]} 
-                                            onDelete={(noteID) => alert("delete note " + noteID)} 
-                                            onEdit={(noteID) => alert("edit note " + noteID)} />
+            <NotesContext.Provider value={{notes: notes, tags: tags}}>
+                <div className="notes-container flex-grow-1">
+                    <NotesFilter tagDeleted={(e) => {}} updateFilter={() => {}} />
+                    <div>
+                        {trail.map((props, i) => (
+                            <animated.div key={notes[i].id} style={props}>
+                                <animated.div>
+                                    <NoteListItem key={notes[i].id}
+                                                note={notes[i]} 
+                                                onDelete={(noteID) => alert("delete note " + noteID)} 
+                                                onEdit={(noteID) => alert("edit note " + noteID)} />
+                                </animated.div>
                             </animated.div>
-                        </animated.div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </NotesContext.Provider>
         </div>
     );
 }
