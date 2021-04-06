@@ -1,9 +1,38 @@
-import { ChipModel, DeleteEventArgs } from '@syncfusion/ej2-react-buttons';
-
 import { Note, Tag } from '../models';
-import { ServiceBase } from './serviceBase';
 
-export class NotesService extends ServiceBase {
+export class APIService {
+
+    private _url: string;
+
+    constructor() {
+        this._url = process.env.REACT_APP_API_URL ?? "";
+    }
+
+    private getURL(urlPath: string): string {
+        return this._url + urlPath;
+    }
+
+    private async getResponseJSON<T>(url: string): Promise<T> {
+
+        let response = await fetch(this.getURL(url));
+
+        if(!response.ok) {
+            throw new Error();
+        }
+
+        return await response.json();
+    }
+
+    clubsURL(position: GeolocationPosition | null): string {
+
+        let baseURL = this.getURL("/golfclubs");
+
+        if(position !== null) {
+            baseURL += "?lat=" + position.coords.latitude + "&lng=" + position.coords.longitude;
+        }
+
+        return baseURL;
+    }
 
     async getTags(): Promise<Array<Tag>> {
         return await this.getResponseJSON<Array<Tag>>("/tags");
@@ -42,31 +71,5 @@ export class NotesService extends ServiceBase {
         });
 
         return response.ok;
-    }
-
-
-    beforeTagDeleted(e: DeleteEventArgs | undefined) : void {
-
-        /*
-        if(e) {
-
-            e.cancel = true;
-
-            let tagModel = e.data as ChipModel;
-
-            this._confirmationDialog?.show({
-                content: `The tag '${tagModel.text}' will be deleted and removed from any notes currently using it. Do you wish to continue?`,
-                title: "Confirm Tag Deletion",
-                width: "24%",
-                primaryButtonText: "Delete",
-                primaryButtonClick: async () => {
-                    await this.deleteTag(tagModel.value as number);
-                    //this.refresh();
-                }
-            });
-
-        }
-        */
-
     }
 }

@@ -5,7 +5,7 @@ import { getValue } from '@syncfusion/ej2-base';
 import { createSpinner, hideSpinner, showSpinner } from '@syncfusion/ej2-popups';
 
 import { GolfClub } from '../../models';
-import { ClubsService } from '../../services';
+import { APIService } from '../../services';
 
 import './clubs-page.css';
 
@@ -16,7 +16,7 @@ export class ClubsPage extends React.Component {
 
     private _pageSettings: PageSettingsModel;
     private _filterSettings: FilterSettingsModel;
-    private _clubsService: ClubsService;
+    private _apiService: APIService;
 
     constructor(props: {}) {
 
@@ -34,7 +34,7 @@ export class ClubsPage extends React.Component {
         this.state = {
             clubs: [],
         };
-        this._clubsService = new ClubsService();
+        this._apiService = new APIService();
     }
 
     componentDidMount() {
@@ -61,7 +61,7 @@ export class ClubsPage extends React.Component {
 
         let dataSource = new DataManager({
             adaptor: new WebApiAdaptor(),
-            url: this._clubsService.clubsURL(position),
+            url: this._apiService.clubsURL(position),
             offline: true
         });
 

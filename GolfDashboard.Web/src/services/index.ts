@@ -1,2 +1,1 @@
-export * from './notesService';
-export * from './clubsService';
+export * from './apiService';

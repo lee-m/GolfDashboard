@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import { ToastContainer, toast } from 'react-toastify';
+import { animated, config, useTrail, useSpring } from 'react-spring';
 
+import { APIService } from '../../services';
 import { Note, Tag } from '../../models';
-import { NotesService } from '../../services';
+import { NotesPageController } from './notes-page-controller';
 import { NoteListItem } from './note-list-item'
 import { NotesFilter } from './notes-filter';
-import { NotesContext } from './notes-context';
+import { NotesContext} from './notes-context'
 
 import 'react-toastify/dist/ReactToastify.css';
 import "./notes-page.css";
-import { animated, config, useTrail, useSpring } from 'react-spring';
 
 export function NotesPage(props: {}) {
 
@@ -30,15 +31,24 @@ export function NotesPage(props: {}) {
         to: { opacity: loading ? 1 : 0 }
     });
 
+    const context = {
+        notes: notes,
+        tags: tags,
+        updateNotes: (notes: Array<Note>) => setNotes(notes),
+        updateTags: (tags: Array<Tag>) => setTags(tags)
+    };
+
+    const pageController = new NotesPageController(context);
+
     useEffect(() => {
 
         const getNotes = async () => {
 
             try {
 
-                let notesService = new NotesService();
-                setNotes(await notesService.getNotes());
-                setTags(await notesService.getTags());
+                const apiService = new APIService();
+                setNotes(await apiService.getNotes());
+                setTags(await apiService.getTags());
 
             } catch {
 
@@ -67,16 +77,18 @@ export function NotesPage(props: {}) {
                     </animated.div>
                 </div>
             </div>
-            <NotesContext.Provider value={{notes: notes, tags: tags}}>
+            <NotesContext.Provider value={context}>
                 <div className="notes-container flex-grow-1">
-                    <NotesFilter visible={!loading} tagDeleted={(e) => {}} updateFilter={() => {}} />
+                    <NotesFilter visible={!loading} 
+                                 tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
+                                 updateFilter={() => {}} />
                     <div>
                         {trail.map((props, i) => (
                             <animated.div key={notes[i].id} style={props}>
                                 <animated.div>
                                     <NoteListItem key={notes[i].id}
                                                 note={notes[i]} 
-                                                onDelete={(noteID) => alert("delete note " + noteID)} 
+                                                onDelete={(noteID) => pageController.confirmNoteDeletion(noteID)} 
                                                 onEdit={(noteID) => alert("edit note " + noteID)} />
                                 </animated.div>
                             </animated.div>
