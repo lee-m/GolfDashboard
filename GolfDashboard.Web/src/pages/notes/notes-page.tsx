@@ -18,6 +18,7 @@ export function NotesPage(props: {}) {
     const [loading, setLoading] = useState(true);
     const [notes, setNotes] = useState<Note[]>([]);
     const [tags, setTags] = useState<Tag[]>([]);
+    const [softDeletedNoteIDs, setSoftDeletedNoteIDs] = useState(new Set<number>());
 
     //Apply a staggered fade in animation to each note after it's been loaded
     const trail = useTrail(notes.length, {
@@ -34,6 +35,11 @@ export function NotesPage(props: {}) {
     const context = {
         notes: notes,
         tags: tags,
+        softDeletedNoteIDs: softDeletedNoteIDs,
+
+        markNoteAsDeleted: (noteID: number) => {
+            setSoftDeletedNoteIDs(new Set<number>([...softDeletedNoteIDs, noteID]));
+        }, 
         updateNotes: (notes: Array<Note>) => setNotes(notes),
         updateTags: (tags: Array<Tag>) => setTags(tags)
     };
@@ -87,9 +93,9 @@ export function NotesPage(props: {}) {
                             <animated.div key={notes[i].id} style={props}>
                                 <animated.div>
                                     <NoteListItem key={notes[i].id}
-                                                note={notes[i]} 
-                                                onDelete={(noteID) => pageController.confirmNoteDeletion(noteID)} 
-                                                onEdit={(noteID) => alert("edit note " + noteID)} />
+                                                  note={notes[i]} 
+                                                  onDelete={(noteID) => pageController.confirmNoteDeletion(noteID)} 
+                                                  onEdit={(noteID) => alert("edit note " + noteID)} />
                                 </animated.div>
                             </animated.div>
                         ))}

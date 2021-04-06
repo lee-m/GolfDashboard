@@ -39,7 +39,7 @@ export class NotesPageController {
 
     }
 
-    confirmNoteDeletion(noteID: number) {
+    confirmNoteDeletion(noteID: number): void {
 
         const dialog = this.showConfirmationDialog({
             content: "This note will be deleted. Do you wish to continue?",
@@ -47,7 +47,8 @@ export class NotesPageController {
             okButton: { 
                 text: 'OK', 
                 click: async () => {
-                    this._notesContext.updateNotes(this._notesContext.notes.filter(n => n.id !== noteID));
+                    this._notesContext.markNoteAsDeleted(noteID);
+                    this._apiService.deleteNote(noteID);
                     dialog.close();
                 }
             }
