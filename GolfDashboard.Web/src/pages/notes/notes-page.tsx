@@ -69,7 +69,7 @@ export function NotesPage(props: {}) {
             </div>
             <NotesContext.Provider value={{notes: notes, tags: tags}}>
                 <div className="notes-container flex-grow-1">
-                    <NotesFilter tagDeleted={(e) => {}} updateFilter={() => {}} />
+                    <NotesFilter visible={!loading} tagDeleted={(e) => {}} updateFilter={() => {}} />
                     <div>
                         {trail.map((props, i) => (
                             <animated.div key={notes[i].id} style={props}>

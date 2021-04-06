@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import { ChipDirective, ChipListComponent, ChipsDirective, DeleteEventArgs } from '@syncfusion/ej2-react-buttons';
-import { Tag } from '../../models';
 
 import { NotesContext } from './notes-context';
 
 interface NotesFilterProps {
+    visible: boolean
     tagDeleted: (e: DeleteEventArgs | undefined) => void,
     updateFilter: () => void
 };
@@ -18,7 +18,7 @@ export function NotesFilter(props: NotesFilterProps) {
     });
 
     return (
-        <div className="d-flex">
+        <div className={props.visible ? "d-flex" : "d-none"}>
             <h6 className="font-bold align-self-center pl-2 pr-2 mb-0">Filter by Tag:</h6>
             <ChipListComponent selection="Multiple" 
                                 enableDelete={true} 
