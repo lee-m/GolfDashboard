@@ -93,3 +93,11 @@ a:hover {
 .font-size-small {
     font-size: small;
 }
+
+.toast-info-background {
+    background: var(--color-primary-400);
+}
+
+.toast-error-background {
+    background: var(--color-accent-red);
+}

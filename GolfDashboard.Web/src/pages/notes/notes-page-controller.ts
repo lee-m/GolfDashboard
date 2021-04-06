@@ -1,7 +1,7 @@
 import { ChipModel, DeleteEventArgs } from '@syncfusion/ej2-react-buttons';
-import { ConfirmDialogArgs, Dialog, DialogUtility } from '@syncfusion/ej2-react-popups';
 
 import { APIService } from '../../services';
+import { PopupUtils } from '../../popupUtils';
 import { NotesContextState } from './notes-context';
 
 export class NotesPageController {
@@ -23,11 +23,12 @@ export class NotesPageController {
             let tagModel = e.data as ChipModel;
             let tagID = tagModel.value as number;
 
-            let confirmDialog = this.showConfirmationDialog({
+            let confirmDialog = PopupUtils.showConfirmationDialog({
                 content: `The tag '${tagModel.text}' will be deleted and removed from any notes currently using it. Do you wish to continue?`,
                 okButton: { 
                     text: 'OK', 
                     click: async () => {
+
                         this.deleteTag(tagID);
                         confirmDialog.close();
                     }
@@ -41,15 +42,18 @@ export class NotesPageController {
 
     confirmNoteDeletion(noteID: number): void {
 
-        const dialog = this.showConfirmationDialog({
+        const dialog = PopupUtils.showConfirmationDialog({
             content: "This note will be deleted. Do you wish to continue?",
             title: "Confirm Note Deletion",
             okButton: { 
                 text: 'OK', 
                 click: async () => {
+
                     this._notesContext.markNoteAsDeleted(noteID);
                     this._apiService.deleteNote(noteID);
                     dialog.close();
+                    PopupUtils.infoToast("Note deleted");
+
                 }
             }
         });
@@ -64,24 +68,8 @@ export class NotesPageController {
             //the notes
             this._notesContext.updateTags(this._notesContext.tags.filter(t => t.id !== tagID))
             this._notesContext.updateNotes(await this._apiService.getNotes());
+            
+            PopupUtils.infoToast("Tag deleted");
         }
-    }
-
-    private showConfirmationDialog(args: ConfirmDialogArgs):  Dialog {
-
-        let confirmDialog = DialogUtility.confirm({
-            animationSettings: { effect: 'FadeZoom' },
-            closeOnEscape: true,
-            showCloseIcon: true,
-            ...args
-        });
-
-        //Want the dialog to fade out as it's closing
-        confirmDialog.beforeClose = () => {
-            let overlay = confirmDialog.element!.parentElement!.querySelector(".e-dlg-overlay")!;
-            overlay.classList.add("e-fade");
-        }
-
-        return confirmDialog;
     }
 }

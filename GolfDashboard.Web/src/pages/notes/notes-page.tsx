@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import { ToastContainer, toast } from 'react-toastify';
-import { animated, config, useTrail, useSpring } from 'react-spring';
+import { animated, useTrail, useSpring } from 'react-spring';
 
 import { APIService } from '../../services';
 import { Note, Tag } from '../../models';
@@ -22,7 +22,6 @@ export function NotesPage(props: {}) {
 
     //Apply a staggered fade in animation to each note after it's been loaded
     const trail = useTrail(notes.length, {
-        config: config.default,
         from: { opacity: 0 },
         to: { opacity: 1 }
     });
@@ -86,8 +85,8 @@ export function NotesPage(props: {}) {
             <NotesContext.Provider value={context}>
                 <div className="notes-container flex-grow-1">
                     <NotesFilter visible={!loading} 
-                                 tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
-                                 updateFilter={() => {}} />
+                                tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
+                                updateFilter={() => {}} />
                     <div>
                         {trail.map((props, i) => (
                             <animated.div key={notes[i].id} style={props}>
