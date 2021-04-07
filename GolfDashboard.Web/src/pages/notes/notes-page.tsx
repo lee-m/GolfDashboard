@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import ScaleLoader from 'react-spinners/ScaleLoader';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { animated, useTrail, useSpring } from 'react-spring';
 
 import { APIService } from '../../services';
@@ -74,7 +74,6 @@ export function NotesPage(props: {}) {
 
     return (
         <div className="position-relative w-100">
-            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={true} />
             <div className="position-absolute w-100 h-100">
                 <div className="d-flex justify-content-center align-items-center h-100">
                     <animated.div className="notes-loading" style={loadingAnim}>

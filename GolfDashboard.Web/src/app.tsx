@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import { TopNavBar } from './navbar'
 import { Sidebar } from './sidebar';
 import { ClubsPage, DashboardPage, RoundsPage, NotesPage } from "./pages";
+import { ToastContainer } from 'react-toastify';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -18,6 +19,7 @@ export default class App extends React.Component {
         <div className="main-content">
           <Sidebar />
           <div className="main-content-body">
+            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={true} />
             <Route exact path="/" component={DashboardPage} />
             <Route path="/clubs" component={ClubsPage} />
             <Route path="/rounds" component={RoundsPage} />

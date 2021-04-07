@@ -95,9 +95,9 @@ a:hover {
 }
 
 .toast-info-background {
-    background: var(--color-primary-400);
+    background: var(--color-primary-800);
 }
 
 .toast-error-background {
-    background: var(--color-accent-red);
+    background: var(--color-warning-800);
 }

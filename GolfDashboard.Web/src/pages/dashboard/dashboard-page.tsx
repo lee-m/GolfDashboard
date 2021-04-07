@@ -1,20 +1,19 @@
 import * as React from 'react';
-import { ToastComponent  } from '@syncfusion/ej2-react-notifications';
+import { PopupUtils } from '../../popupUtils';
 import { NotesModal } from '../notes';
+
 
 import './dashboard-page.css';
 
 export class DashboardPage extends React.Component {
 
     private _notesDialog: NotesModal|null;
-    private _toastInstance: ToastComponent|null;
 
     constructor(props: any) {
 
         super(props);
 
         this._notesDialog = null;
-        this._toastInstance = null;
         this.addNoteClick = this.addNoteClick.bind(this);
         this.onNoteSaved = this.onNoteSaved.bind(this);
         
@@ -27,19 +26,9 @@ export class DashboardPage extends React.Component {
     onNoteSaved(success: boolean) {
 
         if(success) {
-
-            this._toastInstance?.show({
-                content: "Note saved",
-                cssClass: "e-toast-success"
-            });
-
+            PopupUtils.infoToast("Note Saved");
         } else {
-
-            this._toastInstance?.show({
-                content: "Error saving note",
-                cssClass: "e-toast-danger"
-            });
-
+            PopupUtils.errorToast("Error Saving Note");
         }
     }
 
@@ -69,7 +58,6 @@ export class DashboardPage extends React.Component {
                     </div>
                 </div>
                 <NotesModal target="#root" onSaveCallback={this.onNoteSaved} ref={dialog => this._notesDialog = dialog} />
-                <ToastComponent ref={toast => this._toastInstance = toast!} position={{X: "Right", Y: "Bottom"}} />
             </div>
         );
     }

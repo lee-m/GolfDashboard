@@ -6,7 +6,6 @@
     "@syncfusion/ej2-react-buttons": "^18.4.46",
     "@syncfusion/ej2-react-dropdowns": "^18.4.47",
     "@syncfusion/ej2-react-grids": "^18.4.47",
-    "@syncfusion/ej2-react-notifications": "^18.4.39",
     "@syncfusion/ej2-react-popups": "^18.4.44",
     "@syncfusion/ej2-react-richtexteditor": "^18.4.47",
     "@testing-library/jest-dom": "^5.11.9",
