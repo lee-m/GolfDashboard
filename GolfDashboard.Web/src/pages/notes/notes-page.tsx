@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import ScaleLoader from 'react-spinners/ScaleLoader';
-import { toast } from 'react-toastify';
 import { animated, useTrail, useSpring } from 'react-spring';
 
-import { APIService } from '../../services';
 import { Note, Tag } from '../../models';
 import { NotesPageController } from './notes-page-controller';
 import { NoteListItem } from './note-list-item'
 import { NotesFilter } from './notes-filter';
 import { NotesContext} from './notes-context'
+import { PopupUtils } from '../../popupUtils';
 
 import 'react-toastify/dist/ReactToastify.css';
 import "./notes-page.css";
@@ -50,18 +49,9 @@ export function NotesPage(props: {}) {
         const getNotes = async () => {
 
             try {
-
-                const apiService = new APIService();
-                setNotes(await apiService.getNotes());
-                setTags(await apiService.getTags());
-
+                await pageController.loadNotesData();
             } catch {
-
-                toast("Error loading notes", {
-                    type: "error",
-                    className: "notes-error-toast-background"
-                });
-
+                PopupUtils.errorToast("Error loading notes");
             } finally {
                 setLoading(false);
             }
@@ -85,7 +75,7 @@ export function NotesPage(props: {}) {
                 <div className="notes-container flex-grow-1">
                     <NotesFilter visible={!loading} 
                                 tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
-                                updateFilter={() => {}} />
+                                updateFilter={() => pageController.updateTagsFilter()} />
                     <div>
                         {trail.map((props, i) => (
                             <animated.div key={notes[i].id} style={props}>
@@ -93,7 +83,7 @@ export function NotesPage(props: {}) {
                                     <NoteListItem key={notes[i].id}
                                                   note={notes[i]} 
                                                   onDelete={(noteID) => pageController.confirmNoteDeletion(noteID)} 
-                                                  onEdit={(noteID) => alert("edit note " + noteID)} />
+                                                  onEdit={(noteID) => pageController.editNote(noteID)} />
                                 </animated.div>
                             </animated.div>
                         ))}

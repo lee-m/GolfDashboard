@@ -14,6 +14,14 @@ export class NotesPageController {
         this._notesContext = notesContext;
     }
 
+    async loadNotesData() {
+
+        const apiService = new APIService();
+        this._notesContext.updateNotes(await apiService.getNotes());
+        this._notesContext.updateTags(await apiService.getTags());
+
+    }
+
     confirmTagDeletion(e: DeleteEventArgs | undefined) : void {
 
         if(e) {
@@ -47,17 +55,23 @@ export class NotesPageController {
             title: "Confirm Note Deletion",
             okButton: { 
                 text: 'OK', 
-                click: async () => {
+                click: () => {
 
-                    this._notesContext.markNoteAsDeleted(noteID);
-                    this._apiService.deleteNote(noteID);
+                    this.deleteNote(noteID);
                     dialog.close();
-                    PopupUtils.infoToast("Note deleted");
 
                 }
             }
         });
 
+    }
+
+    editNote(noteID: number) {
+        alert("todo");
+    }
+
+    updateTagsFilter() {
+        alert("todo");
     }
 
     private async deleteTag(tagID: number) {
@@ -71,5 +85,13 @@ export class NotesPageController {
             
             PopupUtils.infoToast("Tag deleted");
         }
+    }
+
+    private deleteNote(noteID: number) {
+
+        this._notesContext.markNoteAsDeleted(noteID);
+        this._apiService.deleteNote(noteID);
+        PopupUtils.infoToast("Note deleted");
+
     }
 }
