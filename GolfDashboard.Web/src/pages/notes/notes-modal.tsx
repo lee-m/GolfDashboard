@@ -4,7 +4,7 @@ import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent,
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 
 import { APIService } from '../../services';
-import { Note } from '../../models/note';
+import { Note, Tag } from '../../models';
 
 import './notes-modal.css';
 
@@ -12,19 +12,26 @@ interface OnSaveCallback {
     (success: boolean): void 
 }
 
-interface NotesProps { 
+interface OnCloseCallback {
+    (): void
+}
+
+interface NotesModalProps { 
     target: string;
-    onSaveCallback: OnSaveCallback;
+    visible: boolean;
+    selectedNote: Note | null;
+    tags: Array<Tag>;
+    onSave: OnSaveCallback;
+    onClose: OnCloseCallback;
 };
 
-interface NotesState {
-    existingNote: Note | null,
+interface NotesModalState {
     title: string;
     titleErrorCSSClass: string;
     contentErrorCSSClass: string;
 }
 
-export class NotesModal extends React.Component<NotesProps, NotesState> {
+export class NotesModal extends React.Component<NotesModalProps, NotesModalState> {
 
     private _notesDialog: DialogComponent | null = null;
     private _notesDialogButtons: Array<ButtonPropsModel>;
@@ -35,7 +42,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
     private _tagFields: object;
     private _tagEditor: MultiSelectComponent | null;
 
-    constructor(props: NotesProps) {
+    constructor(props: NotesModalProps) {
 
         super(props);
     
@@ -53,7 +60,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                 isPrimary: false,
                 cssClass: "e-primary font-weight-bold"
             },
-            click: () => this._notesDialog?.hide()
+            click: () => this.props.onClose()
         }, {
             buttonModel: {
                 content: "Save",
@@ -69,67 +76,28 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         };
 
         this.state = {
-            existingNote: null,
             title: "",
             titleErrorCSSClass: "",
             contentErrorCSSClass: ""
         };
    }
 
-    async componentDidMount() {
-        await this.refreshTags();
-    }
+    componentDidUpdate(prevProps: NotesModalProps, prevState: NotesModalState) {
 
-    async refreshTags() {
-
-        try
-        {
-            let tags = await this._notesService.getTags();
-            let tagsDataSource: { text: string; id: number; }[] = [];
-
-            tags.forEach(t => {
-                tagsDataSource.push({
-                    text: t.text,
-                    id: t.id
-                });
-            });
-
-            this._tagEditor!.dataSource = tagsDataSource;
-        }
-        catch
-        { }
-    }
-
-    async show(note?: Note) {
-
-        if(note) {
-
-            this._rteEditor!.value = note.content;
-            this._tagEditor!.value = note.tags;
-            this.setState({ 
-                title: note.title,
-                existingNote: note 
-            });
-
-        } else {
-
-            this._rteEditor!.value = "";
-            this._tagEditor!.value = [];
-            this.setState({ title: "" });
-
+        if(this.props.visible === prevProps.visible) {
+            return;
         }
 
-        await this.refreshTags();
-        this._notesDialog?.show();
-    }
+        this.updateTagsDataSource();
 
-    beforeDialogClose() {
+        this._rteEditor!.value = this.props.selectedNote?.content ?? "";
+        this._tagEditor!.value = this.props.selectedNote?.tags ?? [];
 
-        if(this._notesDialog) {
-
-            let overlay = this._notesDialog.element!.parentElement!.querySelector(".e-dlg-overlay")!;
-            overlay.classList.add("e-fade");
-        }
+        this.setState({ 
+            title: this.props.selectedNote?.title ?? "",
+            titleErrorCSSClass: "",
+            contentErrorCSSClass: ""
+        });
     }
 
     render() {
@@ -137,8 +105,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
             <DialogComponent width='60%' 
                              height='60%' 
                              target={this.props.target}
-                             visible={false} 
-                             showCloseIcon={true} 
+                             visible={this.props.visible} 
                              isModal={true}
                              allowDragging={true}
                              header='Add New Note'
@@ -149,7 +116,12 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                              beforeClose={() => this.beforeDialogClose()}
                              ref={dialog => this._notesDialog = dialog}>
                 <div className="notes-main-content h-100">
-                    <input id="noteTitle" type="text" placeholder="Title" className={"mb-2 e-input " + this.state.titleErrorCSSClass} value={this.state.title} onChange={(e) => this.onTitleChanged(e)} />
+                    <input id="noteTitle" 
+                           type="text" 
+                           placeholder="Title" 
+                           className={"mb-2 e-input " + this.state.titleErrorCSSClass} 
+                           value={this.state.title} 
+                           onChange={(e) => this.onTitleChanged(e)} />
                     <div className="d-flex mt-1 mb-2 w-100">
                         <span className="align-self-center mr-2">Tags:</span>
                         <MultiSelectComponent ref={e => this._tagEditor = e}
@@ -159,7 +131,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
                                               placeholder="No Tags Selected" />
                     </div>
                     <div className={"d-flex flex-grow-1 " + this.state.contentErrorCSSClass}>
-                        <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor} >
+                        <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor} value={this.props.selectedNote?.content} >
                             <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
                         </RichTextEditorComponent>
                     </div>
@@ -168,14 +140,37 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         );
     }
 
-    onTitleChanged(event: ChangeEvent<HTMLInputElement>): void {
+    private updateTagsDataSource() {
+
+        let tagsDataSource: { text: string; id: number; }[] = [];
+
+        this.props.tags.forEach(t => {
+            tagsDataSource.push({
+                text: t.text,
+                id: t.id
+            });
+        });
+
+        this._tagEditor!.dataSource = tagsDataSource;
+    }
+
+    private beforeDialogClose() {
+
+        if(this._notesDialog) {
+
+            let overlay = this._notesDialog.element!.parentElement!.querySelector(".e-dlg-overlay")!;
+            overlay.classList.add("e-fade");
+        }
+    }
+
+    private onTitleChanged(event: ChangeEvent<HTMLInputElement>): void {
 
         this.setState({
             title: event.target.value,
         });
     }
 
-    async saveNewNote() {
+    private async saveNewNote() {
 
         //Check something has been entered before allowing the note to be saved
         if(!this.validate()) {
@@ -183,7 +178,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         }
 
         var noteContents = {
-            id: this.state.existingNote?.id,
+            id: this.props.selectedNote?.id,
             title: this.state.title,
             content: this._rteEditor!.getHtml(),
             tags: this.getSelectedTags()
@@ -192,17 +187,17 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         try 
         {
             if(await this._notesService.saveNote(noteContents)) {
-                this.props.onSaveCallback(true);
-                this._notesDialog?.hide();
+                this.props.onSave(true);
+                this.props.onClose();
             }
         }
         catch
         {
-            this.props.onSaveCallback(false);
+            this.props.onSave(false);
         }
     }
 
-    validate(): boolean {
+    private validate(): boolean {
 
         var titleMissing = !this.state.title;
         var contentMissing = (this._rteEditor!.value?.length ?? 0) === 0;
@@ -220,7 +215,7 @@ export class NotesModal extends React.Component<NotesProps, NotesState> {
         return true;
     }
 
-    getSelectedTags(): string[] {
+    private getSelectedTags(): string[] {
 
         var tags: string[] = [];
 

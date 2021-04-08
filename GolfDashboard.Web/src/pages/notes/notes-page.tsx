@@ -7,6 +7,7 @@ import { NotesPageController } from './notes-page-controller';
 import { NoteListItem } from './note-list-item'
 import { NotesFilter } from './notes-filter';
 import { NotesContext} from './notes-context'
+import { NotesModal } from './notes-modal';
 import { PopupUtils } from '../../popupUtils';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,6 +15,8 @@ import "./notes-page.css";
 
 export function NotesPage(props: {}) {
 
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedNote, setSelectedNote] = useState<Note | null>(null);
     const [loading, setLoading] = useState(true);
     const [notes, setNotes] = useState<Note[]>([]);
     const [tags, setTags] = useState<Tag[]>([]);
@@ -25,8 +28,9 @@ export function NotesPage(props: {}) {
         to: { opacity: 1 }
     });
 
+    //Loading element is faded out once we've finished loading the required data
     const loadingAnim = useSpring({
-        from: { opacity: loading ? 0 : 1 },
+        from: { opacity: 1 },
         to: { opacity: loading ? 1 : 0 }
     });
 
@@ -39,7 +43,7 @@ export function NotesPage(props: {}) {
             setSoftDeletedNoteIDs(new Set<number>([...softDeletedNoteIDs, noteID]));
         }, 
         updateNotes: (notes: Array<Note>) => setNotes(notes),
-        updateTags: (tags: Array<Tag>) => setTags(tags)
+        updateTags: (tags: Array<Tag>) => setTags(tags),
     };
 
     const pageController = new NotesPageController(context);
@@ -60,7 +64,7 @@ export function NotesPage(props: {}) {
 
         getNotes();
 
-    }, []);
+    });
 
     return (
         <div className="position-relative w-100">
@@ -83,11 +87,21 @@ export function NotesPage(props: {}) {
                                     <NoteListItem key={notes[i].id}
                                                   note={notes[i]} 
                                                   onDelete={(noteID) => pageController.confirmNoteDeletion(noteID)} 
-                                                  onEdit={(noteID) => pageController.editNote(noteID)} />
+                                                  onEdit={() => {
+                                                      setSelectedNote(notes[i]);
+                                                      setModalVisible(true);
+                                                  }} />
                                 </animated.div>
                             </animated.div>
                         ))}
                     </div>
+                    <NotesModal target=".main-content-body" 
+                                visible={modalVisible}
+                                tags={tags}
+                                selectedNote={selectedNote}
+                                onSave={(success: boolean) => {}}
+                                onClose={() => setModalVisible(false)} />
+
                 </div>
             </NotesContext.Provider>
         </div>

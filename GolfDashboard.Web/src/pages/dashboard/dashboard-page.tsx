@@ -20,7 +20,6 @@ export class DashboardPage extends React.Component {
     }
 
     addNoteClick() {
-        this._notesDialog?.show();
     }
 
     onNoteSaved(success: boolean) {
@@ -57,7 +56,13 @@ export class DashboardPage extends React.Component {
                         </div>
                     </div>
                 </div>
-                <NotesModal target="#root" onSaveCallback={this.onNoteSaved} ref={dialog => this._notesDialog = dialog} />
+                <NotesModal target="#root" 
+                            visible={false} 
+                            selectedNote={null}
+                            tags={[]}
+                            onSave={this.onNoteSaved} 
+                            onClose={() => {}} 
+                            ref={dialog => this._notesDialog = dialog} />
             </div>
         );
     }
