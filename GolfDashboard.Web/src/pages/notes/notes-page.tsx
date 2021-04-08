@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import ScaleLoader from 'react-spinners/ScaleLoader';
 import { animated, useTrail, useSpring } from 'react-spring';
+import { ScaleLoader } from 'react-spinners';
 
 import { Note, Tag } from '../../models';
 import { NotesPageController, NoteListItem, NotesFilter, NotesContext, NotesModal } from '../notes';
 import { PopupUtils } from '../../popupUtils';
+import { APIService } from '../../services';
 
 import 'react-toastify/dist/ReactToastify.css';
 import "./notes-page.css";
@@ -49,7 +50,11 @@ export function NotesPage(props: {}) {
         const getNotes = async () => {
 
             try {
-                await pageController.loadNotesData();
+
+                const apiService = new APIService();
+                setNotes(await apiService.getNotes());
+                setTags(await apiService.getTags());
+
             } catch {
                 PopupUtils.errorToast("Error loading notes");
             } finally {
@@ -60,7 +65,7 @@ export function NotesPage(props: {}) {
 
         getNotes();
 
-    });
+    }, []);
 
     return (
         <div className="position-relative w-100">
@@ -95,7 +100,13 @@ export function NotesPage(props: {}) {
                                 visible={modalVisible}
                                 tags={tags}
                                 selectedNote={selectedNote}
-                                onSave={(success: boolean) => {}}
+                                onSave={async (note: Note) => {
+
+                                    if(await pageController.saveNote(note)) {
+                                        setModalVisible(false);
+                                    }
+                                    
+                                }}
                                 onClose={() => setModalVisible(false)} />
 
                 </div>

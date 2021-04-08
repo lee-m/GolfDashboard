@@ -1,35 +1,10 @@
 import * as React from 'react';
-import { PopupUtils } from '../../popupUtils';
+import { Note } from '../../models';
 import { NotesModal } from '../notes';
-
 
 import './dashboard-page.css';
 
 export class DashboardPage extends React.Component {
-
-    private _notesDialog: NotesModal|null;
-
-    constructor(props: any) {
-
-        super(props);
-
-        this._notesDialog = null;
-        this.addNoteClick = this.addNoteClick.bind(this);
-        this.onNoteSaved = this.onNoteSaved.bind(this);
-        
-    }
-
-    addNoteClick() {
-    }
-
-    onNoteSaved(success: boolean) {
-
-        if(success) {
-            PopupUtils.infoToast("Note Saved");
-        } else {
-            PopupUtils.errorToast("Error Saving Note");
-        }
-    }
 
     render() {
         return (
@@ -51,7 +26,7 @@ export class DashboardPage extends React.Component {
                         <div className="d-flex">
                             <span>Notes</span>
                             <div className="ml-auto">
-                                <button className="e-btn e-lib e-flat e-primary e-small align-self-end font-size-small font-weight-bold" onClick={this.addNoteClick}>Add Note</button>
+                                <button className="e-btn e-lib e-flat e-primary e-small align-self-end font-size-small font-weight-bold">Add Note</button>
                             </div>
                         </div>
                     </div>
@@ -60,9 +35,8 @@ export class DashboardPage extends React.Component {
                             visible={false} 
                             selectedNote={null}
                             tags={[]}
-                            onSave={this.onNoteSaved} 
-                            onClose={() => {}} 
-                            ref={dialog => this._notesDialog = dialog} />
+                            onSave={(note: Note) => {}} 
+                            onClose={() => {}} />
             </div>
         );
     }

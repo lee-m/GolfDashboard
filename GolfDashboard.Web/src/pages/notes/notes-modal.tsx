@@ -3,13 +3,12 @@ import { AnimationSettingsModel, ButtonPropsModel, DialogComponent } from '@sync
 import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 
-import { APIService } from '../../services';
 import { Note, Tag } from '../../models';
 
 import './notes-modal.css';
 
 interface OnSaveCallback { 
-    (success: boolean): void 
+    (note: Note): void 
 }
 
 interface OnCloseCallback {
@@ -37,7 +36,6 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
     private _notesDialogButtons: Array<ButtonPropsModel>;
     private _animationSettings: AnimationSettingsModel;
     private _rteEditor: RichTextEditorComponent | null;
-    private _notesService: APIService;
 
     private _tagFields: object;
     private _tagEditor: MultiSelectComponent | null;
@@ -48,7 +46,6 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
     
         this._rteEditor = null;
         this._tagEditor = null;
-        this._notesService = new APIService();
         this._tagFields = {
             text: "text",
             value: "id"
@@ -169,7 +166,7 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
         });
     }
 
-    private async saveNewNote() {
+    private saveNewNote() {
 
         //Check something has been entered before allowing the note to be saved
         if(!this.validate()) {
@@ -183,17 +180,7 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
             tags: this.getSelectedTags()
         };
 
-        try 
-        {
-            if(await this._notesService.saveNote(noteContents)) {
-                this.props.onSave(true);
-                this.props.onClose();
-            }
-        }
-        catch
-        {
-            this.props.onSave(false);
-        }
+        this.props.onSave(noteContents);
     }
 
     private validate(): boolean {

@@ -3,6 +3,7 @@ import { ChipModel, DeleteEventArgs } from '@syncfusion/ej2-react-buttons';
 import { APIService } from '../../services';
 import { PopupUtils } from '../../popupUtils';
 import { NotesContextState } from '../notes';
+import { Note } from '../../models';
 
 export class NotesPageController {
 
@@ -14,12 +15,9 @@ export class NotesPageController {
         this._notesContext = notesContext;
     }
 
-    async loadNotesData() {
-
-        const apiService = new APIService();
-        this._notesContext.updateNotes(await apiService.getNotes());
-        this._notesContext.updateTags(await apiService.getTags());
-
+    async refreshData() {
+        this._notesContext.updateNotes(await this._apiService.getNotes());
+        this._notesContext.updateTags(await this._apiService.getTags());
     }
 
     confirmTagDeletion(e: DeleteEventArgs | undefined) : void {
@@ -66,12 +64,28 @@ export class NotesPageController {
 
     }
 
-    editNote(noteID: number) {
+    updateTagsFilter() {
         alert("todo");
     }
 
-    updateTagsFilter() {
-        alert("todo");
+    async saveNote(note: Note): Promise<boolean> {
+
+        try {
+
+            if(await this._apiService.saveNote(note)) {
+
+                await this.refreshData();
+                PopupUtils.infoToast("Note Saved");
+
+                return true;
+
+            }
+
+        } catch {
+        }
+
+        PopupUtils.errorToast("Error Saving Note");
+        return false;
     }
 
     private async deleteTag(tagID: number) {
