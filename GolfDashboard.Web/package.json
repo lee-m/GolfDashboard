@@ -3,16 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@syncfusion/ej2-base": "^19.1.54",
+    "@syncfusion/ej2-data": "^19.1.55",
+    "@syncfusion/ej2-popups": "^19.1.54",
     "@syncfusion/ej2-react-buttons": "^19.1.54",
     "@syncfusion/ej2-react-dropdowns": "^19.1.55",
     "@syncfusion/ej2-react-grids": "^19.1.55",
     "@syncfusion/ej2-react-popups": "^19.1.54",
     "@syncfusion/ej2-react-richtexteditor": "^19.1.55",
     "@testing-library/jest-dom": "^5.11.10",
-    "@testing-library/react": "^11.2.6",
-    "@testing-library/user-event": "^13.1.1",
-    "@types/jest": "^26.0.22",
-    "@types/node": "^14.14.37",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
     "@types/react-router-dom": "5.1.7",
@@ -27,7 +26,6 @@
     "react-spinners": "^0.10.6",
     "react-spring": "^9.0.0",
     "react-toastify": "^7.0.3",
-    "react-transition-group": "^4.4.1",
     "typescript": "^4.2.3"
   },
   "scripts": {
