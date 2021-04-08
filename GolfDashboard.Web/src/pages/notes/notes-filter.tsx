@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { ChipDirective, ChipListComponent, ChipsDirective, DeleteEventArgs } from '@syncfusion/ej2-react-buttons';
 
-import { NotesContext } from './notes-context';
+import { NotesContext } from '../notes';
 
 interface NotesFilterProps {
     visible: boolean

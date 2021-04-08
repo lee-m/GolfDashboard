@@ -2,8 +2,8 @@ import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { ChipDirective, ChipListComponent, ChipsDirective } from '@syncfusion/ej2-react-buttons';
 import { animated, useSpring } from 'react-spring';
 
-import { NotesContext } from './notes-context';
-import { Note } from '../../models/note';
+import { NotesContext } from '../notes';
+import { Note } from '../../models';
 import { IconButton } from '../../icon-button';
 
 type NoteListItemProps = {

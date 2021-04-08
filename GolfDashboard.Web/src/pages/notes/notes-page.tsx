@@ -3,11 +3,7 @@ import ScaleLoader from 'react-spinners/ScaleLoader';
 import { animated, useTrail, useSpring } from 'react-spring';
 
 import { Note, Tag } from '../../models';
-import { NotesPageController } from './notes-page-controller';
-import { NoteListItem } from './note-list-item'
-import { NotesFilter } from './notes-filter';
-import { NotesContext} from './notes-context'
-import { NotesModal } from './notes-modal';
+import { NotesPageController, NoteListItem, NotesFilter, NotesContext, NotesModal } from '../notes';
 import { PopupUtils } from '../../popupUtils';
 
 import 'react-toastify/dist/ReactToastify.css';

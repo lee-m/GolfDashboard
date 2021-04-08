@@ -2,7 +2,7 @@ import { ChipModel, DeleteEventArgs } from '@syncfusion/ej2-react-buttons';
 
 import { APIService } from '../../services';
 import { PopupUtils } from '../../popupUtils';
-import { NotesContextState } from './notes-context';
+import { NotesContextState } from '../notes';
 
 export class NotesPageController {
 
