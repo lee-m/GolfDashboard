@@ -1,7 +1,8 @@
-interface IconButtonProps {
+import { ButtonProps } from './button-props';
+
+interface IconButtonProps extends ButtonProps {
     iconCSSClass: string,
     title: string,
-    clickHandler: () => void
 }
 
 export function IconButton(props: IconButtonProps) {

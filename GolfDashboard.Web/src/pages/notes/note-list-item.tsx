@@ -4,7 +4,7 @@ import { animated, useSpring } from 'react-spring';
 
 import { NotesContext } from '../notes';
 import { Note } from '../../models';
-import { IconButton } from '../../icon-button';
+import { EditButton, DeleteButton } from '../../components';
 
 type NoteListItemProps = {
     note: Note,
@@ -81,14 +81,8 @@ export function NoteListItem(props: NoteListItemProps) {
                     <div className="d-flex justify-content-between">
                         <h4 className="card-title">{props.note.title}</h4>
                         <div>
-                            <IconButton 
-                                title="Edit" 
-                                iconCSSClass="bi-pencil-square"
-                                clickHandler={() => props.onEdit(props.note.id!)} />
-                            <IconButton 
-                                title="Delete"  
-                                iconCSSClass="bi-x-square"
-                                clickHandler={() => props.onDelete(props.note.id!) } />
+                            <EditButton clickHandler={() => props.onEdit(props.note.id!)} />
+                            <DeleteButton clickHandler={() => props.onDelete(props.note.id!) } />
                         </div>
                     </div>
                     <div dangerouslySetInnerHTML={{__html: props.note.content}}></div>
