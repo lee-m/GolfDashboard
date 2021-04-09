@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { Note } from '../../models';
-import { NotesModal } from '../notes';
 
 import './dashboard-page.css';
 
@@ -25,18 +23,9 @@ export class DashboardPage extends React.Component {
                     <div className="grid-two-col-span">
                         <div className="d-flex">
                             <span>Notes</span>
-                            <div className="ml-auto">
-                                <button className="e-btn e-lib e-flat e-primary e-small align-self-end font-size-small font-weight-bold">Add Note</button>
-                            </div>
                         </div>
                     </div>
                 </div>
-                <NotesModal target="#root" 
-                            visible={false} 
-                            selectedNote={null}
-                            tags={[]}
-                            onSave={(note: Note) => {}} 
-                            onClose={() => {}} />
             </div>
         );
     }
