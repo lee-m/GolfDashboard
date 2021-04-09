@@ -6,7 +6,8 @@ import { NotesContext } from '../notes';
 interface NotesFilterProps {
     visible: boolean
     tagDeleted: (e: DeleteEventArgs | undefined) => void,
-    updateFilter: (selectedTags: string[]) => void
+    updateFilter: (selectedTags: string[]) => void,
+    addNote: () => void
 };
 
 export function NotesFilter(props: NotesFilterProps) {
@@ -40,7 +41,8 @@ export function NotesFilter(props: NotesFilterProps) {
 
     return (
         <div className={props.visible ? "d-flex" : "d-none"}>
-            <h6 className="font-bold align-self-center pl-2 pr-2 mb-0">Filter by Tag:</h6>
+            <ButtonComponent cssClass="e-small ml-2 mt-2 mb-2" isPrimary={true} content="Add New Note" onClick={() => props.addNote()} />
+            <h6 className="font-bold align-self-center pl-2 pr-2 pb-1 mb-0">Filter by Tag:</h6>
             <ChipListComponent ref={tagListRef}
                                selection="Multiple" 
                                enableDelete={true} 

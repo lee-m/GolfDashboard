@@ -78,7 +78,11 @@ export function NotesPage(props: {}) {
                 <div className="notes-container flex-grow-1">
                     <NotesFilter visible={!loading} 
                                 tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
-                                updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)} />
+                                updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
+                                addNote={() => {
+                                    setSelectedNote(null);
+                                    setModalVisible(true);
+                                }} />
                     <hr className="ml-2 mr-2" />
                     <div>
                         {trail.map((props, i) => (
