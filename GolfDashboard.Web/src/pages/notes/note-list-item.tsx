@@ -76,7 +76,7 @@ export function NoteListItem(props: NoteListItemProps) {
 
     return (
         <animated.div style={itemAnimation} ref={listItemRef}>
-            <div className="card m-1" key={props.note.id}>
+            <div className="card ml-2 mr-2" key={props.note.id}>
                 <div className="card-body pb-3 pt-3">
                     <div className="d-flex justify-content-between">
                         <h4 className="card-title">{props.note.title}</h4>

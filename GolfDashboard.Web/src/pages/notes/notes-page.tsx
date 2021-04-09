@@ -81,6 +81,7 @@ export function NotesPage(props: {}) {
                     <NotesFilter visible={!loading} 
                                 tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
                                 updateFilter={() => pageController.updateTagsFilter()} />
+                    <hr className="ml-2 mr-2" />
                     <div>
                         {trail.map((props, i) => (
                             <animated.div key={notes[i].id} style={props}>
