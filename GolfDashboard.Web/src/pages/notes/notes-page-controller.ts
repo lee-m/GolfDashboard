@@ -4,7 +4,6 @@ import { APIService } from '../../services';
 import { PopupUtils } from '../../popupUtils';
 import { NotesContextState } from '../notes';
 import { Note } from '../../models';
-import { select } from '@syncfusion/ej2-base';
 
 export class NotesPageController {
 
@@ -71,7 +70,7 @@ export class NotesPageController {
             this._notesContext.hideNotes(new Set<number>());
             return;
         }
-        
+
         const noteFilteredOut = (note: Note) : boolean => {
             return !note.tags.some((noteTag: string) => selectedTags.find(selectedTag => selectedTag === noteTag));
         }

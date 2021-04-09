@@ -74,13 +74,6 @@ export function NotesPage(props: {}) {
 
     return (
         <div className="position-relative w-100">
-            <div className="position-absolute w-100 h-100">
-                <div className="d-flex justify-content-center align-items-center h-100">
-                    <animated.div className="notes-loading" style={loadingAnim}>
-                        <ScaleLoader loading={loading} height={35} width={4} radius={2} margin={2} color={"#3E517A"} />
-                    </animated.div>
-                </div>
-            </div>
             <NotesContext.Provider value={context}>
                 <div className="notes-container flex-grow-1">
                     <NotesFilter visible={!loading} 
@@ -117,6 +110,13 @@ export function NotesPage(props: {}) {
 
                 </div>
             </NotesContext.Provider>
+            <div className="position-absolute w-100 h-100">
+                <div className="d-flex justify-content-center align-items-center h-100">
+                    <animated.div className="notes-loading" style={loadingAnim}>
+                        <ScaleLoader loading={loading} height={35} width={4} radius={2} margin={2} color={"#3E517A"} />
+                    </animated.div>
+                </div>
+            </div>
         </div>
     );
 }
