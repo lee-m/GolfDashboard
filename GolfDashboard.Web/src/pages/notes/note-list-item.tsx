@@ -25,7 +25,7 @@ export function NoteListItem(props: NoteListItemProps) {
     const notesContext = useContext(NotesContext);
     const listItemRef = useRef<HTMLDivElement>(null);
     const [height, setHeight] = useState(0);
-    const isVisible = !notesContext.softDeletedNoteIDs.has(props.note.id!);
+    const isVisible = !notesContext.softDeletedNoteIDs.has(props.note.id!) && !notesContext.hiddenNoteIDs.has(props.note.id!);
 
     let springProps: SpringProps = {
         opacity: isVisible ? 1 : 0,

@@ -18,6 +18,7 @@ export function NotesPage(props: {}) {
     const [notes, setNotes] = useState<Note[]>([]);
     const [tags, setTags] = useState<Tag[]>([]);
     const [softDeletedNoteIDs, setSoftDeletedNoteIDs] = useState(new Set<number>());
+    const [hiddenNoteIDs, setHiddenNoteIDs] = useState(new Set<number>());
 
     //Apply a staggered fade in animation to each note after it's been loaded
     const trail = useTrail(notes.length, {
@@ -35,10 +36,14 @@ export function NotesPage(props: {}) {
         notes: notes,
         tags: tags,
         softDeletedNoteIDs: softDeletedNoteIDs,
+        hiddenNoteIDs: hiddenNoteIDs,
 
         markNoteAsDeleted: (noteID: number) => {
             setSoftDeletedNoteIDs(new Set<number>([...softDeletedNoteIDs, noteID]));
         }, 
+        hideNotes: (noteIDs: Set<number>) => {
+            setHiddenNoteIDs(noteIDs);
+        },
         updateNotes: (notes: Array<Note>) => setNotes(notes),
         updateTags: (tags: Array<Tag>) => setTags(tags),
     };
@@ -80,7 +85,7 @@ export function NotesPage(props: {}) {
                 <div className="notes-container flex-grow-1">
                     <NotesFilter visible={!loading} 
                                 tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
-                                updateFilter={() => pageController.updateTagsFilter()} />
+                                updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)} />
                     <hr className="ml-2 mr-2" />
                     <div>
                         {trail.map((props, i) => (
