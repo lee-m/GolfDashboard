@@ -73,53 +73,45 @@ export function NotesPage(props: {}) {
     }, []);
 
     return (
-        <div className="position-relative w-100">
-            <NotesContext.Provider value={context}>
-                <div className="notes-container flex-grow-1 pt-0">
-                    <NotesFilter visible={true} 
-                                 tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
-                                 updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
-                                 addNote={() => {
-                                    setSelectedNote(null);
-                                    setModalVisible(true);
-                                 }} />
-                    <div>
+        <NotesContext.Provider value={context}>
+            <div className="notes-container flex-grow-1 pt-0 d-flex flex-column">
+                <NotesFilter visible={true} 
+                                tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
+                                updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
+                                addNote={() => {
+                                setSelectedNote(null);
+                                setModalVisible(true);
+                                }} />
+                <div className="position-relative flex-grow-1">
+                    <div className="position-absolute overflow-auto notes-list">
                         {trail.map((props, i) => (
                             <animated.div key={notes[i].id} style={props}>
                                 <animated.div>
                                     <NoteListItem key={notes[i].id}
-                                                  note={notes[i]} 
-                                                  onDelete={(noteID) => pageController.confirmNoteDeletion(noteID)} 
-                                                  onEdit={() => {
-                                                      setSelectedNote(notes[i]);
-                                                      setModalVisible(true);
-                                                  }} />
+                                                    note={notes[i]} 
+                                                    onDelete={(noteID) => pageController.confirmNoteDeletion(noteID)} 
+                                                    onEdit={() => {
+                                                        setSelectedNote(notes[i]);
+                                                        setModalVisible(true);
+                                                    }} />
                                 </animated.div>
                             </animated.div>
                         ))}
                     </div>
-                    <NotesModal target=".page-content" 
-                                visible={modalVisible}
-                                tags={tags}
-                                selectedNote={selectedNote}
-                                onSave={async (note: Note) => {
-
-                                    if(await pageController.saveNote(note)) {
-                                        setModalVisible(false);
-                                    }
-                                    
-                                }}
-                                onClose={() => setModalVisible(false)} />
-
                 </div>
-            </NotesContext.Provider>
-            <div className="position-absolute w-100 h-100">
-                <div className="d-flex justify-content-center align-items-center h-100">
-                    <animated.div className="notes-loading" style={loadingAnim}>
-                        <ScaleLoader loading={loading} height={35} width={4} radius={2} margin={2} color={"#3E517A"} />
-                    </animated.div>
-                </div>
+                <NotesModal target=".page-content" 
+                            visible={modalVisible}
+                            tags={tags}
+                            selectedNote={selectedNote}
+                            onSave={async (note: Note) => {
+
+                                if(await pageController.saveNote(note)) {
+                                    setModalVisible(false);
+                                }
+                                
+                            }}
+                            onClose={() => setModalVisible(false)} />
             </div>
-        </div>
+        </NotesContext.Provider>
     );
 }

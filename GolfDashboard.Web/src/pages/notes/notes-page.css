@@ -10,11 +10,11 @@
     color: rgb(33, 37, 41) !important
 }
 
-.notes-filter {
-    position: sticky;
+.notes-list {
     top: 0;
-    z-index: 1;
-    background-color: var(--color-grey-100);
+    left: 0;
+    bottom: 0;
+    right: 0;
 }
 
 .filter-by-tag-label {
