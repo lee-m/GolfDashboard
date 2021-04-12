@@ -68,7 +68,7 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
         }]
 
         this._animationSettings = {
-            effect: "Fade"
+            effect: "FadeZoom"
         };
 
         this.state = {
