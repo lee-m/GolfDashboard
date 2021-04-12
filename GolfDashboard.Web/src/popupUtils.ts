@@ -16,7 +16,8 @@ export class PopupUtils {
 
         toast.info(title, {
             className: "toast-error-background",
-            closeButton: false,
+            closeButton: true,
+            autoClose: false
         });
 
     }
