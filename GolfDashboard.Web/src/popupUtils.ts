@@ -24,7 +24,7 @@ export class PopupUtils {
     public static showConfirmationDialog(args: ConfirmDialogArgs):  Dialog {
 
         let confirmDialog = DialogUtility.confirm({
-            animationSettings: { effect: 'Fade' },
+            animationSettings: { effect: 'FadeZoom' },
             closeOnEscape: true,
             showCloseIcon: true,
             ...args
