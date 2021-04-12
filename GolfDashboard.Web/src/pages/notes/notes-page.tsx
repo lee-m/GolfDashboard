@@ -75,15 +75,14 @@ export function NotesPage(props: {}) {
     return (
         <div className="position-relative w-100">
             <NotesContext.Provider value={context}>
-                <div className="notes-container flex-grow-1">
-                    <NotesFilter visible={!loading && tags.length > 0} 
+                <div className="notes-container flex-grow-1 pt-0">
+                    <NotesFilter visible={true} 
                                  tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
                                  updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
                                  addNote={() => {
                                     setSelectedNote(null);
                                     setModalVisible(true);
                                  }} />
-                    <hr className={"ml-2 mr-2 " + (tags.length === 0 ? "d-none" : "")} />
                     <div>
                         {trail.map((props, i) => (
                             <animated.div key={notes[i].id} style={props}>
@@ -99,7 +98,7 @@ export function NotesPage(props: {}) {
                             </animated.div>
                         ))}
                     </div>
-                    <NotesModal target=".main-content-body" 
+                    <NotesModal target=".page-content" 
                                 visible={modalVisible}
                                 tags={tags}
                                 selectedNote={selectedNote}

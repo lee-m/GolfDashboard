@@ -38,9 +38,6 @@
     --color-accent-green: #6CDA98;
     --color-accent-red: #DA6C6C;
     --color-accent-blue: #3E517A;
-
-    /* Sidebar */
-    --sidebar-width: 12.5em;
 }
 
 html {
@@ -50,6 +47,7 @@ html {
 body {
     min-height: 100%;
     display: flex;
+    overflow: hidden;
 }
 
 .btn-primary {
@@ -68,22 +66,55 @@ a:hover {
 }
 
 .root-content {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.main-content {
     background-color: var(--color-primary-800);
     display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: 1fr;
-    height: 100%;
+    grid-template-columns: 12.5em 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "header header"
+                         "sidebar content";
+    height: 100vh;
 }
 
-.main-content-body {
-    background-color: var(--color-grey-100);
+/*
+ * Navbar 
+ */
+.navbar {
+    grid-area: header;
+    background: var(--color-primary-800);
     display: flex;
+}
+
+.navbar-title {
+    font-size: 20px;
+}
+
+/*
+ * Sidebar
+ */
+.sidebar {
+    grid-area: sidebar;
+    background: var(--color-primary-800);
+}
+
+.sidebar-selected-item {
+    background-color: var(--color-primary-900);
+    transition: background-color 0.5s ease;
+}
+
+.sidebar-item-logo {
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+}
+
+/*
+ * Page content
+ */
+.page-content {
+    background-color: var(--color-grey-100);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .text-white-tinted {

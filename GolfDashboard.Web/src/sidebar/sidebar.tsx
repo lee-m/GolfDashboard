@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { SideNavItem } from './side-nav-item';
 
-import "./sidebar.css";
-
 import HomeLogo from '../images/home.svg';
 import GolfCourseLogo from '../images/golf_course.svg';
 import GridLogo from '../images/grid.svg';

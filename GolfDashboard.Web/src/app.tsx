@@ -14,17 +14,15 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div className="root-content">
+      <div className="root-content w-100 overflow-hidden">
         <TopNavBar />
-        <div className="main-content">
-          <Sidebar />
-          <div className="main-content-body">
-            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={true} />
-            <Route exact path="/" component={DashboardPage} />
-            <Route path="/clubs" component={ClubsPage} />
-            <Route path="/rounds" component={RoundsPage} />
-            <Route path="/notes" component={NotesPage} />
-          </div>
+        <Sidebar />
+        <div className="page-content">
+          <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={true} />
+          <Route exact path="/" component={DashboardPage} />
+          <Route path="/clubs" component={ClubsPage} />
+          <Route path="/rounds" component={RoundsPage} />
+          <Route path="/notes" component={NotesPage} />
         </div>
       </div>
     );
