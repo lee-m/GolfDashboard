@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { animated, useTrail, useSpring } from 'react-spring';
-import { ScaleLoader } from 'react-spinners';
+import { animated, useTrail } from 'react-spring';
 
 import { Note, Tag } from '../../models';
 import { NotesPageController, NoteListItem, NotesFilter, NotesContext, NotesModal } from '../notes';
 import { PopupUtils } from '../../popupUtils';
 import { APIService } from '../../services';
+import { LoadingOverlay } from '../../components';
 
 import 'react-toastify/dist/ReactToastify.css';
 import "./notes-page.css";
@@ -25,12 +25,6 @@ export function NotesPage(props: {}) {
     const trail = useTrail(notes.length, {
         from: { opacity: 0 },
         to: { opacity: 1 }
-    });
-
-    //Loading element is faded out once we've finished loading the required data
-    const loadingAnim = useSpring({
-        from: { opacity: 1 },
-        to: { opacity: loading ? 1 : 0 }
     });
 
     const context = {
@@ -78,48 +72,44 @@ export function NotesPage(props: {}) {
     return (
         <NotesContext.Provider value={context}>
             <div className="notes-container flex-grow-1 pt-0 position-relative">
-                <div className="notes-loading-overlay d-flex">
-                    <div className="d-flex flex-grow-1 justify-content-center align-items-center">
-                        <animated.div style={loadingAnim}>
-                            <ScaleLoader loading={loading} height={35} width={4} radius={2} margin={2} color={"#3E517A"} />
-                        </animated.div>
-                    </div>
-                </div>
-                <NotesFilter visible={filterVisible} 
-                             tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
-                             updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
-                             addNote={() => {
-                             setSelectedNote(null);
-                             setModalVisible(true)}} />
-                <div className="position-relative flex-grow-1 notes-list-container">
-                    <div className="position-absolute overflow-auto notes-list">
-                        {trail.map((props, i) => (
-                            <animated.div key={notes[i].id} style={props}>
-                                <animated.div>
-                                    <NoteListItem key={notes[i].id}
-                                                    note={notes[i]} 
-                                                    onDelete={(noteID) => pageController.confirmNoteDeletion(noteID)} 
-                                                    onEdit={() => {
-                                                        setSelectedNote(notes[i]);
-                                                        setModalVisible(true);
-                                                    }} />
+                <LoadingOverlay loading={loading}>
+                    <NotesFilter visible={filterVisible} 
+                                tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
+                                updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
+                                addNote={() => {
+                                    setSelectedNote(null);
+                                    setModalVisible(true)
+                                }} />
+                    <div className="position-relative flex-grow-1 notes-list-container">
+                        <div className="position-absolute overflow-auto notes-list">
+                            {trail.map((props, i) => (
+                                <animated.div key={notes[i].id} style={props}>
+                                    <animated.div>
+                                        <NoteListItem key={notes[i].id}
+                                                        note={notes[i]} 
+                                                        onDelete={(noteID) => pageController.confirmNoteDeletion(noteID)} 
+                                                        onEdit={() => {
+                                                            setSelectedNote(notes[i]);
+                                                            setModalVisible(true);
+                                                        }} />
+                                    </animated.div>
                                 </animated.div>
-                            </animated.div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
-                <NotesModal target=".page-content" 
-                            visible={modalVisible}
-                            tags={tags}
-                            selectedNote={selectedNote}
-                            onSave={async (note: Note) => {
+                    <NotesModal target=".page-content" 
+                                visible={modalVisible}
+                                tags={tags}
+                                selectedNote={selectedNote}
+                                onSave={async (note: Note) => {
 
-                                if(await pageController.saveNote(note)) {
-                                    setModalVisible(false);
-                                }
-                                
-                            }}
-                            onClose={() => setModalVisible(false)} />
+                                    if(await pageController.saveNote(note)) {
+                                        setModalVisible(false);
+                                    }
+                                    
+                                }}
+                                onClose={() => setModalVisible(false)} />
+                </LoadingOverlay>
             </div>
         </NotesContext.Provider>
     );
