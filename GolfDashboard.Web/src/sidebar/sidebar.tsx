@@ -10,7 +10,7 @@ export class Sidebar extends React.Component {
 
     render() {
         return (
-            <div className="sidebar">
+            <div className="sidebar bg-primary-800">
                 <div className="container">
                     <SideNavItem isFirst={true} linkURL="/" linkText="Dashboard" logo={HomeLogo} logoAlt="Home Logo" />
                     <SideNavItem linkURL="/rounds" linkText="Round History" logo={GridLogo} logoAlt="Round History Logo" />

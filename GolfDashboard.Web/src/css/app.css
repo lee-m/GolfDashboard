@@ -1,47 +1,6 @@
 @import '../css/theme.css';
 
-:root 
-{
-    /* Primary Colour Shades */
-    --color-primary-100: #E3E8E5; 
-    --color-primary-200: #C6D2CB;
-    --color-primary-300: #9CB0A4;
-    --color-primary-400: #879D90;
-    --color-primary-500: #698474;
-    --color-primary-600: #546A5D;
-    --color-primary-700: #4A5C51;
-    --color-primary-800: #3F4F46;
-    --color-primary-900: #2d3831;
-
-    /* Tints */
-    --color-white-tinted: #dfe5e1;
-
-    /* Warning Colour Shades */
-    --color-warning-100: #D6B5B2;
-    --color-warning-200: #C1918B;
-    --color-warning-300: #AD6C65;
-    --color-warning-400: #A25951;
-    --color-warning-500: #98473E;
-    --color-warning-600: #894038;
-    --color-warning-700: #7A3932;
-    --color-warning-800: #5B2B25;
-    --color-warning-900: #3D1C19;
-
-    /* Grey Shades */
-    --color-grey-500: #212529;
-    --color-grey-400: #797979;
-    --color-grey-300: #A9A9A9;
-    --color-grey-200: #D4D4D4;
-    --color-grey-100: #FAFAFA;
-
-    /* Accent Shades */
-    --color-accent-green: #6CDA98;
-    --color-accent-red: #DA6C6C;
-    --color-accent-blue: #3E517A;
-}
-
 .root-content {
-    background-color: var(--color-primary-800);
     display: grid;
     grid-template-columns: 12.5em 1fr;
     grid-template-rows: auto 1fr;
@@ -50,44 +9,10 @@
     height: 100vh;
 }
 
-/*
- * Navbar 
- */
 .navbar {
     grid-area: header;
-    background: var(--color-primary-800);
 }
 
-/*
- * Sidebar
- */
 .sidebar {
     grid-area: sidebar;
-    background: var(--color-primary-800);
-}
-
-.sidebar-selected-item {
-    background-color: var(--color-primary-900);
-    transition: background-color 0.5s ease;
-}
-
-.sidebar-item-logo {
-    width: 20px;
-    height: 20px;
-    opacity: 0.8;
-}
-
-/*
- * Page content
- */
-.page-content {
-    background-color: var(--color-grey-100);
-}
-
-.toast-info-background {
-    background: var(--color-accent-blue);
-}
-
-.toast-error-background {
-    background: var(--color-accent-red);
 }
