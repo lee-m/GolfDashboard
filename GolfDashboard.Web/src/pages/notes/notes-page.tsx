@@ -13,6 +13,7 @@ import "./notes-page.css";
 export function NotesPage(props: {}) {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [filterVisible, setFilterVisible] = useState(false);
     const [selectedNote, setSelectedNote] = useState<Note | null>(null);
     const [loading, setLoading] = useState(true);
     const [notes, setNotes] = useState<Note[]>([]);
@@ -59,9 +60,11 @@ export function NotesPage(props: {}) {
                 const apiService = new APIService();
                 setNotes(await apiService.getNotes());
                 setTags(await apiService.getTags());
+                setFilterVisible(true);
 
             } catch {
                 PopupUtils.errorToast("Error loading notes");
+                setFilterVisible(false);
             } finally {
                 setLoading(false);
             }
@@ -82,7 +85,7 @@ export function NotesPage(props: {}) {
                         </animated.div>
                     </div>
                 </div>
-                <NotesFilter visible={!loading} 
+                <NotesFilter visible={filterVisible} 
                              tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
                              updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
                              addNote={() => {
