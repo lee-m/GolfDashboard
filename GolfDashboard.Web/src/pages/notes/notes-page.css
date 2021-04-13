@@ -1,5 +1,27 @@
 .notes-container {
     padding: 0.5em;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "filter"
+                         "list";
+}
+
+.notes-filter {
+    grid-area: filter;
+}
+
+.notes-list-container {
+    grid-area: list;
+}
+
+.notes-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
 
 .notes-container .card {

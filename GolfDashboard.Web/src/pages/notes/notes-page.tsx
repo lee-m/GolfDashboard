@@ -74,15 +74,21 @@ export function NotesPage(props: {}) {
 
     return (
         <NotesContext.Provider value={context}>
-            <div className="notes-container flex-grow-1 pt-0 d-flex flex-column">
-                <NotesFilter visible={true} 
-                                tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
-                                updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
-                                addNote={() => {
-                                setSelectedNote(null);
-                                setModalVisible(true);
-                                }} />
-                <div className="position-relative flex-grow-1">
+            <div className="notes-container flex-grow-1 pt-0 position-relative">
+                <div className="notes-loading-overlay d-flex">
+                    <div className="d-flex flex-grow-1 justify-content-center align-items-center">
+                        <animated.div style={loadingAnim}>
+                            <ScaleLoader loading={loading} height={35} width={4} radius={2} margin={2} color={"#3E517A"} />
+                        </animated.div>
+                    </div>
+                </div>
+                <NotesFilter visible={!loading} 
+                             tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
+                             updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
+                             addNote={() => {
+                             setSelectedNote(null);
+                             setModalVisible(true)}} />
+                <div className="position-relative flex-grow-1 notes-list-container">
                     <div className="position-absolute overflow-auto notes-list">
                         {trail.map((props, i) => (
                             <animated.div key={notes[i].id} style={props}>

@@ -40,7 +40,7 @@ export function NotesFilter(props: NotesFilterProps) {
     };
 
     return (
-        <div className={"notes-filter pt-2"}>
+        <div className={"notes-filter pt-2 " + (!props.visible ? "d-none" : "")}>
             <div className="d-flex">
                 <ButtonComponent cssClass="e-small ml-2 mt-2 mb-2" isPrimary={true} content="Add New Note" onClick={() => props.addNote()} />
                 <h6 className="font-bold align-self-center pl-2 pr-2 pb-1 mb-0">Filter by Tag:</h6>
