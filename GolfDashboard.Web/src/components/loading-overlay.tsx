@@ -1,8 +1,6 @@
 import { useSpring, animated } from 'react-spring';
 import { ScaleLoader } from 'react-spinners';
 
-import './loading-overlay.css';
-
 export interface LoadingOverlayProps {
     loading: boolean;
     children: React.ReactElement[]
@@ -17,8 +15,8 @@ export function LoadingOverlay(props: LoadingOverlayProps) {
 
     return (
         <>
-            <div className="loading-overlay d-flex">
-                <div className="d-flex flex-grow-1 justify-content-center align-items-center">
+            <div className="flex absolute top-0 left-0 right-0 bottom-0 -z-1">
+                <div className="flex flex-grow justify-center items-center">
                     <animated.div style={loadingAnim}>
                         <ScaleLoader loading={props.loading} height={35} width={4} radius={2} margin={2} color={"#3E517A"} />
                     </animated.div>

@@ -1,5 +1,6 @@
 import { useContext, useRef } from 'react';
 import { ChipDirective, ChipListComponent, ChipsDirective, ChipModel, DeleteEventArgs, ButtonComponent } from '@syncfusion/ej2-react-buttons';
+import { Separator } from '../../components';
 
 import { NotesContext } from '../notes';
 
@@ -40,10 +41,10 @@ export function NotesFilter(props: NotesFilterProps) {
     };
 
     return (
-        <div className={"notes-filter pt-2 " + (!props.visible ? "d-none" : "")}>
-            <div className="d-flex">
-                <ButtonComponent cssClass="e-small ml-2 mt-2 mb-2" isPrimary={true} content="Add New Note" onClick={() => props.addNote()} />
-                <h6 className="font-bold align-self-center pl-2 pr-2 pb-1 mb-0">Filter by Tag:</h6>
+        <div className={"notes-filter pt-2" + (!props.visible ? "hidden" : "")}>
+            <div className="flex pb-2">
+                <ButtonComponent cssClass="e-small ml-2 mt-2 mb-2 rounded-sm" isPrimary={true} content="Add New Note" onClick={() => props.addNote()} />
+                <h6 className="font-bold self-center pl-2 pr-2 pb-1 mb-0">Filter by Tag:</h6>
                 <ChipListComponent ref={tagListRef}
                                 selection="Multiple" 
                                 enableDelete={true} 
@@ -53,9 +54,9 @@ export function NotesFilter(props: NotesFilterProps) {
                         {tagDirectives}
                     </ChipsDirective>
                 </ChipListComponent>
-                <ButtonComponent cssClass="e-outline e-small mt-2 mb-2" content="Clear" onClick={() => clearSelectedTags()} />
+                <ButtonComponent cssClass="e-outline e-small mt-2 mb-2 rounded-sm" content="Clear" onClick={() => clearSelectedTags()} />
             </div>
-            <hr className={"ml-2 mr-2"} />
+            <Separator />
         </div>
     );
 

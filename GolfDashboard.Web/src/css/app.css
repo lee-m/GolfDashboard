@@ -40,31 +40,6 @@
     --color-accent-blue: #3E517A;
 }
 
-html {
-    height: 100%;
-}
-
-body {
-    min-height: 100%;
-    display: flex;
-    overflow: hidden;
-}
-
-.btn-primary {
-    background-color: var(--color-accent-blue);
-    color: white;
-}
-
-#root {
-    flex-grow: 1;
-    display: flex;
-}
-
-a,
-a:hover {
-    color: inherit;
-}
-
 .root-content {
     background-color: var(--color-primary-800);
     display: grid;
@@ -81,11 +56,6 @@ a:hover {
 .navbar {
     grid-area: header;
     background: var(--color-primary-800);
-    display: flex;
-}
-
-.navbar-title {
-    font-size: 20px;
 }
 
 /*
@@ -112,17 +82,6 @@ a:hover {
  */
 .page-content {
     background-color: var(--color-grey-100);
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-}
-
-.text-white-tinted {
-    color: var(--color-white-tinted);
-}
-
-.font-size-small {
-    font-size: small;
 }
 
 .toast-info-background {

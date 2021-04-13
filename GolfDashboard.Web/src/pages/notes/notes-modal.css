@@ -1,11 +1,10 @@
-.notes-main-content {
-    display: flex;
-    flex-direction: column;
-}
-
 .notes-save-button {
     background-color: var(--color-accent-blue) !important;
     color: white !important;
+}
+
+.notes-tag {
+    color: rgb(33, 37, 41) !important
 }
 
 .notes-error-border {

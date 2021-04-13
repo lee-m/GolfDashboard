@@ -7,7 +7,6 @@ import { PopupUtils } from '../../popupUtils';
 import { APIService } from '../../services';
 import { LoadingOverlay } from '../../components';
 
-import 'react-toastify/dist/ReactToastify.css';
 import "./notes-page.css";
 
 export function NotesPage(props: {}) {
@@ -71,7 +70,7 @@ export function NotesPage(props: {}) {
 
     return (
         <NotesContext.Provider value={context}>
-            <div className="notes-container flex-grow-1 pt-0 position-relative">
+            <div className="notes-container relative flex-grow p-3">
                 <LoadingOverlay loading={loading}>
                     <NotesFilter visible={filterVisible} 
                                 tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
@@ -80,8 +79,8 @@ export function NotesPage(props: {}) {
                                     setSelectedNote(null);
                                     setModalVisible(true)
                                 }} />
-                    <div className="position-relative flex-grow-1 notes-list-container">
-                        <div className="position-absolute overflow-auto notes-list">
+                    <div className="relative flex-grow notes-list-container">
+                        <div className="absolute overflow-auto top-0 left-0 right-0 bottom-0 pr-2">
                             {trail.map((props, i) => (
                                 <animated.div key={notes[i].id} style={props}>
                                     <animated.div>

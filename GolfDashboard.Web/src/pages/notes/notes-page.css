@@ -1,5 +1,4 @@
 .notes-container {
-    padding: 0.5em;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
@@ -13,23 +12,4 @@
 
 .notes-list-container {
     grid-area: list;
-}
-
-.notes-container .card {
-    margin-bottom: 0.5em;
-}
-
-.notes-tag {
-    color: rgb(33, 37, 41) !important
-}
-
-.notes-list {
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-}
-
-.filter-by-tag-label {
-    height: 28px;
 }

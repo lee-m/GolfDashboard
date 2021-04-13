@@ -111,22 +111,22 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
                              buttons={this._notesDialogButtons} 
                              beforeClose={() => this.beforeDialogClose()}
                              ref={dialog => this._notesDialog = dialog}>
-                <div className="notes-main-content h-100">
+                <div className="flex flex-col h-full">
                     <input id="noteTitle" 
                            type="text" 
                            placeholder="Title" 
                            className={"mb-2 e-input " + this.state.titleErrorCSSClass} 
                            value={this.state.title} 
                            onChange={(e) => this.onTitleChanged(e)} />
-                    <div className="d-flex mt-1 mb-2 w-100">
-                        <span className="align-self-center mr-2">Tags:</span>
+                    <div className="flex mt-1 mb-2 w-100">
+                        <span className="self-center mr-2">Tags:</span>
                         <MultiSelectComponent ref={e => this._tagEditor = e}
                                               fields={this._tagFields} 
                                               allowCustomValue={true}
                                               mode="Box"
                                               placeholder="No Tags Selected" />
                     </div>
-                    <div className={"d-flex flex-grow-1 " + this.state.contentErrorCSSClass}>
+                    <div className={"flex flex-grow " + this.state.contentErrorCSSClass}>
                         <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor} value={this.props.selectedNote?.content} >
                             <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
                         </RichTextEditorComponent>

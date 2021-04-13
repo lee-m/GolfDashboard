@@ -94,7 +94,7 @@ export class ClubsPage extends React.Component {
 
     render() {
         return (
-            <div className="h-100">
+            <div className="h-full">
                 <div ref={spinner => this._spinnerElement = spinner} id="spinner"/>
                 <GridComponent
                     ref={grid => this._gridComponent = grid}

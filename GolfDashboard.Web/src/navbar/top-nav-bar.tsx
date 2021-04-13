@@ -1,13 +1,11 @@
-import { SearchBox } from "./search-box";
 import { LoggedInUser } from "./logged-in-user";
 
 export function TopNavBar() {
     
     return (
-        <div className="container-fluid p-3 navbar">
-            <span className="navbar-title text-white-tinted align-self-center">Golf Dashboard</span>
-            <div className="d-flex flex-grow-1 top-nav-bar-content justify-content-between">
-                <SearchBox />
+        <div className="navbar flex p-5">
+            <span className="text-2xl text-white self-center">Golf Dashboard</span>
+            <div className="flex flex-grow top-nav-bar-content justify-between">
                 <LoggedInUser />
             </div>
         </div>
