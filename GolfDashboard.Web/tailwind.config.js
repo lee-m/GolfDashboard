@@ -20,6 +20,17 @@ module.exports = {
           800: '#3F4F46',
           900: '#2d3831',
         },
+        secondary: {
+          100: '#d8dce4',
+          200: '#9fa8bd',
+          300: '#8b97af',
+          400: '#657495',
+          500: '#3E517A',
+          600: '#38496e',
+          700: '#324162',
+          800: '#2b3955',
+          900: '#1f293d'
+        },
         warning: {
           100: '#D6B5B2',
           200: '#C1918B',
@@ -35,7 +46,10 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      opacity: ['disabled'],
+      cursor: ['disabled']
+    },
   },
   plugins: [],
 }

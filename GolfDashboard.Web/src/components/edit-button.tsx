@@ -1,6 +1,6 @@
-import { IconButton, ButtonProps } from '.';
+import { IconButton, IconButtonProps } from '.';
 
-export function EditButton(props: ButtonProps) {
+export function EditButton(props: IconButtonProps) {
 
     return (
         <IconButton 

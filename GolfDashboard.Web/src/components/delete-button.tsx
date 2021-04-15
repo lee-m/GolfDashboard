@@ -1,6 +1,6 @@
-import { IconButton, ButtonProps } from '.';
+import { IconButton, IconButtonProps } from '.';
 
-export function DeleteButton(props: ButtonProps) {
+export function DeleteButton(props: IconButtonProps) {
 
     return (
         <IconButton 
