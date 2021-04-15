@@ -41,10 +41,10 @@ export function NotesFilter(props: NotesFilterProps) {
     };
 
     return (
-        <div className={"notes-filter pt-2" + (!props.visible ? "hidden" : "")}>
+        <div className={"notes-filter" + (!props.visible ? "hidden" : "")}>
             <div className="flex pb-2">
                 <Button text="Add New Note" clickHandler={() => props.addNote()} disabled={false} />
-                <h6 className="font-semibold self-center pl-2 pr-2 pb-1 mb-0">Filter by Tag:</h6>
+                <h6 className="font-semibold self-center pl-2 pr-2 mb-0">Filter by Tag:</h6>
                 <ChipListComponent ref={tagListRef}
                                 selection="Multiple" 
                                 enableDelete={true} 
