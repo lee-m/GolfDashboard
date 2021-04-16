@@ -6,6 +6,7 @@ import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 import { Note, Tag } from '../../models';
 
 import './notes-modal.css';
+import { Button } from '../../components';
 
 interface OnSaveCallback { 
     (note: Note): void 
@@ -33,7 +34,6 @@ interface NotesModalState {
 export class NotesModal extends React.Component<NotesModalProps, NotesModalState> {
 
     private _notesDialog: DialogComponent | null = null;
-    private _notesDialogButtons: Array<ButtonPropsModel>;
     private _animationSettings: AnimationSettingsModel;
     private _rteEditor: RichTextEditorComponent | null;
 
@@ -51,22 +51,6 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
             value: "id"
         };
         
-        this._notesDialogButtons = [{
-            buttonModel: {
-                content: "Cancel",
-                isPrimary: false,
-                cssClass: "e-primary font-weight-bold"
-            },
-            click: () => this.props.onClose()
-        }, {
-            buttonModel: {
-                content: "Save",
-                isPrimary: false,
-                cssClass: "notes-save-button"
-            },
-            click: () => this.saveNewNote()
-        }]
-
         this._animationSettings = {
             effect: "FadeZoom"
         };
@@ -108,7 +92,6 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
                              closeOnEscape={false} 
                              animationSettings={this._animationSettings}
                              position={{ X: 'center', Y: 'center' }}
-                             buttons={this._notesDialogButtons} 
                              beforeClose={() => this.beforeDialogClose()}
                              ref={dialog => this._notesDialog = dialog}>
                 <div className="flex flex-col h-full">
@@ -130,6 +113,10 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
                         <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor} value={this.props.selectedNote?.content} >
                             <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
                         </RichTextEditorComponent>
+                    </div>
+                    <div className="flex flex-row-reverse pt-2 pb-2">
+                        <Button text="Cancel" disabled={false} clickHandler={() => this.props.onClose()} outline={true} />
+                        <Button cssClasses="mr-2" text="Save" disabled={false} clickHandler={() => this.saveNewNote()} />
                     </div>
                 </div>
             </DialogComponent>
