@@ -18,9 +18,9 @@ namespace GolfDashboard.Data.Migrations
             var doc = JsonDocument.Parse(Properties.Resources.GolfClubs);
             var columns = new[] { DisplaySequenceProperty, NameProperty, AddressProperty, WebsiteProperty, LatProperty, LongProperty };
 
-            foreach(var club in doc.RootElement.EnumerateArray())
+            foreach (var club in doc.RootElement.EnumerateArray())
             {
-                var values = new object []
+                var values = new object[]
                 {
                     club.GetProperty(DisplaySequenceProperty).GetInt32(),
                     club.GetProperty(NameProperty).GetString(),
@@ -31,6 +31,8 @@ namespace GolfDashboard.Data.Migrations
                 };
 
                 migrationBuilder.InsertData("GolfClubs", columns, values);
+                migrationBuilder.InsertData("Tags", "Text", "Swing ");
+                migrationBuilder.InsertData("Tags", "Text", "Putting");
             }
         }
 

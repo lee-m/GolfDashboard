@@ -26,7 +26,7 @@ namespace GolfDashboard.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<GolfDashboardDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+            services.AddDbContext<GolfDashboardDbContext>(options => options.UseSqlite("name=ConnectionStrings:Default"));
             services.AddAutoMapper(GetType().Assembly);
 
             services.AddCors((options) =>
@@ -43,7 +43,7 @@ namespace GolfDashboard.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GolfDashboardDbContext databaseContext)
         {
             if (env.IsDevelopment())
             {
@@ -55,10 +55,9 @@ namespace GolfDashboard.API
             app.UseCors(CORSPolicyName);
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            databaseContext.Database.Migrate();
         }
     }
 }

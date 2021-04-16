@@ -15,8 +15,5 @@ namespace GolfDashboard.Data
         public DbSet<GolfClub> GolfClubs { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<Tag> Tags { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlServer("Data Source=lee-laptop;Initial Catalog=GolfDashboard;Integrated Security=True;");
     }
 }
