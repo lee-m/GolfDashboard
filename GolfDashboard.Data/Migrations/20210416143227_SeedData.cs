@@ -40,6 +40,7 @@ namespace GolfDashboard.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("truncate table GolfClubs");
+            migrationBuilder.Sql("truncate table Tags");
         }
     }
 }
