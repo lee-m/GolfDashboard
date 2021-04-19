@@ -28,14 +28,17 @@ namespace GolfDashboard.API
             services.AddControllers();
             services.AddDbContext<GolfDashboardDbContext>(options => options.UseSqlite("name=ConnectionStrings:Default"));
             services.AddAutoMapper(GetType().Assembly);
+            services.Configure<CORSOptions>(Configuration.GetSection(nameof(CORSOptions)));
 
             services.AddCors((options) =>
             {
                 options.AddPolicy(CORSPolicyName, configure =>
                 {
-                    configure.WithOrigins("https://localhost:3000", "http://localhost:3000")
-                             .WithMethods("GET", "POST", "DELETE")
-                             .WithHeaders("Content-Type");
+                    var opts = Configuration.GetSection(nameof(CORSOptions)).Get<CORSOptions>();
+
+                    configure.WithOrigins(opts.AllowedOrigins)
+                             .WithMethods(opts.Methods)
+                             .WithHeaders(opts.Headers);
                 });
             });
 
