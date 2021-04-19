@@ -31,9 +31,10 @@ namespace GolfDashboard.Data.Migrations
                 };
 
                 migrationBuilder.InsertData("GolfClubs", columns, values);
-                migrationBuilder.InsertData("Tags", "Text", "Swing ");
-                migrationBuilder.InsertData("Tags", "Text", "Putting");
             }
+
+            migrationBuilder.InsertData("Tags", "Text", "Swing ");
+            migrationBuilder.InsertData("Tags", "Text", "Putting");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
