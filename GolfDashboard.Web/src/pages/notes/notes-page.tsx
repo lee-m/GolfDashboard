@@ -80,7 +80,7 @@ export function NotesPage(props: {}) {
                                     setModalVisible(true)
                                 }} />
                     <div className="relative flex-grow notes-list-container">
-                        <div className="absolute overflow-auto top-0 left-0 right-0 bottom-0 pr-2">
+                        <div className="absolute overflow-auto top-0 left-0 right-0 bottom-0">
                             {trail.map((props, i) => (
                                 <animated.div key={notes[i].id} style={props}>
                                     <animated.div>
