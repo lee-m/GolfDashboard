@@ -1,12 +1,12 @@
 import React, { ChangeEvent } from 'react';
-import { AnimationSettingsModel, ButtonPropsModel, DialogComponent } from '@syncfusion/ej2-react-popups';
+import { AnimationSettingsModel, DialogComponent } from '@syncfusion/ej2-react-popups';
 import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
 import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
 
+import { Button } from '../../components';
 import { Note, Tag } from '../../models';
 
 import './notes-modal.css';
-import { Button } from '../../components';
 
 interface OnSaveCallback { 
     (note: Note): void 
