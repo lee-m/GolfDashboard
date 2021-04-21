@@ -9,7 +9,6 @@ import Validator, { RequiredRule, } from 'devextreme-react/validator';
 
 import { Note, Tag } from '../../models';
 
-
 interface OnSaveCallback { 
     (note: Note): void 
 }

@@ -1,12 +1,12 @@
 import { useLayoutEffect, useState } from 'react';
 import DataGrid, { Column, FilterRow, Scrolling } from 'devextreme-react/data-grid';
+import { animated, useSpring } from 'react-spring';
 
 import { GolfClub } from '../../models';
 import { APIService } from '../../services';
 import { LoadingOverlay } from '../../components';
 
 import './clubs-page.css';
-import { animated, useSpring } from 'react-spring';
 
 export function ClubsPage(props: any) {
 

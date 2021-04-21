@@ -1,9 +1,8 @@
 import { useContext } from 'react';
-import { Separator } from '../../components';
-
 import Button from 'devextreme-react/button'
 import TagBox from 'devextreme-react/tag-box';
 
+import { Separator } from '../../components';
 import { NotesContext } from '../notes';
 
 interface NotesFilterProps {
