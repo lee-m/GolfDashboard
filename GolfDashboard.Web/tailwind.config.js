@@ -1,13 +1,15 @@
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
+  important: true,
   theme: {
     extend: {
       colors: {
         accent: {
           green: '#6CDA98',
           red: '#DA6C6C',
-          blue: '#3E517A'
+          blue: '#3E517A',
+          yellow: '#EDF0DA'
         },
         primary: {
           100: '#E3E8E5', 

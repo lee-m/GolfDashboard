@@ -51,14 +51,17 @@ export function NotesPage(props: {}) {
             try {
 
                 const apiService = new APIService();
-                setNotes(await apiService.getNotes());
-                setTags(await apiService.getTags());
+                const notes = await apiService.getNotes();
+                const tags = await apiService.getTags();
+
+                setLoading(false);
                 setFilterVisible(true);
+                setNotes(notes);
+                setTags(tags);
 
             } catch {
                 PopupUtils.errorToast("Error loading notes");
                 setFilterVisible(false);
-            } finally {
                 setLoading(false);
             }
 
@@ -69,17 +72,17 @@ export function NotesPage(props: {}) {
     }, []);
 
     return (
+
         <NotesContext.Provider value={context}>
             <div className="notes-container relative flex-grow p-3">
                 <LoadingOverlay loading={loading}>
                     <NotesFilter visible={filterVisible} 
-                                tagDeleted={(e) => pageController.confirmTagDeletion(e)} 
-                                updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
-                                addNote={() => {
-                                    setSelectedNote(null);
-                                    setModalVisible(true)
-                                }} />
-                    <div className="relative flex-grow notes-list-container">
+                                 updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
+                                 addNote={() => {
+                                     setSelectedNote(null);
+                                     setModalVisible(true)
+                                 }} />
+                    <div className="relative flex-grow notes-list-container -mt-2">
                         <div className="absolute overflow-auto top-0 left-0 right-0 bottom-0">
                             {trail.map((props, i) => (
                                 <animated.div key={notes[i].id} style={props}>

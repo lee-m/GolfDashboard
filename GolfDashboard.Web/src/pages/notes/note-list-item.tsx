@@ -1,5 +1,4 @@
 import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
-import { ChipDirective, ChipListComponent, ChipsDirective } from '@syncfusion/ej2-react-buttons';
 import { animated, useSpring } from 'react-spring';
 
 import { NotesContext } from '../notes';
@@ -66,26 +65,31 @@ export function NoteListItem(props: NoteListItemProps) {
     }, []);
 
     if(props.note.tags != null && props.note.tags.length > 0) {
+
         tagComponent = 
-            <ChipListComponent className="p-0">
-                <ChipsDirective>
-                    {props.note.tags.map((t, i) => <ChipDirective text={t} enabled={false} key={t} cssClass={"notes-tag" + (i === 0 ? " ml-0" : "")}></ChipDirective>)}
-                </ChipsDirective>
-            </ChipListComponent>;
+            <div className="pt-2 space-x-2">
+                {props.note.tags.map((t, i) => {
+                    return (
+                        <div className="dx-tag" key={i}>
+                            <span className="dx-tag-content p-2 m-0 bg-accent-yellow">{t}</span>
+                        </div>
+                    );
+                })}
+            </div>;
     }
 
     return (
         <animated.div style={itemAnimation} ref={listItemRef}>
-            <div className="border-gray-300 border rounded p-3" key={props.note.id}>
+            <div className="border-gray-300 border rounded p-3 bg-white" key={props.note.id}>
                 <div>
-                    <div className="flex justify-between pl-2">
+                    <div className="flex justify-between">
                         <h4 className="text-xl">{props.note.title}</h4>
                         <div className="space-x-3">
                             <EditButton clickHandler={() => props.onEdit(props.note.id!)} />
                             <DeleteButton clickHandler={() => props.onDelete(props.note.id!) } />
                         </div>
                     </div>
-                    <div className="pb-2 pt-1 pl-2" dangerouslySetInnerHTML={{__html: props.note.content}}></div>
+                    <div className="pb-2 pt-1" dangerouslySetInnerHTML={{__html: props.note.content}}></div>
                     {tagComponent}
                 </div>
             </div>

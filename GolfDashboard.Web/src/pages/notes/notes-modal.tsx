@@ -1,12 +1,14 @@
-import React, { ChangeEvent } from 'react';
-import { AnimationSettingsModel, DialogComponent } from '@syncfusion/ej2-react-popups';
-import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
-import { MultiSelectComponent } from '@syncfusion/ej2-react-dropdowns';
+import React from 'react';
+import Button from 'devextreme-react/button'
+import Popup  from 'devextreme-react/popup';
+import TagBox from 'devextreme-react/tag-box';
+import TextBox from 'devextreme-react/text-box';
+import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
+import dxHtmlEditor from 'devextreme/ui/html_editor';
+import Validator, { RequiredRule, } from 'devextreme-react/validator';
 
-import { Button } from '../../components';
 import { Note, Tag } from '../../models';
 
-import './notes-modal.css';
 
 interface OnSaveCallback { 
     (note: Note): void 
@@ -27,40 +29,25 @@ interface NotesModalProps {
 
 interface NotesModalState {
     title: string;
-    titleErrorCSSClass: string;
-    contentErrorCSSClass: string;
+    selectedTags: string[],
+    allTags: string[]
 }
 
 export class NotesModal extends React.Component<NotesModalProps, NotesModalState> {
 
-    private _notesDialog: DialogComponent | null = null;
-    private _animationSettings: AnimationSettingsModel;
-    private _rteEditor: RichTextEditorComponent | null;
-
-    private _tagFields: object;
-    private _tagEditor: MultiSelectComponent | null;
-
+    private _htmlEditor: dxHtmlEditor | null;
+    
     constructor(props: NotesModalProps) {
 
         super(props);
-    
-        this._rteEditor = null;
-        this._tagEditor = null;
-        this._tagFields = {
-            text: "text",
-            value: "id"
-        };
-        
-        this._animationSettings = {
-            effect: "FadeZoom"
-        };
 
+        this._htmlEditor = null;
         this.state = {
-            title: "",
-            titleErrorCSSClass: "",
-            contentErrorCSSClass: ""
+            title: props.selectedNote?.title ?? "",
+            selectedTags: props.selectedNote?.tags ?? [],
+            allTags: props.tags.map(t => t.text)
         };
-   }
+    }
 
     componentDidUpdate(prevProps: NotesModalProps, prevState: NotesModalState) {
 
@@ -68,152 +55,105 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
             return;
         }
 
-        this.updateTagsDataSource();
-
-        this._rteEditor!.value = this.props.selectedNote?.content ?? "";
-        this._tagEditor!.value = this.props.selectedNote?.tags ?? [];
-
-        this.setState({ 
+        this.setState({
             title: this.props.selectedNote?.title ?? "",
-            titleErrorCSSClass: "",
-            contentErrorCSSClass: ""
+            selectedTags: this.props.selectedNote?.tags ?? [],
+            allTags: this.props.tags.map(t => t.text)
         });
+
+        this._htmlEditor?.option("value", this.props.selectedNote?.content ?? "");
+
     }
 
     render() {
+
         return (
-            <DialogComponent width='60%' 
-                             height='60%' 
-                             target={this.props.target}
-                             visible={this.props.visible} 
-                             isModal={true}
-                             allowDragging={true}
-                             header='Add New Note'
-                             closeOnEscape={false} 
-                             animationSettings={this._animationSettings}
-                             position={{ X: 'center', Y: 'center' }}
-                             beforeClose={() => this.beforeDialogClose()}
-                             ref={dialog => this._notesDialog = dialog}>
-                <div className="flex flex-col h-full">
-                    <input id="noteTitle" 
-                           type="text" 
-                           placeholder="Title" 
-                           className={"mb-2 e-input " + this.state.titleErrorCSSClass} 
-                           value={this.state.title} 
-                           onChange={(e) => this.onTitleChanged(e)} />
-                    <div className="flex mt-1 mb-2 w-100">
-                        <span className="self-center mr-2">Tags:</span>
-                        <MultiSelectComponent ref={e => this._tagEditor = e}
-                                              fields={this._tagFields} 
-                                              allowCustomValue={true}
-                                              mode="Box"
-                                              placeholder="No Tags Selected" />
+            <Popup width="60%"
+                   height="60%"
+                   showTitle={true}
+                   visible={this.props.visible}
+                   title="Add New Note"
+                   showCloseButton={false}>
+                <div className="flex flex-col h-full space-y-2">
+                    <TextBox placeholder="Title"
+                            showClearButton={true}
+                            stylingMode="underlined"
+                            value={this.state.title}
+                            onValueChange={(e) => this.onTitleChanged(e)}>
+                        <Validator>
+                            <RequiredRule />
+                        </Validator>
+                    </TextBox>
+                    <TagBox dataSource={this.state.allTags}
+                            value={this.state.selectedTags}
+                            showSelectionControls={true}
+                            showClearButton={true}
+                            stylingMode="underlined"
+                            acceptCustomValue={true}
+                            placeholder="Select Tags"
+                            onValueChanged={e => {
+                                this.setState({
+                                    selectedTags: e.value
+                                });
+                            }} />
+                    <div className={"flex flex-grow"}>
+                        <HtmlEditor height="100%"
+                                    width="100%"
+                                    defaultValue={this.props.selectedNote?.content ?? ""}
+                                    onInitialized={(e) => this._htmlEditor = e.component!}>
+                            <Toolbar>
+                                <Item formatName="bold" />
+                                <Item formatName="italic" />
+                                <Item formatName="underline" />
+                                <Item formatName="separator" />
+                                <Item formatName="header" formatValues={[false, 1, 2, 3, 4, 5]} />
+                                <Item formatName="separator" />
+                                <Item formatName="orderedList" />
+                                <Item formatName="bulletList" />
+                                <Item formatName="link" />
+                                <Item formatName="separator" />
+                                <Item formatName="alignLeft" />
+                                <Item formatName="alignCenter" />
+                                <Item formatName="alignRight" />
+                                <Item formatName="alignJustify" />
+                                <Item formatName="separator" />
+                            </Toolbar>
+                            <Validator>
+                                <RequiredRule />
+                            </Validator>
+                        </HtmlEditor>
                     </div>
-                    <div className={"flex flex-grow " + this.state.contentErrorCSSClass}>
-                        <RichTextEditorComponent ref={rteEditor => this._rteEditor = rteEditor} value={this.props.selectedNote?.content} >
-                            <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
-                        </RichTextEditorComponent>
-                    </div>
-                    <div className="flex flex-row-reverse pt-2 pb-2">
-                        <Button text="Cancel" disabled={false} clickHandler={() => this.props.onClose()} outline={true} />
-                        <Button cssClasses="mr-2" text="Save" disabled={false} clickHandler={() => this.saveNewNote()} />
+                    <div className="flex self-end">
+                        <div className="flex pt-2 pb-2 space-x-2">
+                            <Button text="Save" disabled={false} onClick={(e) => this.saveNewNote(e)} stylingMode="contained" type="default" />
+                            <Button text="Cancel" disabled={false} onClick={() => this.props.onClose()} stylingMode="outlined"  type="normal" />
+                        </div>
                     </div>
                 </div>
-            </DialogComponent>
+            </Popup>
         );
     }
 
-    private updateTagsDataSource() {
-
-        let tagsDataSource: { text: string; id: number; }[] = [];
-
-        this.props.tags.forEach(t => {
-            tagsDataSource.push({
-                text: t.text,
-                id: t.id
-            });
-        });
-
-        this._tagEditor!.dataSource = tagsDataSource;
-    }
-
-    private beforeDialogClose() {
-
-        if(this._notesDialog) {
-
-            let overlay = this._notesDialog.element!.parentElement!.querySelector(".e-dlg-overlay")!;
-            overlay.classList.add("e-fade");
-        }
-    }
-
-    private onTitleChanged(event: ChangeEvent<HTMLInputElement>): void {
+    private onTitleChanged(newTitle: string): void {
 
         this.setState({
-            title: event.target.value,
+            title: newTitle
         });
     }
 
-    private saveNewNote() {
+    private saveNewNote(e: { validationGroup?: any }) {
 
-        //Check something has been entered before allowing the note to be saved
-        if(!this.validate()) {
+        if(!e.validationGroup.validate().isValid) {
             return;
         }
 
         var noteContents = {
             id: this.props.selectedNote?.id,
             title: this.state.title,
-            content: this._rteEditor!.getHtml(),
-            tags: this.getSelectedTags()
+            content: this._htmlEditor?.option("value"),
+            tags: this.state.selectedTags
         };
 
         this.props.onSave(noteContents);
-    }
-
-    private validate(): boolean {
-
-        var titleMissing = !this.state.title;
-        var contentMissing = (this._rteEditor!.value?.length ?? 0) === 0;
-
-        if(titleMissing || contentMissing) {
-
-            this.setState({
-                titleErrorCSSClass: titleMissing ? "e-error" : "",
-                contentErrorCSSClass: contentMissing ? "notes-error-border" : ""
-            });
-
-            return false;
-        }
-
-        return true;
-    }
-
-    private getSelectedTags(): string[] {
-
-        var tags: string[] = [];
-
-        if(!this._tagEditor) {
-            return tags;
-        }
-
-        if(this._tagEditor.value != null) {
-
-            this._tagEditor.value.forEach((tagID: any) => {
-
-                if(!tagID) {
-                    return;
-                }
-
-                var tag = this._tagEditor?.getDataByValue(tagID) as { id: number, text: string};
-
-                if(tag) {
-                    tags.push(tag.text);
-                }
-
-            });
-
-        }
-
-        return tags;
     }
 }
