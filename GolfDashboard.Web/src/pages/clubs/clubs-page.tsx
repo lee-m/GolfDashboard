@@ -1,117 +1,124 @@
-import * as React from 'react';
-import { ColumnDirective, ColumnsDirective, GridComponent, Inject, Page, PageSettingsModel, Filter, FilterSettingsModel } from '@syncfusion/ej2-react-grids';
-import { DataManager, WebApiAdaptor } from '@syncfusion/ej2-data';
-import { getValue } from '@syncfusion/ej2-base';
-import { createSpinner, hideSpinner, showSpinner } from '@syncfusion/ej2-popups';
+import { useLayoutEffect, useState } from 'react';
+import DataGrid, { Column, FilterRow, Scrolling } from 'devextreme-react/data-grid';
 
 import { GolfClub } from '../../models';
 import { APIService } from '../../services';
+import { LoadingOverlay } from '../../components';
 
 import './clubs-page.css';
+import { animated, useSpring } from 'react-spring';
 
-export class ClubsPage extends React.Component {
+export function ClubsPage(props: any) {
 
-    private _gridComponent: GridComponent | null;
-    private _spinnerElement: HTMLDivElement | null;
-
-    private _pageSettings: PageSettingsModel;
-    private _filterSettings: FilterSettingsModel;
-    private _apiService: APIService;
-
-    constructor(props: {}) {
-
-        super(props);
-
-        this._gridComponent = null;
-        this._spinnerElement = null;
-
-        this._pageSettings = {
-            pageSize: 30
-        };
-        this._filterSettings = {
-            type: 'Menu'
-        };
-        this.state = {
-            clubs: [],
-        };
-        this._apiService = new APIService();
+    const [clubs, setClubs] = useState<Array<GolfClub>>([]);
+    const [loading, setLoading] = useState(true);
+    
+    const fetchClubsData = async (position: GeolocationPosition | null) => {
+     
+        const apiService = new APIService();
+        setClubs(await apiService.getClubs(position));
     }
 
-    componentDidMount() {
+    useLayoutEffect(() => {
 
-        if(this._spinnerElement != null) {
-
-            createSpinner({
-                target: this._spinnerElement,
-                label: "Fetching Golf Clubs"
-            });
-            showSpinner(this._spinnerElement);
-
-        }
-
-        navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => this.fetchClubsData(position),
-            () => this.fetchClubsData(null));
-    }
-
-    async fetchClubsData(position: GeolocationPosition | null) {
-
-        if(this._spinnerElement != null) {
-            hideSpinner(this._spinnerElement);
-        }
-
-        let dataSource = new DataManager({
-            adaptor: new WebApiAdaptor(),
-            url: this._apiService.clubsURL(position),
-            offline: true
-        });
-
-        this._gridComponent!.dataSource = dataSource;
-        this._gridComponent!.refresh();
-    }
-
-    websiteColumnTemplate(args: any) {
-
-        let websiteVal = getValue("website", args);
-
-        return (
-            <a href={websiteVal}>{websiteVal}</a>
+        navigator.geolocation.getCurrentPosition(
+            (position: GeolocationPosition) => fetchClubsData(position),
+            () => fetchClubsData(null)
         );
-    }
 
-    distanceInMilesColumnTemplate(props: GolfClub): any {
+    }, []);
 
-        if (props.distanceInMiles == null) {
+    const distanceCellTemplate = (cellData: any) => {
+
+        var club = cellData.data as GolfClub;
+
+        if (club.distanceInMiles == null) {
             return (
-                <span>-</span>
+                <div className="pr-2">
+                    <span>-</span>
+                </div>
             )
         } else {
             return (
-                <span>{props.distanceInMiles.toFixed(2)}</span>
+                <div className="pr-2">
+                    <span>{club.distanceInMiles.toFixed(2)}</span>
+                </div>
             );
         }
+    };
+
+    const websiteCellTemplate = (cellData: any) => {
+
+        var club = cellData.data as GolfClub;
+        return <a href={club.website} target="_blank" rel="noreferrer">{club.website}</a>
 
     }
 
-    render() {
-        return (
-            <div className="h-full">
-                <div ref={spinner => this._spinnerElement = spinner} id="spinner"/>
-                <GridComponent
-                    ref={grid => this._gridComponent = grid}
-                    allowPaging={true}
-                    allowFiltering={true}
-                    pageSettings={this._pageSettings}
-                    filterSettings={this._filterSettings}
-                    height="100%">
-                    <ColumnsDirective>
-                        <ColumnDirective field="name" headerText="Club Name" width="25%" type="string" />
-                        <ColumnDirective field="address" headerText="Address" width="35%" allowFiltering={false} type="string" />
-                        <ColumnDirective field="website" headerText="Website" width="25%" disableHtmlEncode={true} template={this.websiteColumnTemplate} allowFiltering={false} type="string" />
-                        <ColumnDirective field="distanceInMiles" headerText="Distance (Miles)" width="15%" template={this.distanceInMilesColumnTemplate} type="number" />
-                    </ColumnsDirective>
-                    <Inject services={[Page, Filter]} />
-                </GridComponent>
-            </div>
-        );
+    //Infinite scrolling on the grid requires setting a specific height so we use the height
+    //of the page content container element so that the grid occupies the entire content
+    const getGridHeight = () => {
+        return document.getElementById("page-content")!.clientHeight;
     }
+
+    const alphanumericFilterOperators = [ "contains", "startswith", "endswith" ];
+    const fadeInAnimation = useSpring({
+        from: { opacity: 0},
+        to: { opacity: loading ? 0 : 1 }
+    });
+
+    return (
+        <div className="relative h-full">
+            <LoadingOverlay loading={loading}>
+                <animated.div style={fadeInAnimation}>
+                    <DataGrid dataSource={clubs}
+                            showBorders={true}
+                            showColumnLines={true}
+                            showRowLines={true}
+                            height={getGridHeight}
+                            visible={!loading}
+                            rowAlternationEnabled={true}
+                            noDataText=""
+                            onContentReady={() => setLoading(false)}
+                            onEditorPreparing={(e) => {
+
+                                    if(e.parentType === "filterRow") {
+                                        e.editorOptions.showClearButton = true;
+                                    }
+
+                            }}>
+
+                        <FilterRow visible={true} />
+                        <Scrolling mode="infinite" />
+
+                        <Column dataField="name"
+                                caption="Club Name" 
+                                width="30%" 
+                                type="string" 
+                                filterOperations={alphanumericFilterOperators} />
+
+                        <Column dataField="address" 
+                                caption="Address" 
+                                width="35%" 
+                                type="string"
+                                filterOperations={alphanumericFilterOperators} />
+                                
+                        <Column dataField="website"
+                                caption="Website" 
+                                width="25%"  
+                                type="string" 
+                                cellRender={websiteCellTemplate}
+                                filterOperations={alphanumericFilterOperators} />
+
+                        <Column dataField="distanceInMiles" 
+                                caption="Distance (Miles)" 
+                                width="5%"
+                                minWidth={50} 
+                                type="numeric" 
+                                cellRender={distanceCellTemplate} 
+                                filterOperations={[ "<", ">", "between" ]} />
+                    </DataGrid>
+                </animated.div>
+            </LoadingOverlay>
+        </div>
+    );
 }

@@ -1,8 +1,4 @@
-td a {
-    text-decoration: underline;
-}
-
-.e-headertext {
-    font-weight: bolder;
-    color: rgba(0, 0, 0, 0.75);
-}
+td[role=columnheader] {  
+    text-align: left !important;
+    font-weight: 600 !important;
+}  

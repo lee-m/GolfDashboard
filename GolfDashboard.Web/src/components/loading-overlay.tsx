@@ -3,7 +3,7 @@ import { ScaleLoader } from 'react-spinners';
 
 export interface LoadingOverlayProps {
     loading: boolean;
-    children: React.ReactElement[]
+    children: React.ReactElement[] | React.ReactElement
 }
 
 export function LoadingOverlay(props: LoadingOverlayProps) {

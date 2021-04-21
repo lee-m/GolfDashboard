@@ -1,4 +1,4 @@
-import { Note, Tag } from '../models';
+import { GolfClub, Note, Tag } from '../models';
 
 export class APIService {
 
@@ -23,15 +23,15 @@ export class APIService {
         return await response.json();
     }
 
-    clubsURL(position: GeolocationPosition | null): string {
+    async getClubs(position: GeolocationPosition | null): Promise<Array<GolfClub>> {
 
-        let baseURL = this.getURL("/golfclubs");
+        let baseURL = "/golfclubs";
 
         if(position !== null) {
             baseURL += "?lat=" + position.coords.latitude + "&lng=" + position.coords.longitude;
         }
 
-        return baseURL;
+        return await this.getResponseJSON<Array<GolfClub>>(baseURL);
     }
 
     async getTags(): Promise<Array<Tag>> {

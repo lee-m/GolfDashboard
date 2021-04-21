@@ -23,3 +23,8 @@ body,
 .sidebar {
     grid-area: sidebar;
 }
+
+/* Dev Extreme Overrides */
+.dx-overlay-shader {
+  background-color: rgba(0,0,0,.6) !important;
+}
