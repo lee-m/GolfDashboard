@@ -18,7 +18,6 @@ interface OnCloseCallback {
 }
 
 interface NotesModalProps { 
-    target: string;
     visible: boolean;
     selectedNote: Note | null;
     tags: Array<Tag>;
@@ -123,9 +122,9 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
                         </HtmlEditor>
                     </div>
                     <div className="flex self-end">
-                        <div className="flex pt-2 pb-2 space-x-2">
-                            <Button text="Save" disabled={false} onClick={(e) => this.saveNewNote(e)} stylingMode="contained" type="default" />
-                            <Button text="Cancel" disabled={false} onClick={() => this.props.onClose()} stylingMode="outlined"  type="normal" />
+                        <div className="flex pt-2 space-x-2">
+                            <Button text="Save" onClick={(e) => this.saveNewNote(e)} stylingMode="contained" type="default" />
+                            <Button text="Cancel" onClick={() => this.props.onClose()} stylingMode="outlined"  type="normal" />
                         </div>
                     </div>
                 </div>

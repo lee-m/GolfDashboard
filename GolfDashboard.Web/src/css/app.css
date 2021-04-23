@@ -28,3 +28,15 @@ body,
 .dx-overlay-shader {
   background-color: rgba(0,0,0,.6) !important;
 }
+
+.dx-popup-content {
+    padding: 16px !important;
+}
+
+@layer components {
+ 
+    .button-sm .dx-button-content {
+        @apply px-3 py-2 text-xs !important
+    }
+
+}

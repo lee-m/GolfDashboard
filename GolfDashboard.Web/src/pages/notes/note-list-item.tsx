@@ -7,8 +7,8 @@ import { EditButton, DeleteButton } from '../../components';
 
 type NoteListItemProps = {
     note: Note,
-    onDelete: (noteID: number) => void,
-    onEdit: (noteID: number) => void
+    onDelete: (note: Note) => void,
+    onEdit: (note: Note) => void
 };
 
 interface SpringProps {
@@ -85,8 +85,8 @@ export function NoteListItem(props: NoteListItemProps) {
                     <div className="flex justify-between">
                         <h4 className="text-xl">{props.note.title}</h4>
                         <div className="space-x-3">
-                            <EditButton clickHandler={() => props.onEdit(props.note.id!)} />
-                            <DeleteButton clickHandler={() => props.onDelete(props.note.id!) } />
+                            <EditButton clickHandler={() => props.onEdit(props.note)} />
+                            <DeleteButton clickHandler={() => props.onDelete(props.note) } />
                         </div>
                     </div>
                     <div className="pb-2 pt-1" dangerouslySetInnerHTML={{__html: props.note.content}}></div>

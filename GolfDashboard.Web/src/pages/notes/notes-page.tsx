@@ -5,16 +5,17 @@ import { Note, Tag } from '../../models';
 import { NotesPageController, NoteListItem, NotesFilter, NotesContext, NotesModal } from '../notes';
 import { PopupUtils } from '../../popupUtils';
 import { APIService } from '../../services';
-import { LoadingOverlay } from '../../components';
+import { LoadingOverlay, DeletePrompt } from '../../components';
 
 import "./notes-page.css";
 
-export function NotesPage(props: {}) {
+export function NotesPage(props: any) {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [filterVisible, setFilterVisible] = useState(false);
     const [selectedNote, setSelectedNote] = useState<Note | null>(null);
     const [loading, setLoading] = useState(true);
+    const [deletePromptVisible, setDeletePromptVisible] = useState(false);
     const [notes, setNotes] = useState<Note[]>([]);
     const [tags, setTags] = useState<Tag[]>([]);
     const [softDeletedNoteIDs, setSoftDeletedNoteIDs] = useState(new Set<number>());
@@ -43,6 +44,11 @@ export function NotesPage(props: {}) {
     };
 
     const pageController = new NotesPageController(context);
+
+    const deleteNote = () => {
+        pageController.deleteNote(selectedNote!.id!);
+        setDeletePromptVisible(false);
+    }
 
     useEffect(() => {
 
@@ -89,9 +95,12 @@ export function NotesPage(props: {}) {
                                     <animated.div>
                                         <NoteListItem key={notes[i].id}
                                                         note={notes[i]} 
-                                                        onDelete={(noteID) => pageController.confirmNoteDeletion(noteID)} 
-                                                        onEdit={() => {
-                                                            setSelectedNote(notes[i]);
+                                                        onDelete={(deletedNote: Note) => {
+                                                            setSelectedNote(deletedNote);
+                                                            setDeletePromptVisible(true);
+                                                        }} 
+                                                        onEdit={(editNote: Note) => {
+                                                            setSelectedNote(editNote);
                                                             setModalVisible(true);
                                                         }} />
                                     </animated.div>
@@ -99,8 +108,7 @@ export function NotesPage(props: {}) {
                             ))}
                         </div>
                     </div>
-                    <NotesModal target=".page-content" 
-                                visible={modalVisible}
+                    <NotesModal visible={modalVisible}
                                 tags={tags}
                                 selectedNote={selectedNote}
                                 onSave={async (note: Note) => {
@@ -111,6 +119,11 @@ export function NotesPage(props: {}) {
                                     
                                 }}
                                 onClose={() => setModalVisible(false)} />
+                    <DeletePrompt visible={deletePromptVisible}
+                                  title="Confirm Note Deletion"
+                                  message={`The note '${selectedNote?.title ?? ""}' will be deleted. Do you wish to continue?`}
+                                  onDelete={() => deleteNote()}
+                                  onCancel={() => setDeletePromptVisible(false)} />
                 </LoadingOverlay>
             </div>
         </NotesContext.Provider>

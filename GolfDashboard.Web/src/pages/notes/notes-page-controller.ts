@@ -1,5 +1,3 @@
-import { ChipModel, DeleteEventArgs } from '@syncfusion/ej2-react-buttons';
-
 import { APIService } from '../../services';
 import { PopupUtils } from '../../popupUtils';
 import { NotesContextState } from '../notes';
@@ -20,6 +18,7 @@ export class NotesPageController {
         this._notesContext.updateTags(await this._apiService.getTags());
     }
 
+    /*
     confirmTagDeletion(e: DeleteEventArgs | undefined) : void {
 
         if(e) {
@@ -45,24 +44,7 @@ export class NotesPageController {
         }
 
     }
-
-    confirmNoteDeletion(noteID: number): void {
-
-        const dialog = PopupUtils.showConfirmationDialog({
-            content: "This note will be deleted. Do you wish to continue?",
-            title: "Confirm Note Deletion",
-            okButton: { 
-                text: 'OK', 
-                click: () => {
-
-                    this.deleteNote(noteID);
-                    dialog.close();
-
-                }
-            }
-        });
-
-    }
+    */
 
     updateTagsFilter(selectedTags: string[]) {
 
@@ -77,6 +59,14 @@ export class NotesPageController {
 
         const filteredOutNoteIDs = this._notesContext.notes.filter(noteFilteredOut).map(note => note.id!);
         this._notesContext.hideNotes(new Set<number>(filteredOutNoteIDs));
+    }
+
+    deleteNote(noteID: number) {
+
+        this._notesContext.markNoteAsDeleted(noteID);
+        this._apiService.deleteNote(noteID);
+        PopupUtils.infoToast("Note deleted");
+
     }
 
     async saveNote(note: Note): Promise<boolean> {
@@ -110,13 +100,5 @@ export class NotesPageController {
             
             PopupUtils.infoToast("Tag deleted");
         }
-    }
-
-    private deleteNote(noteID: number) {
-
-        this._notesContext.markNoteAsDeleted(noteID);
-        this._apiService.deleteNote(noteID);
-        PopupUtils.infoToast("Note deleted");
-
     }
 }
