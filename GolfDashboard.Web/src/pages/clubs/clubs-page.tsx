@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from 'react';
-import DataGrid, { Column, FilterRow, Scrolling } from 'devextreme-react/data-grid';
+import DataGrid, { Column, FilterRow, Paging } from 'devextreme-react/data-grid';
 import { animated, useSpring } from 'react-spring';
 
 import { GolfClub } from '../../models';
@@ -12,9 +12,9 @@ export function ClubsPage(props: any) {
 
     const [clubs, setClubs] = useState<Array<GolfClub>>([]);
     const [loading, setLoading] = useState(true);
-    
+
     const fetchClubsData = async (position: GeolocationPosition | null) => {
-     
+
         const apiService = new APIService();
         setClubs(await apiService.getClubs(position));
     }
@@ -60,9 +60,9 @@ export function ClubsPage(props: any) {
         return document.getElementById("page-content")!.clientHeight;
     }
 
-    const alphanumericFilterOperators = [ "contains", "startswith", "endswith" ];
+    const alphanumericFilterOperators = ["contains", "startswith", "endswith"];
     const fadeInAnimation = useSpring({
-        from: { opacity: 0},
+        from: { opacity: 0 },
         to: { opacity: loading ? 0 : 1 }
     });
 
@@ -71,51 +71,51 @@ export function ClubsPage(props: any) {
             <LoadingOverlay loading={loading}>
                 <animated.div style={fadeInAnimation}>
                     <DataGrid dataSource={clubs}
-                            showBorders={true}
-                            showColumnLines={true}
-                            showRowLines={true}
-                            height={getGridHeight}
-                            visible={!loading}
-                            rowAlternationEnabled={true}
-                            noDataText=""
-                            onContentReady={() => setLoading(false)}
-                            onEditorPreparing={(e) => {
+                        showBorders={true}
+                        showColumnLines={true}
+                        showRowLines={true}
+                        height={getGridHeight}
+                        visible={!loading}
+                        rowAlternationEnabled={true}
+                        noDataText=""
+                        onContentReady={() => setLoading(false)}
+                        onEditorPreparing={(e) => {
 
-                                    if(e.parentType === "filterRow") {
-                                        e.editorOptions.showClearButton = true;
-                                    }
+                            if (e.parentType === "filterRow") {
+                                e.editorOptions.showClearButton = true;
+                            }
 
-                            }}>
+                        }}>
 
                         <FilterRow visible={true} />
-                        <Scrolling mode="infinite" />
+                        <Paging defaultPageSize={25} />
 
                         <Column dataField="name"
-                                caption="Club Name" 
-                                width="30%" 
-                                type="string" 
-                                filterOperations={alphanumericFilterOperators} />
+                            caption="Club Name"
+                            width="30%"
+                            type="string"
+                            filterOperations={alphanumericFilterOperators} />
 
-                        <Column dataField="address" 
-                                caption="Address" 
-                                width="35%" 
-                                type="string"
-                                filterOperations={alphanumericFilterOperators} />
-                                
+                        <Column dataField="address"
+                            caption="Address"
+                            width="35%"
+                            type="string"
+                            filterOperations={alphanumericFilterOperators} />
+
                         <Column dataField="website"
-                                caption="Website" 
-                                width="25%"  
-                                type="string" 
-                                cellRender={websiteCellTemplate}
-                                filterOperations={alphanumericFilterOperators} />
+                            caption="Website"
+                            width="25%"
+                            type="string"
+                            cellRender={websiteCellTemplate}
+                            filterOperations={alphanumericFilterOperators} />
 
-                        <Column dataField="distanceInMiles" 
-                                caption="Distance (Miles)" 
-                                width="5%"
-                                minWidth={50} 
-                                type="numeric" 
-                                cellRender={distanceCellTemplate} 
-                                filterOperations={[ "<", ">", "between" ]} />
+                        <Column dataField="distanceInMiles"
+                            caption="Distance (Miles)"
+                            width="5%"
+                            minWidth={50}
+                            type="numeric"
+                            cellRender={distanceCellTemplate}
+                            filterOperations={["<", ">", "between"]} />
                     </DataGrid>
                 </animated.div>
             </LoadingOverlay>
