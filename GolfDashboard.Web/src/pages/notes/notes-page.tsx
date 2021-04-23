@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { animated, useTrail } from 'react-spring';
+import ScrollView from 'devextreme-react/scroll-view';
 
 import { Note, Tag } from '../../models';
 import { NotesPageController, NoteListItem, NotesFilter, NotesContext, NotesModal } from '../notes';
@@ -9,38 +10,54 @@ import { LoadingOverlay, DeletePrompt } from '../../components';
 
 import "./notes-page.css";
 
+interface NotesDataState {
+    loading: boolean;
+    filterVisible: boolean;
+    tags: Tag[],
+    notes: Note[]
+};
+
 export function NotesPage(props: any) {
 
+    const [notesData, setNotesData] = useState<NotesDataState>({
+        loading: true,
+        filterVisible: false,
+        tags: [],
+        notes: []
+    });
+
     const [modalVisible, setModalVisible] = useState(false);
-    const [filterVisible, setFilterVisible] = useState(false);
     const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-    const [loading, setLoading] = useState(true);
     const [deletePromptVisible, setDeletePromptVisible] = useState(false);
-    const [notes, setNotes] = useState<Note[]>([]);
-    const [tags, setTags] = useState<Tag[]>([]);
     const [softDeletedNoteIDs, setSoftDeletedNoteIDs] = useState(new Set<number>());
     const [hiddenNoteIDs, setHiddenNoteIDs] = useState(new Set<number>());
 
     //Apply a staggered fade in animation to each note after it's been loaded
-    const trail = useTrail(notes.length, {
+    const visibleNotes = notesData.notes.filter(n => !softDeletedNoteIDs.has(n.id!));
+    const trail = useTrail(visibleNotes.length, {
         from: { opacity: 0 },
         to: { opacity: 1 }
     });
 
     const context = {
-        notes: notes,
-        tags: tags,
+        notes: notesData.notes,
+        tags: notesData.tags,
         softDeletedNoteIDs: softDeletedNoteIDs,
         hiddenNoteIDs: hiddenNoteIDs,
 
         markNoteAsDeleted: (noteID: number) => {
             setSoftDeletedNoteIDs(new Set<number>([...softDeletedNoteIDs, noteID]));
         },
+
         hideNotes: (noteIDs: Set<number>) => {
             setHiddenNoteIDs(noteIDs);
         },
-        updateNotes: (notes: Array<Note>) => setNotes(notes),
-        updateTags: (tags: Array<Tag>) => setTags(tags),
+        updateNotesData: (notes: Array<Note>, tags: Array<Tag>) => {
+
+            const newData = { ...notesData, notes: notes, tags: tags };
+            setNotesData(newData);
+
+        }
     };
 
     const pageController = new NotesPageController(context);
@@ -61,15 +78,22 @@ export function NotesPage(props: any) {
                 const notes = await apiService.getNotes();
                 const tags = await apiService.getTags();
 
-                setLoading(false);
-                setFilterVisible(true);
-                setNotes(notes);
-                setTags(tags);
+                setNotesData({
+                    loading: false,
+                    filterVisible: true,
+                    notes: notes,
+                    tags: tags
+                });
 
             } catch {
+
                 PopupUtils.errorToast("Error loading notes");
-                setFilterVisible(false);
-                setLoading(false);
+                setNotesData({
+                    loading: false,
+                    filterVisible: false,
+                    notes: [],
+                    tags: []
+                });
             }
 
         }
@@ -82,8 +106,8 @@ export function NotesPage(props: any) {
 
         <NotesContext.Provider value={context}>
             <div className="notes-container relative flex-grow p-3">
-                <LoadingOverlay loading={loading}>
-                    <NotesFilter visible={filterVisible}
+                <LoadingOverlay loading={notesData.loading}>
+                    <NotesFilter visible={notesData.filterVisible}
                         updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
                         addNote={() => {
                             setSelectedNote(null);
@@ -92,16 +116,16 @@ export function NotesPage(props: any) {
                     <div className="relative flex-grow notes-list-container -mt-2">
                         <div className="absolute overflow-auto top-0 left-0 right-0 bottom-0">
                             {trail.map((props, i) => (
-                                <animated.div key={notes[i].id} style={props}>
+                                <animated.div key={visibleNotes[i].id} style={props}>
                                     <animated.div>
-                                        <NoteListItem key={notes[i].id}
-                                            note={notes[i]}
-                                            onDelete={(deletedNote: Note) => {
-                                                setSelectedNote(deletedNote);
+                                        <NoteListItem key={visibleNotes[i].id}
+                                            note={visibleNotes[i]}
+                                            onDelete={() => {
+                                                setSelectedNote(visibleNotes[i]);
                                                 setDeletePromptVisible(true);
                                             }}
-                                            onEdit={(editNote: Note) => {
-                                                setSelectedNote(editNote);
+                                            onEdit={() => {
+                                                setSelectedNote(visibleNotes[i]);
                                                 setModalVisible(true);
                                             }} />
                                     </animated.div>
@@ -110,7 +134,7 @@ export function NotesPage(props: any) {
                         </div>
                     </div>
                     <NotesModal visible={modalVisible}
-                        tags={tags}
+                        tags={notesData.tags}
                         selectedNote={selectedNote}
                         onSave={async (note: Note) => {
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'devextreme-react/button'
-import Popup  from 'devextreme-react/popup';
+import Popup from 'devextreme-react/popup';
 import TagBox from 'devextreme-react/tag-box';
 import TextBox from 'devextreme-react/text-box';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
@@ -9,15 +9,15 @@ import Validator, { RequiredRule, } from 'devextreme-react/validator';
 
 import { Note, Tag } from '../../models';
 
-interface OnSaveCallback { 
-    (note: Note): void 
+interface OnSaveCallback {
+    (note: Note): void
 }
 
 interface OnCloseCallback {
     (): void
 }
 
-interface NotesModalProps { 
+interface NotesModalProps {
     visible: boolean;
     selectedNote: Note | null;
     tags: Array<Tag>;
@@ -34,7 +34,7 @@ interface NotesModalState {
 export class NotesModal extends React.Component<NotesModalProps, NotesModalState> {
 
     private _htmlEditor: dxHtmlEditor | null;
-    
+
     constructor(props: NotesModalProps) {
 
         super(props);
@@ -49,7 +49,7 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
 
     componentDidUpdate(prevProps: NotesModalProps, prevState: NotesModalState) {
 
-        if(this.props.visible === prevProps.visible) {
+        if (this.props.visible === prevProps.visible) {
             return;
         }
 
@@ -67,38 +67,39 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
 
         return (
             <Popup width="60%"
-                   height="60%"
-                   showTitle={true}
-                   visible={this.props.visible}
-                   title="Add New Note"
-                   showCloseButton={false}>
+                height="60%"
+                showTitle={true}
+                visible={this.props.visible}
+                title="Add New Note"
+                showCloseButton={false}>
                 <div className="flex flex-col h-full space-y-2">
                     <TextBox placeholder="Title"
-                            showClearButton={true}
-                            stylingMode="underlined"
-                            value={this.state.title}
-                            onValueChange={(e) => this.onTitleChanged(e)}>
+                        showClearButton={true}
+                        stylingMode="underlined"
+                        value={this.state.title}
+                        onValueChange={(e) => this.onTitleChanged(e)}>
                         <Validator>
                             <RequiredRule />
                         </Validator>
                     </TextBox>
                     <TagBox dataSource={this.state.allTags}
-                            value={this.state.selectedTags}
-                            showSelectionControls={true}
-                            showClearButton={true}
-                            stylingMode="underlined"
-                            acceptCustomValue={true}
-                            placeholder="Select Tags"
-                            onValueChanged={e => {
-                                this.setState({
-                                    selectedTags: e.value
-                                });
-                            }} />
+                        value={this.state.selectedTags}
+                        showSelectionControls={true}
+                        searchEnabled={true}
+                        showClearButton={true}
+                        stylingMode="underlined"
+                        acceptCustomValue={true}
+                        placeholder="Select Tags"
+                        onValueChanged={e => {
+                            this.setState({
+                                selectedTags: e.value
+                            });
+                        }} />
                     <div className={"flex flex-grow"}>
                         <HtmlEditor height="100%"
-                                    width="100%"
-                                    defaultValue={this.props.selectedNote?.content ?? ""}
-                                    onInitialized={(e) => this._htmlEditor = e.component!}>
+                            width="100%"
+                            defaultValue={this.props.selectedNote?.content ?? ""}
+                            onInitialized={(e) => this._htmlEditor = e.component!}>
                             <Toolbar>
                                 <Item formatName="bold" />
                                 <Item formatName="italic" />
@@ -124,7 +125,7 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
                     <div className="flex self-end">
                         <div className="flex pt-2 space-x-2">
                             <Button text="Save" onClick={(e) => this.saveNewNote(e)} stylingMode="contained" type="default" />
-                            <Button text="Cancel" onClick={() => this.props.onClose()} stylingMode="outlined"  type="normal" />
+                            <Button text="Cancel" onClick={() => this.props.onClose()} stylingMode="outlined" type="normal" />
                         </div>
                     </div>
                 </div>
@@ -141,7 +142,7 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
 
     private saveNewNote(e: { validationGroup?: any }) {
 
-        if(!e.validationGroup.validate().isValid) {
+        if (!e.validationGroup.validate().isValid) {
             return;
         }
 

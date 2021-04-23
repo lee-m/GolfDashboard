@@ -14,8 +14,11 @@ export class NotesPageController {
     }
 
     async refreshData() {
-        this._notesContext.updateNotes(await this._apiService.getNotes());
-        this._notesContext.updateTags(await this._apiService.getTags());
+
+        const newNotes = await this._apiService.getNotes();
+        const newTags = await this._apiService.getTags();
+
+        this._notesContext.updateNotesData(newNotes, newTags);
     }
 
     /*
@@ -94,9 +97,10 @@ export class NotesPageController {
 
             //Deleting a tag can update notes if that tag was removed from it so we need to refresh 
             //the notes
-            this._notesContext.updateTags(this._notesContext.tags.filter(t => t.id !== tagID))
-            this._notesContext.updateNotes(await this._apiService.getNotes());
+            const notes = await this._apiService.getNotes();
+            const tags = this._notesContext.tags.filter(t => t.id !== tagID);
 
+            this._notesContext.updateNotesData(notes, tags);
             PopupUtils.infoToast("Tag deleted");
         }
     }

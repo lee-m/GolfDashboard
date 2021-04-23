@@ -7,8 +7,8 @@ import { EditButton, DeleteButton } from '../../components';
 
 type NoteListItemProps = {
     note: Note,
-    onDelete: (note: Note) => void,
-    onEdit: (note: Note) => void
+    onDelete: () => void,
+    onEdit: () => void
 };
 
 interface SpringProps {
@@ -46,27 +46,27 @@ export function NoteListItem(props: NoteListItemProps) {
     //
     //Note - since the item is still in the list, the bottom margin we add to space items out will still be present
     //so we need to zap that on deletion as well.
-    if(!isVisible) {
+    if (!isVisible) {
         springProps.height = 0;
         springProps.marginBottom = "0em";
-    } else if(height > 0) {
+    } else if (height > 0) {
         springProps.height = height;
     }
 
-    const itemAnimation = useSpring({...springProps});
+    const itemAnimation = useSpring({ ...springProps });
 
     useLayoutEffect(() => {
 
         //Capture the height of this item in case we need to animate it's removal from the list
-        if(listItemRef.current) {
+        if (listItemRef.current) {
             setHeight(listItemRef.current.getBoundingClientRect().height);
         }
 
     }, []);
 
-    if(props.note.tags != null && props.note.tags.length > 0) {
+    if (props.note.tags != null && props.note.tags.length > 0) {
 
-        tagComponent = 
+        tagComponent =
             <div className="pt-2 space-x-2">
                 {props.note.tags.map((t, i) => {
                     return (
@@ -85,11 +85,11 @@ export function NoteListItem(props: NoteListItemProps) {
                     <div className="flex justify-between">
                         <h4 className="text-xl">{props.note.title}</h4>
                         <div className="space-x-3">
-                            <EditButton clickHandler={() => props.onEdit(props.note)} />
-                            <DeleteButton clickHandler={() => props.onDelete(props.note) } />
+                            <EditButton clickHandler={() => props.onEdit()} />
+                            <DeleteButton clickHandler={() => props.onDelete()} />
                         </div>
                     </div>
-                    <div className="pb-2 pt-1" dangerouslySetInnerHTML={{__html: props.note.content}}></div>
+                    <div className="pb-2 pt-1" dangerouslySetInnerHTML={{ __html: props.note.content }}></div>
                     {tagComponent}
                 </div>
             </div>
