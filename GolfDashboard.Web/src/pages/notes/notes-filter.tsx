@@ -23,9 +23,10 @@ export function NotesFilter(props: NotesFilterProps) {
                 <span className="font-semibold self-center pl-2 pr-2 mb-0">Filter by Tag:</span>
                 <div className="w-1/4">
                     <TagBox dataSource={tagsDataSource}
-                            showSelectionControls={true}
-                            showClearButton={true}
-                            onValueChanged={(e) => props.updateFilter(e.value)} />
+                        showSelectionControls={true}
+                        showClearButton={true}
+                        stylingMode="underlined"
+                        onValueChanged={(e) => props.updateFilter(e.value)} />
                 </div>
             </div>
             <Separator />
