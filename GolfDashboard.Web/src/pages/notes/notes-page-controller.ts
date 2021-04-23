@@ -48,12 +48,12 @@ export class NotesPageController {
 
     updateTagsFilter(selectedTags: string[]) {
 
-        if(selectedTags.length === 0 ) {
+        if (selectedTags.length === 0) {
             this._notesContext.hideNotes(new Set<number>());
             return;
         }
 
-        const noteFilteredOut = (note: Note) : boolean => {
+        const noteFilteredOut = (note: Note): boolean => {
             return !note.tags.some((noteTag: string) => selectedTags.find(selectedTag => selectedTag === noteTag));
         }
 
@@ -61,11 +61,10 @@ export class NotesPageController {
         this._notesContext.hideNotes(new Set<number>(filteredOutNoteIDs));
     }
 
-    deleteNote(noteID: number) {
+    async deleteNote(noteID: number) {
 
         this._notesContext.markNoteAsDeleted(noteID);
-        this._apiService.deleteNote(noteID);
-        PopupUtils.infoToast("Note deleted");
+        await this._apiService.deleteNote(noteID);
 
     }
 
@@ -73,7 +72,7 @@ export class NotesPageController {
 
         try {
 
-            if(await this._apiService.saveNote(note)) {
+            if (await this._apiService.saveNote(note)) {
 
                 await this.refreshData();
                 PopupUtils.infoToast("Note Saved");
@@ -91,13 +90,13 @@ export class NotesPageController {
 
     private async deleteTag(tagID: number) {
 
-        if(await this._apiService.deleteTag(tagID)) {
+        if (await this._apiService.deleteTag(tagID)) {
 
             //Deleting a tag can update notes if that tag was removed from it so we need to refresh 
             //the notes
             this._notesContext.updateTags(this._notesContext.tags.filter(t => t.id !== tagID))
             this._notesContext.updateNotes(await this._apiService.getNotes());
-            
+
             PopupUtils.infoToast("Tag deleted");
         }
     }

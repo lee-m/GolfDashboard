@@ -35,7 +35,7 @@ export function NotesPage(props: any) {
 
         markNoteAsDeleted: (noteID: number) => {
             setSoftDeletedNoteIDs(new Set<number>([...softDeletedNoteIDs, noteID]));
-        }, 
+        },
         hideNotes: (noteIDs: Set<number>) => {
             setHiddenNoteIDs(noteIDs);
         },
@@ -45,9 +45,10 @@ export function NotesPage(props: any) {
 
     const pageController = new NotesPageController(context);
 
-    const deleteNote = () => {
-        pageController.deleteNote(selectedNote!.id!);
+    const deleteNote = async () => {
+        await pageController.deleteNote(selectedNote!.id!)
         setDeletePromptVisible(false);
+        PopupUtils.infoToast("Note deleted");
     }
 
     useEffect(() => {
@@ -82,48 +83,48 @@ export function NotesPage(props: any) {
         <NotesContext.Provider value={context}>
             <div className="notes-container relative flex-grow p-3">
                 <LoadingOverlay loading={loading}>
-                    <NotesFilter visible={filterVisible} 
-                                 updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
-                                 addNote={() => {
-                                     setSelectedNote(null);
-                                     setModalVisible(true)
-                                 }} />
+                    <NotesFilter visible={filterVisible}
+                        updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
+                        addNote={() => {
+                            setSelectedNote(null);
+                            setModalVisible(true)
+                        }} />
                     <div className="relative flex-grow notes-list-container -mt-2">
                         <div className="absolute overflow-auto top-0 left-0 right-0 bottom-0">
                             {trail.map((props, i) => (
                                 <animated.div key={notes[i].id} style={props}>
                                     <animated.div>
                                         <NoteListItem key={notes[i].id}
-                                                        note={notes[i]} 
-                                                        onDelete={(deletedNote: Note) => {
-                                                            setSelectedNote(deletedNote);
-                                                            setDeletePromptVisible(true);
-                                                        }} 
-                                                        onEdit={(editNote: Note) => {
-                                                            setSelectedNote(editNote);
-                                                            setModalVisible(true);
-                                                        }} />
+                                            note={notes[i]}
+                                            onDelete={(deletedNote: Note) => {
+                                                setSelectedNote(deletedNote);
+                                                setDeletePromptVisible(true);
+                                            }}
+                                            onEdit={(editNote: Note) => {
+                                                setSelectedNote(editNote);
+                                                setModalVisible(true);
+                                            }} />
                                     </animated.div>
                                 </animated.div>
                             ))}
                         </div>
                     </div>
                     <NotesModal visible={modalVisible}
-                                tags={tags}
-                                selectedNote={selectedNote}
-                                onSave={async (note: Note) => {
+                        tags={tags}
+                        selectedNote={selectedNote}
+                        onSave={async (note: Note) => {
 
-                                    if(await pageController.saveNote(note)) {
-                                        setModalVisible(false);
-                                    }
-                                    
-                                }}
-                                onClose={() => setModalVisible(false)} />
+                            if (await pageController.saveNote(note)) {
+                                setModalVisible(false);
+                            }
+
+                        }}
+                        onClose={() => setModalVisible(false)} />
                     <DeletePrompt visible={deletePromptVisible}
-                                  title="Confirm Note Deletion"
-                                  message={`The note '${selectedNote?.title ?? ""}' will be deleted. Do you wish to continue?`}
-                                  onDelete={() => deleteNote()}
-                                  onCancel={() => setDeletePromptVisible(false)} />
+                        title="Confirm Note Deletion"
+                        message={`The note '${selectedNote?.title ?? ""}' will be deleted. Do you wish to continue?`}
+                        onDelete={() => deleteNote()}
+                        onCancel={() => setDeletePromptVisible(false)} />
                 </LoadingOverlay>
             </div>
         </NotesContext.Provider>
