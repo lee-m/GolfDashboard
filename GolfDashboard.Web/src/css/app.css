@@ -33,10 +33,21 @@ body,
     padding: 16px !important;
 }
 
+ 
+
 @layer components {
  
     .button-sm .dx-button-content {
         @apply px-3 py-2 text-xs !important
     }
 
+    .dx-popup-done.dx-button {
+        @apply bg-secondary-500 text-white !important;
+
+        /* #2f3d5c */
+    }
+
+    .dx-popup-done.dx-button:hover {
+        background-color: #2f3d5c !important;
+    }
 }

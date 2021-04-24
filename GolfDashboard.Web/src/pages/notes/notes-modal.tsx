@@ -6,6 +6,8 @@ import TextBox from 'devextreme-react/text-box';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import dxHtmlEditor from 'devextreme/ui/html_editor';
 import Validator, { RequiredRule, } from 'devextreme-react/validator';
+import dxTagBox from 'devextreme/ui/tag_box';
+import { dxElement } from 'devextreme/core/element';
 
 import { Note, Tag } from '../../models';
 
@@ -29,6 +31,14 @@ interface NotesModalState {
     title: string;
     selectedTags: string[],
     allTags: string[]
+}
+
+interface CustomTagCreatedArgs {
+    component?: dxTagBox | undefined;
+    customItem?: string | object | Promise<any>;
+    element?: dxElement | undefined;
+    model?: object;
+    text?: string | undefined;
 }
 
 export class NotesModal extends React.Component<NotesModalProps, NotesModalState> {
@@ -84,17 +94,19 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
                     </TextBox>
                     <TagBox dataSource={this.state.allTags}
                         value={this.state.selectedTags}
+                        showClearButton={true}
+                        acceptCustomValue={true}
                         showSelectionControls={true}
                         searchEnabled={true}
-                        showClearButton={true}
                         stylingMode="underlined"
-                        acceptCustomValue={true}
+                        applyValueMode="useButtons"
                         placeholder="Select Tags"
                         onValueChanged={e => {
                             this.setState({
                                 selectedTags: e.value
                             });
-                        }} />
+                        }}
+                        onCustomItemCreating={e => this.onCustomTagCreated(e)} />
                     <div className={"flex flex-grow"}>
                         <HtmlEditor height="100%"
                             width="100%"
@@ -132,6 +144,19 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
             </Popup>
         );
     }
+
+    private onCustomTagCreated(e: CustomTagCreatedArgs) {
+
+        e.customItem = {
+            text: e.text
+        };
+
+        this.setState({
+            allTags: [...this.state.allTags, e.text!],
+            selectedTags: [...this.state.selectedTags, e.text!]
+        });
+    }
+
 
     private onTitleChanged(newTitle: string): void {
 
