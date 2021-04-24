@@ -1,5 +1,5 @@
 .delete-btn .dx-icon {
-    transition: all 0.5s ease;
+    transition: all 0.3s ease;
     max-width: 0em;
     opacity: 0;
     margin-right: 0 !important;

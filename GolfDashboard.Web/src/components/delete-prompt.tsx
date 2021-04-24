@@ -18,8 +18,13 @@ export function DeletePrompt(props: DeletePromptProps) {
     const [spinnerVisible, showSpinner] = useState(false);
 
     const deleteClick = () => {
-        props.onDelete();
-        showSpinner(!spinnerVisible);
+
+        showSpinner(true);
+
+        //Wait for the spinner expansion animation to complete before we forward on the 
+        //delete event. It's probably better to use the animationend event but that's a lot of
+        //faffing for something simple so go with this simply bodge 
+        setTimeout(() => props.onDelete(), 300);
     }
 
     return (
