@@ -23,9 +23,9 @@ export function SideNavItem(props: SideNavItemProps) {
     return (
         <div className={rowClasses.join(" ")}>
             <div className="flex justify-between pl-2 pr-2">
-                <img src={props.logo} alt={props.logoAlt} className="w-5 h-5 opacity-80"></img>
-                <Link to={props.linkURL} className="flex-grow pl-3 text-white hover:underline opacity-80">{props.linkText}</Link>
-                <img src={CaretLogo} className="text-white opacity-80" alt="" />
+                <img src={props.logo} alt={props.logoAlt} className="w-5 h-5 opacity-90"></img>
+                <Link to={props.linkURL} className="flex-grow pl-3 text-white hover:underline opacity-90">{props.linkText}</Link>
+                <img src={CaretLogo} className="text-white opacity-90" alt="" />
             </div>
         </div>
     );
