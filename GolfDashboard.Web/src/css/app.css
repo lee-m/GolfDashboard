@@ -9,7 +9,7 @@ body,
 
 .root-content {
     display: grid;
-    grid-template-columns: 12.5em 1fr;
+    grid-template-columns: 15em 1fr;
     grid-template-rows: auto 1fr;
     grid-template-areas: "header header"
                          "sidebar content";

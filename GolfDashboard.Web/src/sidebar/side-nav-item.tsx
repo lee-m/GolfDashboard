@@ -12,10 +12,10 @@ interface SideNavItemProps {
 
 export function SideNavItem(props: SideNavItemProps) {
 
-    let rowClasses = [ "pb-3", "pt-3"];
+    let rowClasses = ["pb-3", "pt-3", "pl-2", "pr-2"];
     let location = useLocation();
 
-    if(location.pathname === props.linkURL) {
+    if (location.pathname === props.linkURL) {
         rowClasses.push("bg-primary-900");
         rowClasses.push("transition-colors");
     }
@@ -23,9 +23,9 @@ export function SideNavItem(props: SideNavItemProps) {
     return (
         <div className={rowClasses.join(" ")}>
             <div className="flex justify-between pl-2 pr-2">
-                <img src={props.logo} alt={props.logoAlt} className="w-5 h-5 opacity-90"></img>
-                <Link to={props.linkURL} className="flex-grow pl-3 text-white hover:underline">{props.linkText}</Link>
-                <img src={CaretLogo} className="text-white" alt="" />
+                <img src={props.logo} alt={props.logoAlt} className="w-5 h-5 opacity-80"></img>
+                <Link to={props.linkURL} className="flex-grow pl-3 text-white hover:underline opacity-80">{props.linkText}</Link>
+                <img src={CaretLogo} className="text-white opacity-80" alt="" />
             </div>
         </div>
     );
