@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { animated, useTrail } from 'react-spring';
-import ScrollView from 'devextreme-react/scroll-view';
 
 import { Note, Tag } from '../../models';
 import { NotesPageController, NoteListItem, NotesFilter, NotesContext, NotesModal } from '../notes';
