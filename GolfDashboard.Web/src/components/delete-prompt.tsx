@@ -27,18 +27,28 @@ export function DeletePrompt(props: DeletePromptProps) {
         setTimeout(() => props.onDelete(), 300);
     }
 
+    const renderTitle = () => {
+        return (
+            <div className="flex pt-2 pb-2">
+                <i className="bi bi-exclamation-circle-fill text-accent-red text-lg text-bold"></i>
+                <span className="text-lg font-semibold pl-2">{props.title}</span>
+            </div>
+        );
+    }
+
     return (
         <Popup showTitle={true}
             visible={props.visible}
             showCloseButton={false}
             height="auto"
             width="auto"
-            title={props.title}
+            dragEnabled={false}
+            titleRender={renderTitle}
             onHidden={() => showSpinner(false)}>
-            <div className="flex flex-col">
+            <div className="flex flex-col pl-2 pr-2">
                 <span>{props.message}</span>
-                <div className="self-end mt-4 space-x-2">
-                    <Button text="Delete" icon={SpinnerLogo} onClick={deleteClick} stylingMode="contained" type="danger" elementAttr={{ class: "button-sm delete-btn " + (spinnerVisible ? "saving" : "") }} />
+                <div className="self-end mt-4 space-x-2 pt-3">
+                    <Button text="Delete" icon={SpinnerLogo} onClick={deleteClick} stylingMode="contained" type="danger" elementAttr={{ class: "button-sm delete-btn text-semibold " + (spinnerVisible ? "saving" : "") }} />
                     <Button text="Cancel" onClick={() => props.onCancel()} stylingMode="outlined" type="normal" elementAttr={{ class: "button-sm" }} />
                 </div>
             </div>
