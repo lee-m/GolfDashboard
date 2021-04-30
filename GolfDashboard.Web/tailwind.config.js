@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       colors: {
         accent: {
-          green: '#6CDA98',
+          green: '#339933',
           red: '#DA6C6C',
           blue: '#3E517A',
           yellow: '#EDF0DA'

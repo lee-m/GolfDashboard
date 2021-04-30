@@ -5,7 +5,7 @@ export class PopupUtils {
     public static infoToast(title: string) {
 
         toast.info(title, {
-            className: "bg-accent-blue",
+            className: "bg-accent-green",
             closeButton: false
         });
 
