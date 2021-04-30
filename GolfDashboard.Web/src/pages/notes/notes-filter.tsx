@@ -21,13 +21,13 @@ export function NotesFilter(props: NotesFilterProps) {
             <div className="flex pb-2">
                 <Button text="Add New Note" onClick={() => props.addNote()} disabled={false} stylingMode="contained" type="default" />
                 <span className="font-semibold self-center pl-2 pr-2 mb-0">Filter by Tag:</span>
-                <div className="w-1/4">
-                    <TagBox dataSource={tagsDataSource}
-                        showSelectionControls={true}
-                        showClearButton={true}
-                        stylingMode="underlined"
-                        onValueChanged={(e) => props.updateFilter(e.value)} />
-                </div>
+                <TagBox dataSource={tagsDataSource}
+                    showSelectionControls={true}
+                    showClearButton={true}
+                    applyValueMode="useButtons"
+                    stylingMode="underlined"
+                    elementAttr={{ class: "w-auto min-w-1/4" }}
+                    onValueChanged={(e) => props.updateFilter(e.value)} />
             </div>
             <Separator />
         </div>

@@ -3,6 +3,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   important: true,
   theme: {
+    minWidth: {
+      '1/2': '50%',
+      '1/4': '25%'
+    },
     extend: {
       colors: {
         accent: {
@@ -12,7 +16,7 @@ module.exports = {
           yellow: '#EDF0DA'
         },
         primary: {
-          100: '#E3E8E5', 
+          100: '#E3E8E5',
           200: '#C6D2CB',
           300: '#9CB0A4',
           400: '#879D90',
