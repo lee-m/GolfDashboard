@@ -71,7 +71,7 @@ export function NoteListItem(props: NoteListItemProps) {
                 {props.note.tags.map((t, i) => {
                     return (
                         <div className="dx-tag" key={i}>
-                            <span className="dx-tag-content p-2 m-0 bg-accent-yellow">{t}</span>
+                            <span className="dx-tag-content p-2 m-0 bg-accent-yellow cursor-default">{t}</span>
                         </div>
                     );
                 })}
