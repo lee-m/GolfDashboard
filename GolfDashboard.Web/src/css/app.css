@@ -50,4 +50,8 @@ body,
     .dx-popup-done.dx-button:hover {
         background-color: #2f3d5c !important;
     }
+    
+    .dx-tag-content {
+        @apply bg-secondary-100 !important
+    }
 }
