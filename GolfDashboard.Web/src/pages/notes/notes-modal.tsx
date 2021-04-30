@@ -5,7 +5,6 @@ import TagBox from 'devextreme-react/tag-box';
 import TextBox from 'devextreme-react/text-box';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import dxHtmlEditor from 'devextreme/ui/html_editor';
-import Validator, { RequiredRule, } from 'devextreme-react/validator';
 import dxTagBox from 'devextreme/ui/tag_box';
 import { dxElement } from 'devextreme/core/element';
 
@@ -30,7 +29,9 @@ interface NotesModalProps {
 interface NotesModalState {
     title: string;
     selectedTags: string[],
-    allTags: string[]
+    allTags: string[],
+    titleCSSClass: string,
+    contentCSSClass: string
 }
 
 interface CustomTagCreatedArgs {
@@ -53,7 +54,9 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
         this.state = {
             title: props.selectedNote?.title ?? "",
             selectedTags: props.selectedNote?.tags ?? [],
-            allTags: props.tags.map(t => t.text)
+            allTags: props.tags.map(t => t.text),
+            titleCSSClass: "",
+            contentCSSClass: ""
         };
     }
 
@@ -66,7 +69,9 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
         this.setState({
             title: this.props.selectedNote?.title ?? "",
             selectedTags: this.props.selectedNote?.tags ?? [],
-            allTags: this.props.tags.map(t => t.text)
+            allTags: this.props.tags.map(t => t.text),
+            titleCSSClass: "",
+            contentCSSClass: ""
         });
 
         this._htmlEditor?.option("value", this.props.selectedNote?.content ?? "");
@@ -87,10 +92,8 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
                         showClearButton={true}
                         stylingMode="underlined"
                         value={this.state.title}
+                        elementAttr={{ class: this.state.titleCSSClass }}
                         onValueChange={(e) => this.onTitleChanged(e)}>
-                        <Validator>
-                            <RequiredRule />
-                        </Validator>
                     </TextBox>
                     <TagBox dataSource={this.state.allTags}
                         value={this.state.selectedTags}
@@ -111,7 +114,8 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
                         <HtmlEditor height="100%"
                             width="100%"
                             defaultValue={this.props.selectedNote?.content ?? ""}
-                            onInitialized={(e) => this._htmlEditor = e.component!}>
+                            onInitialized={(e) => this._htmlEditor = e.component!}
+                            elementAttr={{ class: this.state.contentCSSClass }}>
                             <Toolbar>
                                 <Item formatName="bold" />
                                 <Item formatName="italic" />
@@ -129,14 +133,11 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
                                 <Item formatName="alignJustify" />
                                 <Item formatName="separator" />
                             </Toolbar>
-                            <Validator>
-                                <RequiredRule />
-                            </Validator>
                         </HtmlEditor>
                     </div>
                     <div className="flex self-end">
                         <div className="flex pt-2 space-x-2">
-                            <Button text="Save" onClick={(e) => this.saveNewNote(e)} stylingMode="contained" type="default" />
+                            <Button text="Save" onClick={(e) => this.saveNewNote()} stylingMode="contained" type="default" />
                             <Button text="Cancel" onClick={() => this.props.onClose()} stylingMode="outlined" type="normal" />
                         </div>
                     </div>
@@ -165,9 +166,9 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
         });
     }
 
-    private saveNewNote(e: { validationGroup?: any }) {
+    private saveNewNote() {
 
-        if (!e.validationGroup.validate().isValid) {
+        if (!this.validate()) {
             return;
         }
 
@@ -179,5 +180,23 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
         };
 
         this.props.onSave(noteContents);
+    }
+
+    private validate(): boolean {
+
+        var titleMissing = !this.state.title;
+        var contentMissing = (this._htmlEditor!.option("value")?.length ?? 0) === 0;
+
+        if (titleMissing || contentMissing) {
+
+            this.setState({
+                titleCSSClass: titleMissing ? "border-accent-red" : "",
+                contentCSSClass: contentMissing ? "border-accent-red" : ""
+            });
+
+            return false;
+        }
+
+        return true;
     }
 }
