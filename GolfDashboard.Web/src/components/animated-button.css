@@ -1,4 +1,4 @@
-.delete-btn .dx-icon {
+.animated-btn .dx-icon {
     transition: all 0.3s ease;
     max-width: 0em;
     opacity: 0;
@@ -6,17 +6,8 @@
     animation: spin 1s linear infinite;
 }
 
-.delete-btn.saving .dx-icon {
+.animated-btn.animated .dx-icon {
     max-width: 2em;
     margin-right: 9px !important;
     opacity: 1;
-}
-
-@keyframes spin {
-    from {
-        transform:rotate(0deg);
-    }
-    to {
-        transform:rotate(360deg);
-    }
 }

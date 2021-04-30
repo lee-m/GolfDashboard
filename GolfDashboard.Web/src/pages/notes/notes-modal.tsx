@@ -8,10 +8,11 @@ import dxHtmlEditor from 'devextreme/ui/html_editor';
 import dxTagBox from 'devextreme/ui/tag_box';
 import { dxElement } from 'devextreme/core/element';
 
+import { AnimatedButton } from '../../components';
 import { Note, Tag } from '../../models';
 
 interface OnSaveCallback {
-    (note: Note): void
+    (note: Note): Promise<void>
 }
 
 interface OnCloseCallback {
@@ -137,7 +138,7 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
                     </div>
                     <div className="flex self-end">
                         <div className="flex pt-2 space-x-2">
-                            <Button text="Save" onClick={(e) => this.saveNewNote()} stylingMode="contained" type="default" />
+                            <AnimatedButton text="Save" onClick={async () => await this.saveNewNote()} type="default" />
                             <Button text="Cancel" onClick={() => this.props.onClose()} stylingMode="outlined" type="normal" />
                         </div>
                     </div>
@@ -166,7 +167,7 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
         });
     }
 
-    private saveNewNote() {
+    private async saveNewNote(): Promise<void> {
 
         if (!this.validate()) {
             return;
@@ -179,7 +180,7 @@ export class NotesModal extends React.Component<NotesModalProps, NotesModalState
             tags: this.state.selectedTags
         };
 
-        this.props.onSave(noteContents);
+        await this.props.onSave(noteContents);
     }
 
     private validate(): boolean {

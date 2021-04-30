@@ -67,6 +67,14 @@ export function NotesPage(props: any) {
         PopupUtils.infoToast("Note deleted");
     }
 
+    const saveNote = async (note: Note) => {
+
+        if (await pageController.saveNote(note)) {
+            setModalVisible(false);
+        }
+
+    }
+
     useEffect(() => {
 
         const getNotes = async () => {
@@ -135,18 +143,12 @@ export function NotesPage(props: any) {
                     <NotesModal visible={modalVisible}
                         tags={notesData.tags}
                         selectedNote={selectedNote}
-                        onSave={async (note: Note) => {
-
-                            if (await pageController.saveNote(note)) {
-                                setModalVisible(false);
-                            }
-
-                        }}
+                        onSave={saveNote}
                         onClose={() => setModalVisible(false)} />
                     <DeletePrompt visible={deletePromptVisible}
                         title="Confirm Note Deletion"
                         message={`The note '${selectedNote?.title ?? ""}' will be deleted. Do you wish to continue?`}
-                        onDelete={() => deleteNote()}
+                        onDelete={deleteNote}
                         onCancel={() => setDeletePromptVisible(false)} />
                 </LoadingOverlay>
             </div>

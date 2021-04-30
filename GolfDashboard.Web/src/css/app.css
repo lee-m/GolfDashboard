@@ -53,3 +53,12 @@ body,
         @apply bg-secondary-100 rounded !important
     }
 }
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
