@@ -50,6 +50,6 @@ body,
     }
     
     .dx-tag-content {
-        @apply bg-secondary-100 !important
+        @apply bg-secondary-100 rounded !important
     }
 }
