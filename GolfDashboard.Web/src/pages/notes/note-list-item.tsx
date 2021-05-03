@@ -80,7 +80,7 @@ export function NoteListItem(props: NoteListItemProps) {
 
     return (
         <animated.div style={itemAnimation} ref={listItemRef}>
-            <div className="border-gray-300 border rounded p-3 bg-white" key={props.note.id}>
+            <div className="border-gray-300 border rounded p-3 bg-white shadow" key={props.note.id}>
                 <div>
                     <div className="flex justify-between">
                         <h4 className="text-xl">{props.note.title}</h4>
