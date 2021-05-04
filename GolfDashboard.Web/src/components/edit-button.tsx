@@ -1,11 +1,7 @@
-import { IconButton, IconButtonProps } from '.';
+import Button from 'devextreme-react/button'
 
-export function EditButton(props: IconButtonProps) {
+import PencilSquare from '../images/pencil-square.svg';
 
-    return (
-        <IconButton 
-            title="Edit" 
-            iconCSSClass="bi-pencil-square"
-            clickHandler={props.clickHandler} />
-    )
+export function EditButton(props: any) {
+    return (<Button icon={PencilSquare} stylingMode="text" onClick={props.clickHandler} />);
 }

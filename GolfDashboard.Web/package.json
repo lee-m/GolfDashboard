@@ -7,7 +7,6 @@
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
     "@types/react-router-dom": "5.1.7",
-    "bootstrap-icons": "^1.4.1",
     "devextreme": "^20.2.7",
     "devextreme-react": "^20.2.7",
     "react": "^17.0.2",

@@ -1,11 +1,7 @@
-import { IconButton, IconButtonProps } from '.';
+import Button from 'devextreme-react/button'
 
-export function DeleteButton(props: IconButtonProps) {
+import DeleteSquare from '../images/x-square.svg';
 
-    return (
-        <IconButton 
-            title="Delete"  
-            iconCSSClass="bi-x-square"
-            clickHandler={props.clickHandler} />
-    )
+export function DeleteButton(props: any) {
+    return (<Button icon={DeleteSquare} stylingMode="text" onClick={props.clickHandler} />);
 }
