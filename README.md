@@ -10,7 +10,7 @@ The front-end is a Typescript/React web application that communicates to an ASP.
 To aovid getting a bunch of 404's refreshing a page other than /, the the underlying CDN has some URL rewrite rules in place to keep all requests hitting /.
 
 The main libraries used on the front-end are:
-- [Syncfusion ej2 React components](https://ej2.syncfusion.com/home/) for various components (grid, rich text editor etc.) that no-one wants to write themselves.
+- [DevExtreme React Components](https://js.devexpress.com/) for various components (grid, rich text editor etc.) that no-one wants to write themselves.
 - [Tailwind CSS](https://tailwindcss.com/) for making things look pretty.
 - [Bootstrap Icons](https://icons.getbootstrap.com/) for some of the icons used in various places.
 - [react-spring](https://react-spring.io/) for handling animations since we are in a Web 2.0 world after all and having things pop in and out of view is so 1995.
