@@ -1,13 +1,14 @@
 import { useContext, useState } from 'react';
+import { CheckBox } from 'devextreme-react/check-box';
 import Button from 'devextreme-react/button'
 
-import { Separator } from '../../components';
 import { NotesContext } from '../notes';
+import { Tag } from '../../models';
 
 interface NotesFilterProps {
     visible: boolean
     updateFilter: (selectedTags: string[]) => void,
-    addNote: () => void
+    deleteTag: (tag: Tag) => void
 };
 
 export function NotesFilter(props: NotesFilterProps) {
@@ -15,37 +16,56 @@ export function NotesFilter(props: NotesFilterProps) {
     const notesContext = useContext(NotesContext);
     const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set<string>());
 
-    const onTagClick = (tag: string) => {
+    const onTagCheckboxChanged = (tag: string, selected: boolean) => {
 
+        debugger;
         let newTags: Set<string>;
 
-        if (selectedTags.has(tag)) {
-            newTags = new Set([...selectedTags].filter(t => t != tag));
+        if (!selected) {
+            newTags = new Set([...selectedTags].filter(t => t !== tag));
         } else {
             newTags = new Set([...selectedTags, tag]);
         }
 
         setSelectedTags(newTags);
         props.updateFilter([...newTags]);
-    };
+
+    }
+
+    const clearFilterSelection = () => {
+        setSelectedTags(new Set<string>());
+        props.updateFilter([]);
+    }
 
     return (
-        <div className={"notes-filter" + (!props.visible ? "hidden" : "")}>
-            <div className="flex pb-2">
-                <Button text="Add New Note" onClick={() => props.addNote()} disabled={false} stylingMode="contained" type="default" />
-                <span className="font-semibold self-center pl-2 pr-2 mb-0">Filter by Tag:</span>
-                <div className="space-x-2 flex justify-center">
+        <div className="notes-filter bg-gray-200 p-3 flex flex-col space-y-2">
+            <div className="form">
+                <div className="dx-fieldset">
+                    <div className="dx-fieldset-header">
+                        Filter by Tag
+                    </div>
                     {notesContext.tags.map((t, i) => {
                         return (
-                            <div className="dx-tag cursor-pointer self-center" key={i}>
-                                <span className={"dx-tag-content note-tag" + (selectedTags.has(t.text) ? "bg-secondary-300" : "")} onClick={() => onTagClick(t.text)}>{t.text}</span>
+                            <div className="dx-field" key={t.id}>
+                                <div className="dx-field-value w-min">
+                                    <div className="flex items-center">
+                                        <CheckBox value={selectedTags.has(t.text)} onValueChanged={(e) => onTagCheckboxChanged(t.text, e.value)} />
+                                        <Button icon="trash" stylingMode="text" hint="Delete" onClick={() => props.deleteTag(t)} />
+                                    </div>
+                                </div>
+                                <div className="dx-field-label w-min text-gray-700">
+                                    {t.text}
+                                </div>
                             </div>
                         );
                     })}
                 </div>
+                <div className="flex justify-center pt-3">
+                    <Button text="Clear" type="default" onClick={() => clearFilterSelection()} disabled={selectedTags.size === 0} />
+                </div>
             </div>
-            <Separator />
         </div>
     );
 
 };
+

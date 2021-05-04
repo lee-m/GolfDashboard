@@ -84,7 +84,7 @@ export function NoteListItem(props: NoteListItemProps) {
                 <div>
                     <div className="flex justify-between">
                         <h4 className="text-xl">{props.note.title}</h4>
-                        <div className="space-x-3">
+                        <div>
                             <EditButton clickHandler={() => props.onEdit()} />
                             <DeleteButton clickHandler={() => props.onDelete()} />
                         </div>

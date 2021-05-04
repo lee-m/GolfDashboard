@@ -1,7 +1,3 @@
-body {
-    color: #666
-}
-
 body,
 .e-control {
     font-family: 'Nunito', sans-serif !important;
@@ -24,7 +20,7 @@ body,
     grid-area: sidebar;
 }
 
-/* Dev Extreme Overrides */
+/* Dev Extreme Overrides/Customisation */
 .dx-overlay-shader {
   background-color: rgba(0,0,0,.6) !important;
 }
@@ -41,8 +37,6 @@ body,
 
     .dx-popup-done.dx-button {
         @apply bg-secondary-500 text-white !important;
-
-        /* #2f3d5c */
     }
 
     .dx-popup-done.dx-button:hover {
@@ -51,6 +45,14 @@ body,
     
     .dx-tag-content {
         @apply bg-secondary-100 rounded !important
+    }
+
+    .dx-fieldset-header {
+        @apply mb-2 !important;
+    }
+
+    .dx-fieldset {
+        @apply m-2 !important;
     }
 }
 

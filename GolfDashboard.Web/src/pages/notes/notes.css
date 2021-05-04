@@ -1,9 +1,10 @@
 .notes-container {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    grid-template-areas: "filter"
-                         "list";
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas: "opts filter"
+                         "separator filter"
+                         "list filter";
 }
 
 .notes-filter {
@@ -18,5 +19,10 @@
 
     .note-tag {
         @apply p-1.5 text-xs m-0 !important;
+    }
+
+    .notes-opts {
+        grid-area: opts;
+        @apply p-3;
     }
 }

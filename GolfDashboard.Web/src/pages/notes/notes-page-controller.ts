@@ -21,34 +21,6 @@ export class NotesPageController {
         this._notesContext.updateNotesData(newNotes, newTags);
     }
 
-    /*
-    confirmTagDeletion(e: DeleteEventArgs | undefined) : void {
-
-        if(e) {
-
-            e.cancel = true;
-
-            let tagModel = e.data as ChipModel;
-            let tagID = tagModel.value as number;
-
-            let confirmDialog = PopupUtils.showConfirmationDialog({
-                content: `The tag '${tagModel.text}' will be deleted and removed from any notes currently using it. Do you wish to continue?`,
-                okButton: { 
-                    text: 'OK', 
-                    click: async () => {
-
-                        this.deleteTag(tagID);
-                        confirmDialog.close();
-                    }
-                },
-                title: "Confirm Tag Deletion",
-            });
-
-        }
-
-    }
-    */
-
     updateTagsFilter(selectedTags: string[]) {
 
         if (selectedTags.length === 0) {
@@ -71,6 +43,19 @@ export class NotesPageController {
 
     }
 
+    async deleteTag(tagID: number) {
+
+        if (await this._apiService.deleteTag(tagID)) {
+
+            //Deleting a tag can update notes if that tag was removed from it so we need to refresh 
+            //the notes
+            const notes = await this._apiService.getNotes();
+            const tags = this._notesContext.tags.filter(t => t.id !== tagID);
+
+            this._notesContext.updateNotesData(notes, tags);
+        }
+    }
+
     async saveNote(note: Note): Promise<boolean> {
 
         try {
@@ -89,19 +74,5 @@ export class NotesPageController {
 
         PopupUtils.errorToast("Error Saving Note");
         return false;
-    }
-
-    private async deleteTag(tagID: number) {
-
-        if (await this._apiService.deleteTag(tagID)) {
-
-            //Deleting a tag can update notes if that tag was removed from it so we need to refresh 
-            //the notes
-            const notes = await this._apiService.getNotes();
-            const tags = this._notesContext.tags.filter(t => t.id !== tagID);
-
-            this._notesContext.updateNotesData(notes, tags);
-            PopupUtils.infoToast("Tag deleted");
-        }
     }
 }

@@ -6,7 +6,6 @@ import { Sidebar } from './sidebar';
 import { ClubsPage, DashboardPage, RoundsPage, NotesPage } from "./pages";
 import { ToastContainer } from 'react-toastify';
 
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './css/app.css';
 

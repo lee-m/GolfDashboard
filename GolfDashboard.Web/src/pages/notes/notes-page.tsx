@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { animated, useTrail } from 'react-spring';
 
+import Button from 'devextreme-react/button'
+
+import { Separator } from '../../components';
 import { Note, Tag } from '../../models';
 import { NotesPageController, NoteListItem, NotesFilter, NotesContext, NotesModal } from '../notes';
 import { PopupUtils } from '../../popupUtils';
@@ -27,7 +30,9 @@ export function NotesPage(props: any) {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedNote, setSelectedNote] = useState<Note | null>(null);
-    const [deletePromptVisible, setDeletePromptVisible] = useState(false);
+    const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
+    const [noteDeletePromptVisible, setNoteDeletePromptVisible] = useState(false);
+    const [tagDeletePromptVisible, setTagDeletePromptVisible] = useState(false);
     const [softDeletedNoteIDs, setSoftDeletedNoteIDs] = useState(new Set<number>());
     const [hiddenNoteIDs, setHiddenNoteIDs] = useState(new Set<number>());
 
@@ -63,9 +68,15 @@ export function NotesPage(props: any) {
 
     const deleteNote = async () => {
         await pageController.deleteNote(selectedNote!.id!)
-        setDeletePromptVisible(false);
+        setNoteDeletePromptVisible(false);
         PopupUtils.infoToast("Note deleted");
-    }
+    };
+
+    const deleteTag = async () => {
+        await pageController.deleteTag(selectedTag!.id!)
+        setTagDeletePromptVisible(false);
+        PopupUtils.infoToast("Tag deleted");
+    };
 
     const saveNote = async (note: Note) => {
 
@@ -73,7 +84,17 @@ export function NotesPage(props: any) {
             setModalVisible(false);
         }
 
-    }
+    };
+
+    const addNote = () => {
+        setSelectedNote(null);
+        setModalVisible(true)
+    };
+
+    const confirmTagDeletion = (tag: Tag) => {
+        setSelectedTag(tag);
+        setTagDeletePromptVisible(true);
+    };
 
     useEffect(() => {
 
@@ -112,15 +133,18 @@ export function NotesPage(props: any) {
     return (
 
         <NotesContext.Provider value={context}>
-            <div className="notes-container relative flex-grow p-3">
+            <div className="notes-container relative flex-grow">
+                <div className="flex pb-2 space-x-2 notes-opts">
+                    <Button text="Add New Note" onClick={() => addNote()} disabled={false} stylingMode="contained" type="default" />
+                    <Button text="Filter" disabled={false} stylingMode="outlined" type="normal" />
+                </div>
+                <Separator cssClass="ml-3 mr-3" />
+                <NotesFilter
+                    visible={true}
+                    updateFilter={(tags: string[]) => pageController.updateTagsFilter(tags)}
+                    deleteTag={(tag: Tag) => confirmTagDeletion(tag)} />
                 <LoadingOverlay loading={notesData.loading}>
-                    <NotesFilter visible={notesData.filterVisible}
-                        updateFilter={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}
-                        addNote={() => {
-                            setSelectedNote(null);
-                            setModalVisible(true)
-                        }} />
-                    <div className="relative flex-grow notes-list-container -mt-2">
+                    <div className="relative flex-grow notes-list-container -mt-2 ml-3 mr-3">
                         <div className="absolute overflow-auto top-0 left-0 right-0 bottom-0">
                             {trail.map((props, i) => (
                                 <animated.div key={visibleNotes[i].id} style={props}>
@@ -129,7 +153,7 @@ export function NotesPage(props: any) {
                                             note={visibleNotes[i]}
                                             onDelete={() => {
                                                 setSelectedNote(visibleNotes[i]);
-                                                setDeletePromptVisible(true);
+                                                setNoteDeletePromptVisible(true);
                                             }}
                                             onEdit={() => {
                                                 setSelectedNote(visibleNotes[i]);
@@ -140,17 +164,22 @@ export function NotesPage(props: any) {
                             ))}
                         </div>
                     </div>
-                    <NotesModal visible={modalVisible}
-                        tags={notesData.tags}
-                        selectedNote={selectedNote}
-                        onSave={saveNote}
-                        onClose={() => setModalVisible(false)} />
-                    <DeletePrompt visible={deletePromptVisible}
-                        title="Confirm Note Deletion"
-                        message={`The note '${selectedNote?.title ?? ""}' will be deleted. Do you wish to continue?`}
-                        onDelete={deleteNote}
-                        onCancel={() => setDeletePromptVisible(false)} />
                 </LoadingOverlay>
+                <NotesModal visible={modalVisible}
+                    tags={notesData.tags}
+                    selectedNote={selectedNote}
+                    onSave={saveNote}
+                    onClose={() => setModalVisible(false)} />
+                <DeletePrompt visible={noteDeletePromptVisible}
+                    title="Confirm Note Deletion"
+                    message={`The note '${selectedNote?.title ?? ""}' will be deleted. Do you wish to continue?`}
+                    onDelete={deleteNote}
+                    onCancel={() => setNoteDeletePromptVisible(false)} />
+                <DeletePrompt visible={tagDeletePromptVisible}
+                    title="Confirm Tag Deletion"
+                    message={`The tag '${selectedTag?.text ?? ""}' will be deleted and removed from any notes. Do you wish to continue?`}
+                    onDelete={() => deleteTag()}
+                    onCancel={() => setTagDeletePromptVisible(false)} />
             </div>
         </NotesContext.Provider>
     );
