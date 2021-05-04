@@ -2,23 +2,24 @@ import { useContext, useState } from 'react';
 import { CheckBox } from 'devextreme-react/check-box';
 import Button from 'devextreme-react/button'
 
-import { NotesContext } from '../notes';
+import { Separator } from '../../components';
+import { NotesContext } from '.';
 import { Tag } from '../../models';
 
 interface NotesFilterProps {
     visible: boolean
     updateFilter: (selectedTags: string[]) => void,
-    deleteTag: (tag: Tag) => void
+    deleteTag: (tag: Tag) => void,
+    addNote: () => void
 };
 
-export function NotesFilter(props: NotesFilterProps) {
+export function NotesSidebar(props: NotesFilterProps) {
 
     const notesContext = useContext(NotesContext);
     const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set<string>());
 
     const onTagCheckboxChanged = (tag: string, selected: boolean) => {
 
-        debugger;
         let newTags: Set<string>;
 
         if (!selected) {
@@ -38,12 +39,12 @@ export function NotesFilter(props: NotesFilterProps) {
     }
 
     return (
-        <div className="notes-filter bg-gray-200 p-3 flex flex-col space-y-2">
-            <div className="form">
+        <div className="notes-filter bg-gray-200 p-3 flex flex-col">
+            <Button text="Add New Note" onClick={() => props.addNote()} disabled={false} stylingMode="contained" type="default" />
+            <Separator />
+            <h4 className="text-lg">Filter by Tag</h4>
+            <div className="flex-grow overflow-auto h-px">
                 <div className="dx-fieldset">
-                    <div className="dx-fieldset-header">
-                        Filter by Tag
-                    </div>
                     {notesContext.tags.map((t, i) => {
                         return (
                             <div className="dx-field" key={t.id}>
@@ -60,9 +61,9 @@ export function NotesFilter(props: NotesFilterProps) {
                         );
                     })}
                 </div>
-                <div className="flex justify-center pt-3">
-                    <Button text="Clear" type="default" onClick={() => clearFilterSelection()} disabled={selectedTags.size === 0} />
-                </div>
+            </div>
+            <div className="flex justify-center pt-3">
+                <Button text="Clear" type="default" stylingMode="outlined" onClick={() => clearFilterSelection()} disabled={selectedTags.size === 0} />
             </div>
         </div>
     );

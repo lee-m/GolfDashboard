@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { animated, useTrail } from 'react-spring';
 
-import Button from 'devextreme-react/button'
-
 import { Separator } from '../../components';
 import { Note, Tag } from '../../models';
-import { NotesPageController, NoteListItem, NotesFilter, NotesContext, NotesModal } from '../notes';
+import { NotesPageController, NoteListItem, NotesSidebar, NotesContext, NotesModal } from '../notes';
 import { PopupUtils } from '../../popupUtils';
 import { APIService } from '../../services';
 import { LoadingOverlay, DeletePrompt } from '../../components';
@@ -134,15 +132,12 @@ export function NotesPage(props: any) {
 
         <NotesContext.Provider value={context}>
             <div className="notes-container relative flex-grow">
-                <div className="flex pb-2 space-x-2 notes-opts">
-                    <Button text="Add New Note" onClick={() => addNote()} disabled={false} stylingMode="contained" type="default" />
-                    <Button text="Filter" disabled={false} stylingMode="outlined" type="normal" />
-                </div>
                 <Separator cssClass="ml-3 mr-3" />
-                <NotesFilter
+                <NotesSidebar
                     visible={true}
                     updateFilter={(tags: string[]) => pageController.updateTagsFilter(tags)}
-                    deleteTag={(tag: Tag) => confirmTagDeletion(tag)} />
+                    deleteTag={(tag: Tag) => confirmTagDeletion(tag)}
+                    addNote={() => addNote()} />
                 <LoadingOverlay loading={notesData.loading}>
                     <div className="relative flex-grow notes-list-container -mt-2 ml-3 mr-3">
                         <div className="absolute overflow-auto top-0 left-0 right-0 bottom-0">

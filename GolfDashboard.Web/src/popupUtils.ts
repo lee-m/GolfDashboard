@@ -6,7 +6,7 @@ export class PopupUtils {
 
         toast.info(title, {
             className: "bg-accent-green",
-            closeButton: false
+            closeButton: true
         });
 
     }
