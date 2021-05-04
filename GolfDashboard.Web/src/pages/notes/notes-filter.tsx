@@ -34,11 +34,11 @@ export function NotesFilter(props: NotesFilterProps) {
             <div className="flex pb-2">
                 <Button text="Add New Note" onClick={() => props.addNote()} disabled={false} stylingMode="contained" type="default" />
                 <span className="font-semibold self-center pl-2 pr-2 mb-0">Filter by Tag:</span>
-                <div className="space-x-2">
+                <div className="space-x-2 flex justify-center">
                     {notesContext.tags.map((t, i) => {
                         return (
-                            <div className="dx-tag cursor-pointer shadow" key={i}>
-                                <span className={"dx-tag-content p-2 m-0 " + (selectedTags.has(t.text) ? "bg-secondary-300" : "")} onClick={() => onTagClick(t.text)}>{t.text}</span>
+                            <div className="dx-tag cursor-pointer self-center" key={i}>
+                                <span className={"dx-tag-content note-tag" + (selectedTags.has(t.text) ? "bg-secondary-300" : "")} onClick={() => onTagClick(t.text)}>{t.text}</span>
                             </div>
                         );
                     })}

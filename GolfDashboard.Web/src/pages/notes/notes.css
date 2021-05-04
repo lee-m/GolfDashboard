@@ -13,3 +13,10 @@
 .notes-list-container {
     grid-area: list;
 }
+
+@layer components {
+
+    .note-tag {
+        @apply p-1.5 text-xs m-0 !important;
+    }
+}

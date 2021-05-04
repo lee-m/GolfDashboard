@@ -7,7 +7,7 @@ import { PopupUtils } from '../../popupUtils';
 import { APIService } from '../../services';
 import { LoadingOverlay, DeletePrompt } from '../../components';
 
-import "./notes-page.css";
+import "./notes.css";
 
 interface NotesDataState {
     loading: boolean;
