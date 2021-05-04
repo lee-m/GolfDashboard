@@ -39,7 +39,7 @@ export function NotesSidebar(props: NotesFilterProps) {
     }
 
     return (
-        <div className="notes-filter bg-gray-200 p-3 flex flex-col">
+        <div className={"notes-filter bg-gray-200 p-3 flex flex-col " + (!props.visible ? "hidden" : "")}>
             <Button text="Add New Note" onClick={() => props.addNote()} disabled={false} stylingMode="contained" type="default" />
             <Separator />
             <h4 className="text-lg">Filter by Tag</h4>

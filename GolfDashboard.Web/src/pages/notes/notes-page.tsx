@@ -134,7 +134,7 @@ export function NotesPage(props: any) {
             <div className="notes-container relative flex-grow">
                 <Separator cssClass="ml-3 mr-3" />
                 <NotesSidebar
-                    visible={true}
+                    visible={!notesData.loading}
                     updateFilter={(tags: string[]) => pageController.updateTagsFilter(tags)}
                     deleteTag={(tag: Tag) => confirmTagDeletion(tag)}
                     addNote={() => addNote()} />
