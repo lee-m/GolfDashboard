@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { animated, useTrail } from 'react-spring';
 
-import { Separator } from '../../components';
 import { Note, Tag } from '../../models';
 import { NotesPageController, NoteListItem, NotesSidebar, NotesContext, NotesModal } from '../notes';
 import { PopupUtils } from '../../popupUtils';
@@ -132,14 +131,13 @@ export function NotesPage(props: any) {
 
         <NotesContext.Provider value={context}>
             <div className="notes-container relative flex-grow">
-                <Separator cssClass="ml-3 mr-3" />
                 <NotesSidebar
                     visible={!notesData.loading}
                     updateFilter={(tags: string[]) => pageController.updateTagsFilter(tags)}
                     deleteTag={(tag: Tag) => confirmTagDeletion(tag)}
                     addNote={() => addNote()} />
                 <LoadingOverlay loading={notesData.loading}>
-                    <div className="relative flex-grow notes-list-container -mt-2 ml-3 mr-3">
+                    <div className="relative flex-grow notes-list-container m-3">
                         <div className="absolute overflow-auto top-0 left-0 right-0 bottom-0">
                             {trail.map((props, i) => (
                                 <animated.div key={visibleNotes[i].id} style={props}>
