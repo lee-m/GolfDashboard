@@ -1,5 +1,7 @@
 export function Separator(props: { cssClass?: string }) {
     return (
-        <div className={"h-px pt-2 pb-2 border-t border-gray-300 " + (props.cssClass ?? "")}></div>
+        <div className={"flex h-100 justify-center py-2 " + (props.cssClass ?? "")}>
+            <div className="flex-grow h-px border-t border-gray-300"></div>
+        </div>
     );
 }
