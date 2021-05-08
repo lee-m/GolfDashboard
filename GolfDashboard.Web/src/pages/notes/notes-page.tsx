@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
-import { animated, useTrail } from 'react-spring';
+import { useEffect, useState, useCallback } from 'react';
 import Button from 'devextreme-react/button'
 
 import { Note, Tag } from '../../models';
-import { NotesPageController, NoteListItem, NotesSidebar, NotesContext, NotesModal } from '../notes';
+import { NotesPageController, NotesList, NotesSidebar, NotesContext, NotesModal } from '../notes';
 import { PopupUtils } from '../../popupUtils';
 import { APIService } from '../../services';
-import { LoadingOverlay, DeletePrompt, Separator } from '../../components';
+import { DeletePrompt, Separator } from '../../components';
 
 import "./notes.css";
 
@@ -31,27 +30,14 @@ export function NotesPage(props: any) {
     const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
     const [noteDeletePromptVisible, setNoteDeletePromptVisible] = useState(false);
     const [tagDeletePromptVisible, setTagDeletePromptVisible] = useState(false);
-    const [softDeletedNoteIDs, setSoftDeletedNoteIDs] = useState(new Set<number>());
     const [hiddenNoteIDs, setHiddenNoteIDs] = useState(new Set<number>());
     const [filterPanelVisible, setFilterPanelVisible] = useState(false);
-
-    //Apply a staggered fade in animation to each note after it's been loaded
-    const visibleNotes = notesData.notes.filter(n => !softDeletedNoteIDs.has(n.id!));
-    const trail = useTrail(visibleNotes.length, {
-        from: { opacity: 0 },
-        to: { opacity: 1 }
-    });
 
     const context = {
         notes: notesData.notes,
         tags: notesData.tags,
-        softDeletedNoteIDs: softDeletedNoteIDs,
         hiddenNoteIDs: hiddenNoteIDs,
         filterPanelVisible: filterPanelVisible,
-
-        markNoteAsDeleted: (noteID: number) => {
-            setSoftDeletedNoteIDs(new Set<number>([...softDeletedNoteIDs, noteID]));
-        },
 
         hideNotes: (noteIDs: Set<number>) => {
             setHiddenNoteIDs(noteIDs);
@@ -133,6 +119,16 @@ export function NotesPage(props: any) {
 
     }, []);
 
+    const onNoteEdit = useCallback((note: Note) => {
+        setSelectedNote(note);
+        setModalVisible(true);
+    }, []);
+
+    const onNoteDelete = useCallback((note: Note) => {
+        setSelectedNote(note);
+        setNoteDeletePromptVisible(true);
+    }, []);
+
     return (
 
         <NotesContext.Provider value={context}>
@@ -142,28 +138,11 @@ export function NotesPage(props: any) {
                     <Button text="Toggle Filter" onClick={() => setFilterPanelVisible(!filterPanelVisible)} disabled={false} stylingMode="contained" type="normal" />
                 </div>
                 <Separator cssClass="notes-separator" />
-                <LoadingOverlay loading={notesData.loading}>
-                    <div className="relative flex-grow notes-list-container ml-3 mr-3">
-                        <div className="absolute overflow-auto top-0 left-0 right-0 bottom-0">
-                            {trail.map((props, i) => (
-                                <animated.div key={visibleNotes[i].id} style={props}>
-                                    <animated.div>
-                                        <NoteListItem key={visibleNotes[i].id}
-                                            note={visibleNotes[i]}
-                                            onDelete={() => {
-                                                setSelectedNote(visibleNotes[i]);
-                                                setNoteDeletePromptVisible(true);
-                                            }}
-                                            onEdit={() => {
-                                                setSelectedNote(visibleNotes[i]);
-                                                setModalVisible(true);
-                                            }} />
-                                    </animated.div>
-                                </animated.div>
-                            ))}
-                        </div>
-                    </div>
-                </LoadingOverlay>
+                <NotesList
+                    notes={notesData.notes}
+                    loading={notesData.loading}
+                    onEdit={onNoteEdit}
+                    onDelete={onNoteDelete} />
                 <NotesSidebar
                     updateFilter={(tags: string[]) => pageController.updateTagsFilter(tags)}
                     deleteTag={(tag: Tag) => confirmTagDeletion(tag)}
@@ -187,3 +166,4 @@ export function NotesPage(props: any) {
         </NotesContext.Provider>
     );
 }
+

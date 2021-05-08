@@ -7,8 +7,8 @@ import { EditButton, DeleteButton } from '../../components';
 
 type NoteListItemProps = {
     note: Note,
-    onDelete: () => void,
-    onEdit: () => void
+    onDelete: (note: Note) => void,
+    onEdit: (note: Note) => void
 };
 
 interface SpringProps {
@@ -24,7 +24,7 @@ export function NoteListItem(props: NoteListItemProps) {
     const notesContext = useContext(NotesContext);
     const listItemRef = useRef<HTMLDivElement>(null);
     const [height, setHeight] = useState(0);
-    const isVisible = !notesContext.softDeletedNoteIDs.has(props.note.id!) && !notesContext.hiddenNoteIDs.has(props.note.id!);
+    const isVisible = !notesContext.hiddenNoteIDs.has(props.note.id!);
 
     let springProps: SpringProps = {
         opacity: isVisible ? 1 : 0,
@@ -85,8 +85,8 @@ export function NoteListItem(props: NoteListItemProps) {
                     <div className="flex justify-between">
                         <h4 className="text-xl">{props.note.title}</h4>
                         <div>
-                            <EditButton clickHandler={() => props.onEdit()} />
-                            <DeleteButton clickHandler={() => props.onDelete()} />
+                            <EditButton clickHandler={() => props.onEdit(props.note)} />
+                            <DeleteButton clickHandler={() => props.onDelete(props.note)} />
                         </div>
                     </div>
                     <div className="pb-2 pt-1" dangerouslySetInnerHTML={{ __html: props.note.content }}></div>

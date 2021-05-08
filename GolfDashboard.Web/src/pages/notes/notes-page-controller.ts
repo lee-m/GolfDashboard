@@ -38,7 +38,7 @@ export class NotesPageController {
 
     async deleteNote(noteID: number) {
 
-        this._notesContext.markNoteAsDeleted(noteID);
+        this._notesContext.updateNotesData(this._notesContext.notes.filter(n => n.id! !== noteID), this._notesContext.tags);
         await this._apiService.deleteNote(noteID);
 
     }
