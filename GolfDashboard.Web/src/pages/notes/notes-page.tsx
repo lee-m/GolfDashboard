@@ -1,11 +1,10 @@
-import { useEffect, useState, useCallback } from 'react';
-import Button from 'devextreme-react/button'
+import { useEffect, useState, useCallback, useMemo } from 'react';
 
 import { Note, Tag } from '../../models';
-import { NotesPageController, NotesList, NotesSidebar, NotesContext, NotesModal } from '../notes';
+import { NotesPageController, NotesList, NotesPageContainer, NotesContext, NotesModal } from '../notes';
 import { PopupUtils } from '../../popupUtils';
 import { APIService } from '../../services';
-import { DeletePrompt, Separator } from '../../components';
+import { DeletePrompt } from '../../components';
 
 import "./notes.css";
 
@@ -31,7 +30,6 @@ export function NotesPage(props: any) {
     const [noteDeletePromptVisible, setNoteDeletePromptVisible] = useState(false);
     const [tagDeletePromptVisible, setTagDeletePromptVisible] = useState(false);
     const [hiddenNoteIDs, setHiddenNoteIDs] = useState(new Set<number>());
-    const [filterPanelVisible, setFilterPanelVisible] = useState(false);
 
     const context = {
         notes: notesData.notes,
@@ -49,37 +47,41 @@ export function NotesPage(props: any) {
         },
     };
 
-    const pageController = new NotesPageController(context);
+    const pageController = useMemo(() => new NotesPageController(context), []);
 
-    const deleteNote = async () => {
+    const deleteNote = useCallback(async () => {
+
         await pageController.deleteNote(selectedNote!.id!)
         setNoteDeletePromptVisible(false);
         PopupUtils.infoToast("Note deleted");
-    };
 
-    const deleteTag = async () => {
+    }, [pageController, selectedNote]);
+
+    const deleteTag = useCallback(async () => {
+
         await pageController.deleteTag(selectedTag!.id!)
         setTagDeletePromptVisible(false);
         PopupUtils.infoToast("Tag deleted");
-    };
 
-    const saveNote = async (note: Note) => {
+    }, [pageController, selectedTag]);
+
+    const saveNote = useCallback(async (note: Note) => {
 
         if (await pageController.saveNote(note)) {
             setModalVisible(false);
         }
 
-    };
+    }, [pageController]);
 
-    const addNote = () => {
+    const addNote = useCallback(() => {
         setSelectedNote(null);
         setModalVisible(true)
-    };
+    }, []);
 
-    const confirmTagDeletion = (tag: Tag) => {
+    const confirmTagDeletion = useCallback((tag: Tag) => {
         setSelectedTag(tag);
         setTagDeletePromptVisible(true);
-    };
+    }, []);
 
     useEffect(() => {
 
@@ -126,27 +128,20 @@ export function NotesPage(props: any) {
     }, []);
 
     return (
-
         <NotesContext.Provider value={context}>
-            <div className="notes-container relative flex-grow">
-                <div className="notes-opts space-x-2">
-                    <Button text="Create New Note" onClick={() => addNote()} disabled={false} stylingMode="contained" type="default" />
-                    <Button text="Toggle Filter" onClick={() => setFilterPanelVisible(!filterPanelVisible)} disabled={false} stylingMode="contained" type="normal" />
-                </div>
-                <Separator cssClass="notes-separator" />
+            <NotesPageContainer
+                notes={notesData.notes}
+                tags={notesData.tags}
+                loading={notesData.loading}
+                onAddNote={() => addNote()}
+                onDeleteTag={(tag: Tag) => confirmTagDeletion(tag)}
+                onFilterChange={(selectedTags: string[]) => pageController.updateTagsFilter(selectedTags)}>
                 <NotesList
                     notes={notesData.notes}
                     loading={notesData.loading}
                     onEdit={onNoteEdit}
                     onDelete={onNoteDelete} />
-                <NotesSidebar
-                    visible={filterPanelVisible}
-                    tags={notesData.tags}
-                    updateFilter={(tags: string[]) => pageController.updateTagsFilter(tags)}
-                    deleteTag={(tag: Tag) => confirmTagDeletion(tag)}
-                    addNote={() => addNote()}
-                    hideFilter={() => setFilterPanelVisible(false)} />
-            </div>
+            </NotesPageContainer>
             <NotesModal visible={modalVisible}
                 tags={notesData.tags}
                 selectedNote={selectedNote}
@@ -165,4 +160,3 @@ export function NotesPage(props: any) {
         </NotesContext.Provider>
     );
 }
-

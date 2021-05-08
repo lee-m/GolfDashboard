@@ -5,3 +5,4 @@ export * from './notes-sidebar';
 export * from './notes-page-controller';
 export * from './notes-page';
 export * from './notes-list';
+export * from './notes-page-container';
