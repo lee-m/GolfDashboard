@@ -37,7 +37,6 @@ export function NotesPage(props: any) {
         notes: notesData.notes,
         tags: notesData.tags,
         hiddenNoteIDs: hiddenNoteIDs,
-        filterPanelVisible: filterPanelVisible,
 
         hideNotes: (noteIDs: Set<number>) => {
             setHiddenNoteIDs(noteIDs);
@@ -48,9 +47,6 @@ export function NotesPage(props: any) {
             setNotesData(newData);
 
         },
-        toggleFilterVisibility: (visible: boolean) => {
-            setFilterPanelVisible(visible);
-        }
     };
 
     const pageController = new NotesPageController(context);
@@ -144,25 +140,28 @@ export function NotesPage(props: any) {
                     onEdit={onNoteEdit}
                     onDelete={onNoteDelete} />
                 <NotesSidebar
+                    visible={filterPanelVisible}
+                    tags={notesData.tags}
                     updateFilter={(tags: string[]) => pageController.updateTagsFilter(tags)}
                     deleteTag={(tag: Tag) => confirmTagDeletion(tag)}
-                    addNote={() => addNote()} />
-                <NotesModal visible={modalVisible}
-                    tags={notesData.tags}
-                    selectedNote={selectedNote}
-                    onSave={saveNote}
-                    onClose={() => setModalVisible(false)} />
-                <DeletePrompt visible={noteDeletePromptVisible}
-                    title="Confirm Note Deletion"
-                    message={`The note '${selectedNote?.title ?? ""}' will be deleted. Do you wish to continue?`}
-                    onDelete={deleteNote}
-                    onCancel={() => setNoteDeletePromptVisible(false)} />
-                <DeletePrompt visible={tagDeletePromptVisible}
-                    title="Confirm Tag Deletion"
-                    message={`The tag '${selectedTag?.text ?? ""}' will be deleted and removed from any notes. Do you wish to continue?`}
-                    onDelete={() => deleteTag()}
-                    onCancel={() => setTagDeletePromptVisible(false)} />
+                    addNote={() => addNote()}
+                    hideFilter={() => setFilterPanelVisible(false)} />
             </div>
+            <NotesModal visible={modalVisible}
+                tags={notesData.tags}
+                selectedNote={selectedNote}
+                onSave={saveNote}
+                onClose={() => setModalVisible(false)} />
+            <DeletePrompt visible={noteDeletePromptVisible}
+                title="Confirm Note Deletion"
+                message={`The note '${selectedNote?.title ?? ""}' will be deleted. Do you wish to continue?`}
+                onDelete={deleteNote}
+                onCancel={() => setNoteDeletePromptVisible(false)} />
+            <DeletePrompt visible={tagDeletePromptVisible}
+                title="Confirm Tag Deletion"
+                message={`The tag '${selectedTag?.text ?? ""}' will be deleted and removed from any notes. Do you wish to continue?`}
+                onDelete={() => deleteTag()}
+                onCancel={() => setTagDeletePromptVisible(false)} />
         </NotesContext.Provider>
     );
 }
