@@ -31,23 +31,26 @@ export function NotesPage(props: any) {
     const [tagDeletePromptVisible, setTagDeletePromptVisible] = useState(false);
     const [hiddenNoteIDs, setHiddenNoteIDs] = useState(new Set<number>());
 
-    const context = {
-        notes: notesData.notes,
-        tags: notesData.tags,
-        hiddenNoteIDs: hiddenNoteIDs,
+    const context = useMemo(() => {
 
-        hideNotes: (noteIDs: Set<number>) => {
-            setHiddenNoteIDs(noteIDs);
-        },
-        updateNotesData: (notes: Array<Note>, tags: Array<Tag>) => {
+        return {
+            notes: notesData.notes,
+            tags: notesData.tags,
+            hiddenNoteIDs: hiddenNoteIDs,
 
-            const newData = { ...notesData, notes: notes, tags: tags };
-            setNotesData(newData);
+            hideNotes: (noteIDs: Set<number>) => {
+                setHiddenNoteIDs(noteIDs);
+            },
+            updateNotesData: (notes: Array<Note>, tags: Array<Tag>) => {
 
-        },
-    };
+                const newData = { ...notesData, notes: notes, tags: tags };
+                setNotesData(newData);
 
-    const pageController = useMemo(() => new NotesPageController(context), []);
+            },
+        };
+    }, [notesData, hiddenNoteIDs]);
+
+    const pageController = useMemo(() => new NotesPageController(context), [context]);
 
     const deleteNote = useCallback(async () => {
 
