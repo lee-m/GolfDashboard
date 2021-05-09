@@ -130,6 +130,8 @@ export function NotesPage(props: any) {
         setNoteDeletePromptVisible(true);
     }, []);
 
+    const hideNoteModal = useCallback(() => setModalVisible(false), []);
+
     return (
         <NotesContext.Provider value={context}>
             <NotesPageContainer
@@ -149,7 +151,7 @@ export function NotesPage(props: any) {
                 tags={notesData.tags}
                 selectedNote={selectedNote}
                 onSave={saveNote}
-                onClose={() => setModalVisible(false)} />
+                onClose={hideNoteModal} />
             <DeletePrompt visible={noteDeletePromptVisible}
                 title="Confirm Note Deletion"
                 message={`The note '${selectedNote?.title ?? ""}' will be deleted. Do you wish to continue?`}
