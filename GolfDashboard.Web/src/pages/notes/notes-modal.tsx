@@ -27,6 +27,8 @@ export function NotesModal(props: NotesModalProps) {
     const [titleCSSClass, setTitleCSSClass] = useState("");
     const [contentCSSClass, setContentCSSClass] = useState("");
 
+    //The HTML editor component is still CTP and doesn't seem to play well if we set the value to a state variable (keeps resetting input focus)
+    //so for now we store a ref to it and use that ref to get the content out of it
     const htmlEditorRef = useRef<dxHtmlEditor | null>(null);
 
     useEffect(() => {
@@ -57,6 +59,11 @@ export function NotesModal(props: NotesModalProps) {
         await props.onSave(noteContents);
 
     }, [title, selectedTags, props]);
+
+    const onClose = useCallback(() => {
+        htmlEditorRef.current?.option("value", null);
+        props.onClose();
+    }, [props]);
 
     return (
         <Popup width="60%"
@@ -105,7 +112,7 @@ export function NotesModal(props: NotesModalProps) {
                 <div className="flex self-end">
                     <div className="flex pt-2 space-x-2">
                         <AnimatedButton text="Save" onClick={saveNewNote} type="default" />
-                        <Button text="Cancel" onClick={props.onClose} stylingMode="outlined" type="normal" />
+                        <Button text="Cancel" onClick={onClose} stylingMode="outlined" type="normal" />
                     </div>
                 </div>
             </div>
