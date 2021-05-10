@@ -149,7 +149,10 @@ export function NotesPage(props: any) {
             </NotesPageContainer>
             <NotesModal visible={modalVisible}
                 tags={notesData.tags}
-                selectedNote={selectedNote}
+                initialTitle={selectedNote?.title ?? ""}
+                initialTags={selectedNote?.tags ?? []}
+                initialContent={selectedNote?.content ?? ""}
+                existingNoteID={selectedNote?.id}
                 onSave={saveNote}
                 onClose={hideNoteModal} />
             <DeletePrompt visible={noteDeletePromptVisible}

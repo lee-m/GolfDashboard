@@ -6,3 +6,4 @@ export * from './notes-page-controller';
 export * from './notes-page';
 export * from './notes-list';
 export * from './notes-page-container';
+export * from './notes-tag-editor';
