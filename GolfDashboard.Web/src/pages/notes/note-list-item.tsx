@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { animated, useSpring } from 'react-spring';
 
 import { NotesContext } from '../notes';
@@ -55,19 +55,23 @@ export function NoteListItem(props: NoteListItemProps) {
 
     const itemAnimation = useSpring({ ...springProps });
 
-    useLayoutEffect(() => {
+    useEffect(() => {
 
-        //Capture the height of this item in case we need to animate it's removal from the list
+        //Capture the height of this item in case we need to animate it's removal from the list. There is an odd case where if a note without
+        //any tags is edited to include some tags, it's height will increase beyond what we previously measured so we need to use scrollHeight here
+        //to get the height of the *content*, and not the height of the containing element which may be too small to properly show the content.
+        //
+        //This way, when tags are added to a note without them, we'll animate out the height to fit everything
         if (listItemRef.current) {
-            setHeight(listItemRef.current.getBoundingClientRect().height);
+            setHeight(listItemRef.current.scrollHeight);
         }
 
-    }, []);
+    }, [props]);
 
     if (props.note.tags != null && props.note.tags.length > 0) {
 
         tagComponent =
-            <div className="pt-2 space-x-2">
+            <div className="py-2 space-x-2">
                 {props.note.tags.map((t, i) => {
                     return (
                         <div className="dx-tag" key={i}>
@@ -79,20 +83,16 @@ export function NoteListItem(props: NoteListItemProps) {
     }
 
     return (
-        <animated.div style={itemAnimation} ref={listItemRef}>
-            <div className="border-gray-300 border rounded p-3 bg-white shadow" key={props.note.id}>
+        <animated.div style={itemAnimation} ref={listItemRef} className="border-gray-300 border rounded p-3 bg-white shadow" key={props.note.id}>
+            <div className="flex justify-between">
+                <h4 className="text-xl">{props.note.title}</h4>
                 <div>
-                    <div className="flex justify-between">
-                        <h4 className="text-xl">{props.note.title}</h4>
-                        <div>
-                            <EditButton clickHandler={() => props.onEdit(props.note)} />
-                            <DeleteButton clickHandler={() => props.onDelete(props.note)} />
-                        </div>
-                    </div>
-                    <div className="pb-2 pt-1" dangerouslySetInnerHTML={{ __html: props.note.content }}></div>
-                    {tagComponent}
+                    <EditButton clickHandler={() => props.onEdit(props.note)} />
+                    <DeleteButton clickHandler={() => props.onDelete(props.note)} />
                 </div>
             </div>
+            <div className="pb-2 pt-1" dangerouslySetInnerHTML={{ __html: props.note.content }}></div>
+            {tagComponent}
         </animated.div>
     );
 }
