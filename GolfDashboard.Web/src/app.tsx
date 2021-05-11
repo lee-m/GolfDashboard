@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import { TopNavBar } from './navbar'
 import { Sidebar } from './sidebar';
@@ -18,10 +18,12 @@ export default class App extends React.Component {
         <Sidebar />
         <div id="page-content" className="page-content flex flex-col bg-gray-100 rounded-tl">
           <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={true} />
-          <Route exact path="/" component={DashboardPage} />
-          <Route path="/clubs" component={ClubsPage} />
-          <Route path="/rounds" component={RoundsPage} />
-          <Route path="/notes" component={NotesPage} />
+          <Switch>
+            <Route exact path="/" component={DashboardPage} />
+            <Route path="/clubs" component={ClubsPage} />
+            <Route path="/rounds" component={RoundsPage} />
+            <Route path="/notes" component={NotesPage} />
+          </Switch>
         </div>
       </div>
     );
