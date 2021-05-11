@@ -105,7 +105,7 @@ export function NotesPage(props: any) {
 
             } catch {
 
-                PopupUtils.errorToast("Error loading notes");
+                PopupUtils.errorToast("Error Loading Notes");
                 setNotesData({
                     loading: false,
                     filterVisible: false,
