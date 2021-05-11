@@ -4,6 +4,7 @@ import { animated, useSpring } from 'react-spring';
 
 import { GolfClub } from '../../models';
 import { APIService } from '../../services';
+import { PopupUtils } from '../../popupUtils';
 import { LoadingOverlay } from '../../components';
 
 import './clubs-page.css';
@@ -15,8 +16,14 @@ export function ClubsPage(props: any) {
 
     const fetchClubsData = async (position: GeolocationPosition | null) => {
 
-        const apiService = new APIService();
-        setClubs(await apiService.getClubs(position));
+        try {
+
+            const apiService = new APIService();
+            setClubs(await apiService.getClubs(position));
+
+        } catch {
+            PopupUtils.errorToast("Error Loading Clubs");
+        }
     }
 
     useLayoutEffect(() => {
