@@ -4,6 +4,7 @@ import { CheckBox } from 'devextreme-react/check-box';
 import Button from 'devextreme-react/button'
 
 import { Tag } from '../../models';
+import TrashLogo from '../../images/trash.svg';
 
 interface NotesFilterProps {
     visible: boolean,
@@ -49,7 +50,7 @@ export function NotesSidebar(props: NotesFilterProps) {
                 {props.tags.map((t, i) => {
                     return (
                         <div className="flex" key={t.id}>
-                            <Button icon="trash" stylingMode="text" hint="Delete Tag" onClick={() => props.deleteTag(t)} />
+                            <Button icon={TrashLogo} stylingMode="text" hint="Delete Tag" onClick={() => props.deleteTag(t)} />
                             <div className="self-center">
                                 <CheckBox value={selectedTags.has(t.text)}
                                     onValueChanged={(e) => onTagCheckboxChanged(t.text, e.value)}

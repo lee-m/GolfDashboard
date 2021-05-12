@@ -1,7 +1,7 @@
 import Button from 'devextreme-react/button'
 
-import PencilSquare from '../images/pencil-square.svg';
+import PencilIcon from '../images/pencil.svg';
 
 export function EditButton(props: any) {
-    return (<Button icon={PencilSquare} stylingMode="text" onClick={props.clickHandler} hint="Edit" />);
+    return (<Button icon={PencilIcon} stylingMode="text" onClick={props.clickHandler} hint="Edit" />);
 }

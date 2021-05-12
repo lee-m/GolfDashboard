@@ -1,10 +1,11 @@
 import { useState, } from 'react';
 import Button from 'devextreme-react/button'
-
 import { Separator } from '../../components';
 import { NotesSidebar } from '.';
-
 import { Note, Tag } from '../../models';
+
+import AddIcon from '../../images/document-add.svg';
+import FilterIcon from '../../images/filter.svg';
 
 export interface NotesPageContainerProps {
     notes: Note[],
@@ -24,8 +25,8 @@ export function NotesPageContainer(props: NotesPageContainerProps) {
     return (
         <div className="notes-container relative flex-grow">
             <div className="notes-opts space-x-2">
-                <Button text="Create New Note" onClick={props.onAddNote} disabled={false} stylingMode="contained" type="default" />
-                <Button text="Toggle Filter" onClick={() => setFilterPanelVisible(!filterPanelVisible)} disabled={false} stylingMode="contained" type="normal" />
+                <Button icon={AddIcon} text="Create New Note" onClick={props.onAddNote} disabled={false} stylingMode="contained" type="default" />
+                <Button icon={FilterIcon} text="Toggle Filter" onClick={() => setFilterPanelVisible(!filterPanelVisible)} disabled={false} stylingMode="contained" type="normal" />
             </div>
             <Separator cssClass="notes-separator" />
             {props.children}

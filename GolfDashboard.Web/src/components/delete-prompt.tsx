@@ -2,6 +2,8 @@ import Popup from 'devextreme-react/popup';
 import Button from 'devextreme-react/button'
 import { AnimatedButton } from './animated-button';
 
+import ExclamationIcon from '../images/exclamation-circle.svg';
+
 export interface DeletePromptProps {
     title: string;
     message: string;
@@ -30,7 +32,7 @@ export function DeletePrompt(props: DeletePromptProps) {
     const renderTitle = () => {
         return (
             <div className="flex pt-2 pb-2">
-                <i className="bi bi-exclamation-circle-fill text-accent-red text-lg text-bold"></i>
+                <img src={ExclamationIcon} alt="Exclamation" width="20" height="20" className="text-accent-red" />
                 <span className="text-lg font-semibold pl-2">{props.title}</span>
             </div>
         );
