@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { animated, useSpring } from 'react-spring';
-
-import { NotesContext } from '../notes';
-import { Note } from '../../models';
 import { EditButton, DeleteButton } from '../../components';
+import { useNotesContext, useNotesModalContext } from '../notes';
+import { Note } from '../../models';
 
 type NoteListItemProps = {
     note: Note,
-    onDelete: (note: Note) => void,
-    onEdit: (note: Note) => void
+    onNoteDelete: (note: Note) => void,
 };
 
 interface SpringProps {
@@ -21,7 +19,9 @@ export function NoteListItem(props: NoteListItemProps) {
 
     let tagComponent: React.ReactElement | null = null;
 
-    const notesContext = useContext(NotesContext);
+    const notesContext = useNotesContext();
+    const notesModalContext = useNotesModalContext();
+
     const listItemRef = useRef<HTMLDivElement>(null);
     const [height, setHeight] = useState(0);
     const isVisible = !notesContext.hiddenNoteIDs.has(props.note.id!);
@@ -87,8 +87,8 @@ export function NoteListItem(props: NoteListItemProps) {
             <div className="flex justify-between">
                 <h4 className="text-xl">{props.note.title}</h4>
                 <div>
-                    <EditButton clickHandler={() => props.onEdit(props.note)} />
-                    <DeleteButton clickHandler={() => props.onDelete(props.note)} />
+                    <EditButton clickHandler={() => notesModalContext.editNote(props.note)} />
+                    <DeleteButton clickHandler={props.onNoteDelete} />
                 </div>
             </div>
             <div className="pb-2 pt-1" dangerouslySetInnerHTML={{ __html: props.note.content }}></div>

@@ -5,22 +5,18 @@ import TextBox from 'devextreme-react/text-box';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import dxHtmlEditor from 'devextreme/ui/html_editor';
 
+import { Note } from '../../models';
 import { AnimatedButton } from '../../components';
-import { NotesTagEditor } from './';
-import { Note, Tag } from '../../models';
+import { NotesTagEditor, NotesPageController, useNotesContext } from './';
 
-interface NotesModalProps {
-    initialTitle: string,
-    initialTags: string[],
-    initialContent: string,
-    existingNoteID: number | undefined
-    visible: boolean;
-    tags: Array<Tag>;
-    onSave: (note: Note) => Promise<void>;
-    onClose: () => void;
-};
+export interface NotesModalProps {
+    visible: boolean,
+    selectedNote: Note,
+    onClose: () => void
+}
+export function NotesModal(props: any) {
 
-export function NotesModal(props: NotesModalProps) {
+    const notesContext = useNotesContext();
 
     const [title, setTitle] = useState("");
     const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
@@ -32,8 +28,8 @@ export function NotesModal(props: NotesModalProps) {
     const htmlEditorRef = useRef<dxHtmlEditor | null>(null);
 
     useEffect(() => {
-        setTitle(props.initialTitle);
-        setSelectedTags(props.initialTags);
+        setTitle(props.selectedNote?.title ?? "");
+        setSelectedTags(props.selectedNote?.tags ?? []);
     }, [props]);
 
     const saveNewNote = useCallback(async () => {
@@ -50,15 +46,19 @@ export function NotesModal(props: NotesModalProps) {
         }
 
         var noteContents = {
-            id: props.existingNoteID,
+            id: props.selectedNote?.id,
             title: title,
             content: content,
             tags: selectedTags
         };
 
-        await props.onSave(noteContents);
+        const controller = new NotesPageController();
 
-    }, [title, selectedTags, props]);
+        if (await controller.saveNote(notesContext, noteContents)) {
+            props.onClose();
+        }
+
+    }, [title, selectedTags, notesContext, props]);
 
     const onClose = useCallback(() => {
         htmlEditorRef.current?.option("value", null);
@@ -80,14 +80,14 @@ export function NotesModal(props: NotesModalProps) {
                     value={title}
                     onValueChanged={(e) => setTitle(e.value!)} />
                 <NotesTagEditor
-                    tags={props.tags}
+                    tags={notesContext.tags}
                     selectedTags={selectedTags}
                     onTagSelectionChange={(newTags: string[]) => setSelectedTags(newTags)} />
                 <div className={"flex flex-grow"}>
                     <HtmlEditor height="100%"
                         width="100%"
-                        defaultValue={props.initialContent}
-                        key={props.initialContent}
+                        defaultValue={props.selectedNote?.content}
+                        key={props.selectedNote?.content}
                         elementAttr={{ class: contentCSSClass }}
                         onInitialized={(e) => htmlEditorRef.current = e.component!}>
                         <Toolbar>
