@@ -15,7 +15,6 @@ export interface NotesContextState {
 
 interface NotesDataState {
     loading: boolean;
-    filterVisible: boolean;
     tags: Tag[],
     notes: Note[],
 };
@@ -26,7 +25,6 @@ export function NotesContextProvider(props: any) {
 
     const [notesData, setNotesData] = useState<NotesDataState>({
         loading: true,
-        filterVisible: false,
         tags: [],
         notes: []
     });
@@ -64,7 +62,6 @@ export function NotesContextProvider(props: any) {
 
                 setNotesData({
                     loading: false,
-                    filterVisible: true,
                     notes: notes,
                     tags: tags
                 });
@@ -74,7 +71,6 @@ export function NotesContextProvider(props: any) {
                 PopupUtils.errorToast("Error Loading Notes");
                 setNotesData({
                     loading: false,
-                    filterVisible: false,
                     notes: [],
                     tags: []
                 });
