@@ -16,6 +16,7 @@ The main libraries used on the front-end are:
 - [react-spring](https://react-spring.io/) for handling animations since we are in a Web 2.0 world after all and having things pop in and out of view is so 1995.
 - [react-spinners](https://www.davidhu.io/react-spinners/) for loading indicators.
 - [react-toastify](https://fkhadra.github.io/react-toastify) for super spiffy toasts.
+- [react-query](https://react-query.tanstack.com/) for handling all the communication with the backend API.
 
 ### Backend:
 The backend is an ASP.NET (.NET 5) API running on Azure App Service. Since the data volumes are very low and to keep things simple, everything is stored in a SQLite database accessed via EntityFramework Core.
