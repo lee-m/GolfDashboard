@@ -88,7 +88,7 @@ export function NoteListItem(props: NoteListItemProps) {
                 <h4 className="text-xl">{props.note.title}</h4>
                 <div>
                     <EditButton clickHandler={() => notesModalContext.editNote(props.note)} />
-                    <DeleteButton clickHandler={props.onNoteDelete} />
+                    <DeleteButton clickHandler={() => props.onNoteDelete(props.note)} />
                 </div>
             </div>
             <div className="pb-2 pt-1" dangerouslySetInnerHTML={{ __html: props.note.content }}></div>

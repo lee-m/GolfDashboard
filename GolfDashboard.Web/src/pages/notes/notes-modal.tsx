@@ -7,7 +7,8 @@ import dxHtmlEditor from 'devextreme/ui/html_editor';
 
 import { Note } from '../../models';
 import { AnimatedButton } from '../../components';
-import { NotesTagEditor, NotesPageController, useNotesContext } from './';
+import { NotesTagEditor, useTagsQuery } from './';
+import { useNotesMutator } from './notes-hooks';
 
 export interface NotesModalProps {
     visible: boolean,
@@ -16,7 +17,8 @@ export interface NotesModalProps {
 }
 export function NotesModal(props: any) {
 
-    const notesContext = useNotesContext();
+    const tagsQuery = useTagsQuery();
+    const notesMutator = useNotesMutator();
 
     const [title, setTitle] = useState("");
     const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
@@ -52,13 +54,10 @@ export function NotesModal(props: any) {
             tags: selectedTags
         };
 
-        const controller = new NotesPageController();
+        notesMutator.update(noteContents);
+        props.onClose();
 
-        if (await controller.saveNote(notesContext, noteContents)) {
-            props.onClose();
-        }
-
-    }, [title, selectedTags, notesContext, props]);
+    }, [title, selectedTags, props, notesMutator]);
 
     const onClose = useCallback(() => {
         htmlEditorRef.current?.option("value", null);
@@ -80,7 +79,7 @@ export function NotesModal(props: any) {
                     value={title}
                     onValueChanged={(e) => setTitle(e.value!)} />
                 <NotesTagEditor
-                    tags={notesContext.tags}
+                    tags={tagsQuery.data || []}
                     selectedTags={selectedTags}
                     onTagSelectionChange={(newTags: string[]) => setSelectedTags(newTags)} />
                 <div className={"flex flex-grow"}>

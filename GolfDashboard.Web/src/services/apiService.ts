@@ -16,7 +16,7 @@ export class APIService {
 
         let response = await fetch(this.getURL(url));
 
-        if(!response.ok) {
+        if (!response.ok) {
             throw new Error();
         }
 
@@ -27,7 +27,7 @@ export class APIService {
 
         let baseURL = "/golfclubs";
 
-        if(position !== null) {
+        if (position !== null) {
             baseURL += "?lat=" + position.coords.latitude + "&lng=" + position.coords.longitude;
         }
 

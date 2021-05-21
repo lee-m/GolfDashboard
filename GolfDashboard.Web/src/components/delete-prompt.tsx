@@ -49,7 +49,7 @@ export function DeletePrompt(props: DeletePromptProps) {
             <div className="flex flex-col pl-2 pr-2">
                 <span>{props.message}</span>
                 <div className="self-end mt-4 space-x-2 pt-3">
-                    <AnimatedButton text="Delete" onClick={deleteClick} type="danger" />
+                    <AnimatedButton text="Delete" onClick={() => deleteClick()} type="danger" />
                     <Button text="Cancel" onClick={() => props.onCancel()} stylingMode="outlined" type="normal" elementAttr={{ class: "button-sm" }} />
                 </div>
             </div>
