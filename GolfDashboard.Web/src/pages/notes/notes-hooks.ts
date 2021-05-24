@@ -11,7 +11,8 @@ export interface TagsMutator {
 };
 
 export interface NotesMutator {
-    add: (note: Note) => void
+    update: (note: Note) => void,
+    delete: (noteID: number) => void
 };
 
 export function useNotesQuery() {
@@ -50,7 +51,7 @@ export function useTagsQuery() {
 
 }
 
-export function useTagsMutator() {
+export function useTagsMutator(): TagsMutator {
 
     const queryClient = useQueryClient();
 
@@ -77,7 +78,7 @@ export function useTagsMutator() {
     };
 }
 
-export function useNotesMutator() {
+export function useNotesMutator(): NotesMutator {
 
     const queryClient = useQueryClient();
     const apiService = new APIService();
