@@ -1,43 +1,15 @@
-import { useLayoutEffect, useState } from 'react';
 import DataGrid, { Column, FilterRow, Paging, Pager } from 'devextreme-react/data-grid';
 import { animated, useSpring } from 'react-spring';
+import { useClubsQuery } from './';
 
 import { GolfClub } from '../../models';
-import { APIService } from '../../services';
-import { PopupUtils } from '../../popupUtils';
 import { LoadingOverlay } from '../../components';
 
 import './clubs-page.css';
 
 export function ClubsPage(props: any) {
 
-    const [clubs, setClubs] = useState<Array<GolfClub>>([]);
-    const [loading, setLoading] = useState(true);
-
-    const fetchClubsData = async (position: GeolocationPosition | null) => {
-
-        try {
-
-            const apiService = new APIService();
-            const clubs = await apiService.getClubs(position);
-
-            setClubs(clubs);
-
-        } catch {
-            PopupUtils.errorToast("Error Loading Clubs");
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    useLayoutEffect(() => {
-
-        navigator.geolocation.getCurrentPosition(
-            (position: GeolocationPosition) => fetchClubsData(position),
-            () => fetchClubsData(null)
-        );
-
-    }, []);
+    const clubsQuery = useClubsQuery();
 
     const distanceCellTemplate = (cellData: any) => {
 
@@ -74,24 +46,26 @@ export function ClubsPage(props: any) {
     const alphanumericFilterOperators = ["contains", "startswith", "endswith"];
     const fadeInAnimation = useSpring({
         from: { opacity: 0 },
-        to: { opacity: loading ? 0 : 1 }
+        to: { opacity: clubsQuery.isLoading ? 0 : 1 }
     });
 
-    if (loading)
-        return <LoadingOverlay />;
+    if (clubsQuery.isLoading || clubsQuery.isIdle) {
+        return <LoadingOverlay />
+    }
 
+    if (clubsQuery.isError) {
+        return <div />
+    }
     return (
         <div className="relative h-full">
             <animated.div style={fadeInAnimation}>
-                <DataGrid dataSource={clubs}
+                <DataGrid dataSource={clubsQuery.data}
                     showBorders={true}
                     showColumnLines={true}
                     showRowLines={true}
                     height={getGridHeight}
-                    visible={!loading}
                     rowAlternationEnabled={true}
                     noDataText=""
-                    onContentReady={() => setLoading(false)}
                     onEditorPreparing={(e) => {
 
                         if (e.parentType === "filterRow") {
