@@ -16,7 +16,7 @@ export default class App extends React.Component {
       <div className="root-content w-full overflow-hidden bg-primary-800">
         <TopNavBar />
         <Sidebar />
-        <div id="page-content" className="page-content flex flex-col bg-gray-100 rounded-tl">
+        <div id="page-content" className="relative flex flex-col bg-gray-100 rounded-tl">
           <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={true} />
           <Switch>
             <Route exact path="/" component={DashboardPage} />
