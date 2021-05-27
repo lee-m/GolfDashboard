@@ -90,21 +90,21 @@ export function NotesModal(props: any) {
                         elementAttr={{ class: contentCSSClass }}
                         onInitialized={(e) => htmlEditorRef.current = e.component!}>
                         <Toolbar>
-                            <Item formatName="bold" />
-                            <Item formatName="italic" />
-                            <Item formatName="underline" />
-                            <Item formatName="separator" />
-                            <Item formatName="header" formatValues={[false, 1, 2, 3, 4, 5]} />
-                            <Item formatName="separator" />
-                            <Item formatName="orderedList" />
-                            <Item formatName="bulletList" />
-                            <Item formatName="link" />
-                            <Item formatName="separator" />
-                            <Item formatName="alignLeft" />
-                            <Item formatName="alignCenter" />
-                            <Item formatName="alignRight" />
-                            <Item formatName="alignJustify" />
-                            <Item formatName="separator" />
+                            <Item name="bold" />
+                            <Item name="italic" />
+                            <Item name="underline" />
+                            <Item name="separator" />
+                            <Item name="header" acceptedValues={[false, 1, 2, 3, 4, 5]} />
+                            <Item name="separator" />
+                            <Item name="orderedList" />
+                            <Item name="bulletList" />
+                            <Item name="link" />
+                            <Item name="separator" />
+                            <Item name="alignLeft" />
+                            <Item name="alignCenter" />
+                            <Item name="alignRight" />
+                            <Item name="alignJustify" />
+                            <Item name="separator" />
                         </Toolbar>
                     </HtmlEditor>
                 </div>
