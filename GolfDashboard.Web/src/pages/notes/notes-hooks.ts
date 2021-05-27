@@ -17,12 +17,12 @@ export interface NotesMutator {
 
 export function useNotesQuery() {
 
-    return useQuery<Note[], Error>(NotesQueryKey, () => {
+    return useQuery<Note[], Error>(NotesQueryKey, async () => {
 
         try {
 
             const apiService = new APIService();
-            return apiService.getNotes();
+            return await apiService.getNotes();
 
         } catch (Error) {
             PopupUtils.errorToast("Error Loading Notes");
@@ -35,12 +35,12 @@ export function useNotesQuery() {
 
 export function useTagsQuery() {
 
-    return useQuery<Tag[], Error>(TagsQueryKey, () => {
+    return useQuery<Tag[], Error>(TagsQueryKey, async () => {
 
         try {
 
             const apiService = new APIService();
-            return apiService.getTags();
+            return await apiService.getTags();
 
         } catch (Error) {
             PopupUtils.errorToast("Error Loading Tags");
