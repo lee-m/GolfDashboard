@@ -7,8 +7,7 @@ import dxHtmlEditor from 'devextreme/ui/html_editor';
 
 import { Note } from '../../models';
 import { AnimatedButton } from '../../components';
-import { NotesTagEditor, useTagsQuery } from './';
-import { useNotesMutator } from './notes-hooks';
+import { NotesTagEditor, useTagsQuery, useNotesMutator } from './';
 
 export interface NotesModalProps {
     visible: boolean,
