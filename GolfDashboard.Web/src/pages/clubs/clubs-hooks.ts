@@ -7,17 +7,27 @@ const ClubsQueryKey = "Clubs";
 
 export function useClubsQuery() {
 
-    return useQuery<GolfClub[], Error>(ClubsQueryKey, async () => {
+    const fetchClubsData = async (position: GeolocationPosition | null) => {
 
         try {
 
             const apiService = new APIService();
-            return await apiService.getClubs(null);
+            return await apiService.getClubs(position);
 
         } catch {
             PopupUtils.errorToast("Error Loading Clubs");
-            return Promise.resolve([]);
+            return [];
         }
+    }
+    return useQuery<GolfClub[], Error>(ClubsQueryKey, async () => {
+
+        return await new Promise<GolfClub[]>((resolve, reject) => {
+
+            navigator.geolocation.getCurrentPosition(
+                (position: GeolocationPosition) => resolve(fetchClubsData(position)),
+                () => resolve(fetchClubsData(null))
+            );
+        });
 
     });
 }
