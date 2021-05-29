@@ -20,7 +20,7 @@ export function NotesSidebar(props: NotesFilterProps) {
     const [tagDeletePromptVisible, setTagDeletePromptVisible] = useState(false);
     const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
 
-    const getFilteredOutNoteIDs = (selectedTags: string[]): Set<number> => {
+    const getFilteredOutNoteIDs = useCallback((selectedTags: string[]): Set<number> => {
 
         if (selectedTags.length === 0 || !notesQuery.data) {
             return new Set<number>();
@@ -32,7 +32,8 @@ export function NotesSidebar(props: NotesFilterProps) {
 
         const filteredOutNoteIDs = notesQuery.data.filter(noteFilteredOut).map(note => note.id!);
         return new Set<number>(filteredOutNoteIDs);
-    }
+
+    }, [notesQuery.data]);
 
     const onTagCheckboxChanged = useCallback((tag: string, selected: boolean) => {
 
@@ -47,14 +48,14 @@ export function NotesSidebar(props: NotesFilterProps) {
         setSelectedTags(newTags);
         notesContext.hideNotes(getFilteredOutNoteIDs([...newTags]));
 
-    }, [notesContext, selectedTags]);
+    }, [notesContext, selectedTags, getFilteredOutNoteIDs]);
 
     const clearFilterSelection = useCallback(() => {
 
         setSelectedTags(new Set<string>());
         notesContext.hideNotes(getFilteredOutNoteIDs([]));
 
-    }, [notesContext]);
+    }, [notesContext, getFilteredOutNoteIDs]);
 
     const confirmTagDeletion = useCallback((tag: Tag) => {
         setSelectedTag(tag);
