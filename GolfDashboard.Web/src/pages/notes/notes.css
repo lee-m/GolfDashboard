@@ -2,18 +2,17 @@
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: auto auto 1fr;
-    grid-template-areas: "opts"
-                         "separator"
-                         "list";
+    grid-template-areas:
+        "opts"
+        "separator"
+        "list";
 }
 
 .notes-list-container {
     grid-area: list;
 }
 
-
 @layer components {
-
     .note-tag {
         @apply p-1.5 text-xs m-0 !important;
     }
