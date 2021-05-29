@@ -83,16 +83,18 @@ export function NoteListItem(props: NoteListItemProps) {
     }
 
     return (
-        <animated.div style={itemAnimation} ref={listItemRef} className="border-gray-300 border rounded p-3 bg-white shadow" key={props.note.id}>
-            <div className="flex justify-between">
-                <h4 className="text-xl">{props.note.title}</h4>
-                <div>
-                    <EditButton clickHandler={() => notesModalContext.editNote(props.note)} />
-                    <DeleteButton clickHandler={() => props.onNoteDelete(props.note)} />
+        <animated.div style={itemAnimation} ref={listItemRef} className="border-gray-300 border rounded bg-white shadow" key={props.note.id}>
+            <div className="p-3">
+                <div className="flex justify-between">
+                    <h4 className="text-xl">{props.note.title}</h4>
+                    <div>
+                        <EditButton clickHandler={() => notesModalContext.editNote(props.note)} />
+                        <DeleteButton clickHandler={() => props.onNoteDelete(props.note)} />
+                    </div>
                 </div>
+                <div className="pb-2 pt-1" dangerouslySetInnerHTML={{ __html: props.note.content }}></div>
+                {tagComponent}
             </div>
-            <div className="pb-2 pt-1" dangerouslySetInnerHTML={{ __html: props.note.content }}></div>
-            {tagComponent}
         </animated.div>
     );
 }
