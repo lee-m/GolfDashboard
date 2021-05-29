@@ -2,18 +2,9 @@ import { useCallback, useMemo } from 'react';
 
 import TagBox from 'devextreme-react/tag-box';
 import DataSource from 'devextreme/data/data_source';
-import dxTagBox from 'devextreme/ui/tag_box';
-import { dxElement } from 'devextreme/core/element';
+import { CustomItemCreatingEvent } from 'devextreme/ui/tag_box';
 
 import { Tag } from '../../models';
-
-interface CustomTagCreatedArgs {
-    component?: dxTagBox | undefined;
-    customItem?: string | object | Promise<any>;
-    element?: dxElement | undefined;
-    model?: object;
-    text?: string | undefined;
-}
 
 export interface NotesTagEditorProps {
     tags: Tag[],
@@ -29,7 +20,7 @@ export function NotesTagEditor(props: NotesTagEditorProps) {
         });
     }, [props.tags]);
 
-    const onCustomTagCreated = useCallback((e: CustomTagCreatedArgs) => {
+    const onCustomTagCreated = useCallback((e: CustomItemCreatingEvent) => {
 
         e.customItem = {
             text: e.text
