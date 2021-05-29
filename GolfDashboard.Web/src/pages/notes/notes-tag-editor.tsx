@@ -29,7 +29,9 @@ export function NotesTagEditor(props: NotesTagEditorProps) {
         e.component?.getDataSource().store().insert(e.text!);
         e.component?.getDataSource().reload();
 
-    }, []);
+        props.onTagSelectionChange([...props.selectedTags, e.text!]);
+
+    }, [props]);
 
     return (
         <TagBox dataSource={tagBoxDataSource}
