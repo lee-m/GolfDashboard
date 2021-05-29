@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
 import { useSpring, animated } from 'react-spring';
 import Button from 'devextreme-react/button'
-import { useNotesContext, NotesPageController, TagsList, useTagsMutator } from '.';
+import { useNotesContext, TagsList, useTagsMutator, useNotesQuery } from '.';
 import { DeletePrompt } from '../../components';
-import { Tag } from '../../models';
+import { Note, Tag } from '../../models';
 
 interface NotesFilterProps {
     visible: boolean,
@@ -13,11 +13,26 @@ interface NotesFilterProps {
 export function NotesSidebar(props: NotesFilterProps) {
 
     const notesContext = useNotesContext();
+    const notesQuery = useNotesQuery();
     const tagsMutator = useTagsMutator();
 
     const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set<string>());
     const [tagDeletePromptVisible, setTagDeletePromptVisible] = useState(false);
     const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
+
+    const getFilteredOutNoteIDs = (selectedTags: string[]): Set<number> => {
+
+        if (selectedTags.length === 0 || !notesQuery.data) {
+            return new Set<number>();
+        }
+
+        const noteFilteredOut = (note: Note): boolean => {
+            return !note.tags.some((noteTag: string) => selectedTags.find(selectedTag => selectedTag === noteTag));
+        }
+
+        const filteredOutNoteIDs = notesQuery.data.filter(noteFilteredOut).map(note => note.id!);
+        return new Set<number>(filteredOutNoteIDs);
+    }
 
     const onTagCheckboxChanged = useCallback((tag: string, selected: boolean) => {
 
@@ -30,18 +45,14 @@ export function NotesSidebar(props: NotesFilterProps) {
         }
 
         setSelectedTags(newTags);
-
-        const controller = new NotesPageController();
-        controller.updateTagsFilter(notesContext, [...newTags]);
+        notesContext.hideNotes(getFilteredOutNoteIDs([...newTags]));
 
     }, [notesContext, selectedTags]);
 
     const clearFilterSelection = useCallback(() => {
 
         setSelectedTags(new Set<string>());
-
-        const controller = new NotesPageController();
-        controller.updateTagsFilter(notesContext, []);
+        notesContext.hideNotes(getFilteredOutNoteIDs([]));
 
     }, [notesContext]);
 

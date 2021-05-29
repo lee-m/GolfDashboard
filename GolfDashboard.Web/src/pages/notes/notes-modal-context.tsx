@@ -13,7 +13,6 @@ export interface NotesModalContextState {
 
 const NotesModalContext = React.createContext<NotesModalContextState | undefined>(undefined);
 
-
 interface NotesModalEditState {
     visible: boolean,
     selectedNote: Note | null
