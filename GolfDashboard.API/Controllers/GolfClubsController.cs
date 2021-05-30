@@ -26,6 +26,7 @@ namespace GolfDashboard.API.Controllers
             {
                 return Json(_dbContext.GolfClubs.Select(x => new GolfClubDTO
                 {
+                    ID = x.ID,
                     Name = x.Name,
                     Address = string.Join(", ", x.Address.Split("\n", StringSplitOptions.None).ToArray()),
                     Website = x.Website,
