@@ -1,8 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 
+using AutoMapper;
+
+using GolfDashboard.API.DTO;
 using GolfDashboard.API.Models;
-using GolfDashboard.Data;
+using GolfDashboard.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +15,14 @@ namespace GolfDashboard.API.Controllers
     [Route("[controller]")]
     public class GolfClubsController : Controller
     {
-        private readonly GolfDashboardDbContext _dbContext;
+        private readonly IGolfClubsRepository _golfClubsRepository;
+        private readonly IMapper _mapper;
 
-        public GolfClubsController(GolfDashboardDbContext dbContext)
+        public GolfClubsController(IGolfClubsRepository golfClubsRepository,
+                                   IMapper mapper)
         {
-            _dbContext = dbContext;
+            _golfClubsRepository = golfClubsRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -24,17 +30,18 @@ namespace GolfDashboard.API.Controllers
         {
             if(lat == null || lng == null)
             {
-                return Json(_dbContext.GolfClubs.Select(x => new GolfClubDTO
+                return Json(_golfClubsRepository.Get().Select(x => new GolfClubDTO
                 {
                     ID = x.ID,
                     Name = x.Name,
-                    Address = string.Join(", ", x.Address.Split("\n", StringSplitOptions.None).ToArray()),
+                    Address = string.Join(", ", x.Address.Split("\n").ToArray()),
                     Website = x.Website,
+                    Courses = _mapper.Map<List<CourseDTO>>(x.Courses)
                 }).OrderBy(x => x.Name));
             }
 
             //Calculate the distance from the specified location to each club
-            var clubs = _dbContext.GolfClubs.AsParallel().Select(x => new GolfClubDTO
+            var clubs = _golfClubsRepository.Get().AsParallel().Select(x => new GolfClubDTO
             {
                 Name = x.Name,
                 Address = string.Join(", ", x.Address.Split("\n").ToArray()),

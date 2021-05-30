@@ -14,6 +14,7 @@ namespace GolfDashboard.API
             CreateMap<Tag, TagDTO>();
             CreateMap<Note, NoteDTO>()
                 .ForMember(m => m.Tags, opts => opts.MapFrom(n => n.Tags.Select(t => t.Text).ToList()));
+            CreateMap<Course, CourseDTO>();
         }
     }
 }
