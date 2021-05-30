@@ -1,5 +1,6 @@
-import DataGrid, { Column, FilterRow, Paging, Pager } from 'devextreme-react/data-grid';
+import DataGrid, { Column, FilterRow, Paging, Pager, Button } from 'devextreme-react/data-grid';
 import { animated, useSpring } from 'react-spring';
+import { useHistory } from 'react-router-dom';
 import { useClubsQuery } from './';
 
 import { GolfClub } from '../../models';
@@ -10,6 +11,7 @@ import './clubs-page.css';
 export function ClubsPage(props: any) {
 
     const clubsQuery = useClubsQuery();
+    const history = useHistory();
 
     const distanceCellTemplate = (cellData: any) => {
 
@@ -41,6 +43,10 @@ export function ClubsPage(props: any) {
     //of the page content container element so that the grid occupies the entire content
     const getGridHeight = () => {
         return document.getElementById("page-content")!.clientHeight;
+    }
+
+    const onEditClick = (club: GolfClub) => {
+        history.push("/clubs/edit/" + club.id);
     }
 
     const alphanumericFilterOperators = ["contains", "startswith", "endswith"];
@@ -83,32 +89,42 @@ export function ClubsPage(props: any) {
                         showPageSizeSelector={true}
                         showNavigationButtons={true} />
 
-                    <Column dataField="name"
+                    <Column
+                        dataField="name"
                         caption="Club Name"
                         width="30%"
                         type="string"
                         filterOperations={alphanumericFilterOperators} />
 
-                    <Column dataField="address"
+                    <Column
+                        dataField="address"
                         caption="Address"
                         width="35%"
                         type="string"
                         filterOperations={alphanumericFilterOperators} />
 
-                    <Column dataField="website"
+                    <Column
+                        dataField="website"
                         caption="Website"
                         width="25%"
                         type="string"
                         cellRender={websiteCellTemplate}
                         filterOperations={alphanumericFilterOperators} />
 
-                    <Column dataField="distanceInMiles"
+                    <Column
+                        dataField="distanceInMiles"
                         caption="Distance (Miles)"
                         width="5%"
                         minWidth={50}
                         type="numeric"
                         cellRender={distanceCellTemplate}
                         filterOperations={["<", ">", "between"]} />
+                    <Column
+                        type="buttons"
+                        width="5%">
+                        <Button icon="edit" onClick={(e: { row: { data: GolfClub } }) => onEditClick(e.row.data)} />
+                    </Column>
+
                 </DataGrid>
             </animated.div>
         </div>
