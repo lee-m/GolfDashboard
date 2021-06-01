@@ -1,14 +1,15 @@
 body,
 .e-control {
-    font-family: 'Nunito', sans-serif !important;
+    font-family: "Nunito", sans-serif !important;
 }
 
 .root-content {
     display: grid;
     grid-template-columns: 15em 1fr;
     grid-template-rows: auto 1fr;
-    grid-template-areas: "header header"
-                         "sidebar content";
+    grid-template-areas:
+        "header header"
+        "sidebar content";
     height: 100vh;
 }
 
@@ -22,7 +23,7 @@ body,
 
 /* Dev Extreme Overrides/Customisation */
 .dx-overlay-shader {
-  background-color: rgba(0,0,0,.6) !important;
+    background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
 .dx-popup-content {
@@ -30,9 +31,8 @@ body,
 }
 
 @layer components {
- 
     .button-sm .dx-button-content {
-        @apply px-3 py-2 text-xs !important
+        @apply px-3 py-2 text-xs !important;
     }
 
     .dx-popup-done.dx-button {
@@ -42,9 +42,9 @@ body,
     .dx-popup-done.dx-button:hover {
         background-color: #2f3d5c !important;
     }
-    
+
     .dx-tag-content {
-        @apply bg-secondary-100 rounded !important
+        @apply bg-secondary-100 rounded !important;
     }
 
     .dx-fieldset-header {
@@ -54,13 +54,17 @@ body,
     .dx-fieldset {
         @apply m-2 !important;
     }
+
+    .dx-form-group-caption {
+        @apply text-lg !important;
+    }
 }
 
 @keyframes spin {
     from {
-        transform:rotate(0deg);
+        transform: rotate(0deg);
     }
     to {
-        transform:rotate(360deg);
+        transform: rotate(360deg);
     }
 }

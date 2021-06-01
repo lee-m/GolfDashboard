@@ -5,7 +5,7 @@ import { GolfClub } from '../../models';
 
 const ClubsQueryKey = "Clubs";
 
-export function useClubsQuery() {
+export function useClubsQuery(successCallback?: (data: GolfClub[]) => void) {
 
     const fetchClubsData = async (position: GeolocationPosition | null) => {
 
@@ -29,5 +29,7 @@ export function useClubsQuery() {
             );
         });
 
+    }, {
+        onSuccess: successCallback
     });
 }
