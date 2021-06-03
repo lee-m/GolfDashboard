@@ -43,6 +43,7 @@ namespace GolfDashboard.API.Controllers
             //Calculate the distance from the specified location to each club
             var clubs = _golfClubsRepository.Get().AsParallel().Select(x => new GolfClubDTO
             {
+                ID = x.ID,
                 Name = x.Name,
                 Address = string.Join(", ", x.Address.Split("\n").ToArray()),
                 Website = x.Website,
