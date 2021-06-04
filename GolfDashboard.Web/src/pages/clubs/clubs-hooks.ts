@@ -19,6 +19,7 @@ export function useClubsQuery(successCallback?: (data: GolfClub[]) => void) {
             return [];
         }
     }
+
     return useQuery<GolfClub[], Error>(ClubsQueryKey, async () => {
 
         return await new Promise<GolfClub[]>((resolve, reject) => {

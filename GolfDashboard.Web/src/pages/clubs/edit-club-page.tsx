@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Form, { Item, GroupItem, TabbedItem } from 'devextreme-react/form';
+import Form, { Item, GroupItem, SimpleItem } from 'devextreme-react/form';
+import TextBox from 'devextreme-react/text-box';
 import { useClubsQuery } from './';
 import { LoadingOverlay } from '../../components';
-import { useState } from 'react';
-import { Course } from '../../models/course';
-import { GolfClub } from '../../models';
+import { Course, GolfClub } from '../../models';
+import { FieldDataChangedEvent } from 'devextreme/ui/form';
+
+import './edit-club.css';
 
 interface EditClubPageURLParameters {
     clubID?: string
@@ -20,7 +23,7 @@ export function EditClubPage(props: any) {
         const editingClub = data.find(e => e.id === parseInt(params.clubID!));
 
         if (editingClub) {
-            setCourses(editingClub.courses);
+            setCourses(editingClub.courses ?? []);
         }
 
     }
@@ -44,7 +47,7 @@ export function EditClubPage(props: any) {
     const validationRules = {
         address: [
             { type: 'required', message: 'Address is required.' },
-        ],
+        ]
     };
 
     const addCourseButtonOptions = {
@@ -53,7 +56,7 @@ export function EditClubPage(props: any) {
         onClick: () => {
 
             const newCourse = {
-                id: -1,
+                id: courses.length * -1,
                 name: "New Course",
                 numberOfHoles: 18,
                 rating: 0,
@@ -62,37 +65,80 @@ export function EditClubPage(props: any) {
             };
 
             setCourses([...courses, newCourse]);
-
         }
     };
 
-    const courseTabs = courses.map(c => {
-        return {
-            title: c.name
-        };
+    const courseTabRender = (params: { name: string }) => {
+
+        var course = courses.find(c => c.name === params.name)!;
+
+        return (
+
+            <Form formData={course} colCount={2} key={course.id}>
+
+                <GroupItem caption="Course Details">
+                    <Item dataField="name" />
+                    <Item dataField="numberOfHoles" />
+                </GroupItem>
+
+                <GroupItem caption="Ratings">
+                    <Item dataField="sss" />
+                    <Item dataField="rating" />
+                    <Item dataField="slope" />
+                </GroupItem>
+
+                <GroupItem caption="Hole Details" colSpan={2}>
+                    <Item dataField="foo" />
+                </GroupItem>
+            </Form>
+        );
+    }
+
+    const courseItems = courses.map(c => {
+        return (
+            <GroupItem caption={c.name} colSpan={2} key={c.id}>
+                <SimpleItem
+                    dataField="name"
+                    render={courseTabRender}
+                    key={c.id}
+                    label={{ visible: false }}
+                    name={c.name} />
+            </GroupItem>
+        )
     });
 
     return (
-        <div className="px-3 pt-3 space-y-3">
+        <div className="px-3 pt-3 space-y-3 scrollable-container">
             <h1>{club.name}</h1>
+            <div>
+                <div className="club-edit-club-details">
+                    <div className="text-gray-500">Address</div>
+                    <TextBox className="dx-field-value" defaultValue={club.address} />
+                    <div className="text-gray-500">Website</div>
+                    <TextBox className="dx-field-value" defaultValue={club.website} />
+                </div>
+            </div>
             <Form
                 colCount={2}
                 id="form"
-                formData={club}>
+                formData={club}
+                onFieldDataChanged={(e) => onFieldDataChanged(e)}>
 
                 <Item dataField="address" validationRules={validationRules.address} />
                 <Item dataField="website" />
 
-                <GroupItem caption="Courses" colSpan={2}>
-                    <TabbedItem name="Courses" tabs={courseTabs} />
-                    <Item
-                        itemType="button"
-                        horizontalAlignment="left"
-                        buttonOptions={addCourseButtonOptions} />
-                </GroupItem>
-
+                {courseItems}
+                <Item
+                    itemType="button"
+                    colSpan={2}
+                    horizontalAlignment="left"
+                    buttonOptions={addCourseButtonOptions} />
             </Form>
-        </div >
+        </div>
     );
+}
+
+function onFieldDataChanged(e: FieldDataChangedEvent): void {
+    debugger;
 }
 
