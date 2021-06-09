@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Form, { Item, GroupItem, SimpleItem } from 'devextreme-react/form';
-import TextBox from 'devextreme-react/text-box';
+import { useParams, useHistory } from 'react-router-dom';
+import Form, { Item, GroupItem, Tab, TabbedItem } from 'devextreme-react/form';
+import Button from 'devextreme-react/button'
 import { useClubsQuery } from './';
 import { LoadingOverlay } from '../../components';
 import { Course, GolfClub } from '../../models';
-import { FieldDataChangedEvent } from 'devextreme/ui/form';
 
 import './edit-club.css';
+
+import ArrowBackIcon from '../../images/arrow-back.svg';
+import SaveIcon from '../../images/save.svg';
 
 interface EditClubPageURLParameters {
     clubID?: string
@@ -15,8 +17,10 @@ interface EditClubPageURLParameters {
 
 export function EditClubPage(props: any) {
 
+    const history = useHistory();
     const params: EditClubPageURLParameters = useParams();
     const [courses, setCourses] = useState<Array<Course>>([]);
+    const [saveEnabled, setSaveEnabled] = useState<boolean>(false);
 
     const onDataLoad = (data: GolfClub[]) => {
 
@@ -68,9 +72,9 @@ export function EditClubPage(props: any) {
         }
     };
 
-    const courseTabRender = (params: { name: string }) => {
+    const courseTabRender = (params: { title: string }) => {
 
-        var course = courses.find(c => c.name === params.name)!;
+        var course = courses.find(c => c.name === params.title)!;
 
         return (
 
@@ -94,51 +98,44 @@ export function EditClubPage(props: any) {
         );
     }
 
-    const courseItems = courses.map(c => {
-        return (
-            <GroupItem caption={c.name} colSpan={2} key={c.id}>
-                <SimpleItem
-                    dataField="name"
-                    render={courseTabRender}
-                    key={c.id}
-                    label={{ visible: false }}
-                    name={c.name} />
-            </GroupItem>
-        )
-    });
-
     return (
         <div className="px-3 pt-3 space-y-3 scrollable-container">
-            <h1>{club.name}</h1>
-            <div>
-                <div className="club-edit-club-details">
-                    <div className="text-gray-500">Address</div>
-                    <TextBox className="dx-field-value" defaultValue={club.address} />
-                    <div className="text-gray-500">Website</div>
-                    <TextBox className="dx-field-value" defaultValue={club.website} />
+            <div className="flex flex-row justify-between">
+                <div className="flex">
+                    <Button
+                        icon={ArrowBackIcon}
+                        stylingMode="text"
+                        hint="Back"
+                        onClick={() => history.goBack()} />
+                    <h2>{club.name}</h2>
                 </div>
+                <Button
+                    icon={SaveIcon}
+                    text="Save"
+                    disabled={saveEnabled}
+                    stylingMode="contained"
+                    type="default" />
             </div>
-            <Form
-                colCount={2}
-                id="form"
-                formData={club}
-                onFieldDataChanged={(e) => onFieldDataChanged(e)}>
+            <Form colCount={2} id="form" formData={club}>
 
                 <Item dataField="address" validationRules={validationRules.address} />
                 <Item dataField="website" />
 
-                {courseItems}
-                <Item
-                    itemType="button"
-                    colSpan={2}
-                    horizontalAlignment="left"
-                    buttonOptions={addCourseButtonOptions} />
+                <GroupItem caption="Courses" colSpan={2}>
+                    {courses.length > 0 && (
+                        <TabbedItem>
+                            {courses.map(c =>
+                                <Tab title={c.name} key={c.id} render={courseTabRender} />)}
+                        </TabbedItem>
+                    )}
+                    <Item
+                        itemType="button"
+                        colSpan={2}
+                        horizontalAlignment="left"
+                        buttonOptions={addCourseButtonOptions} />
+                </GroupItem>
+
             </Form>
         </div>
     );
 }
-
-function onFieldDataChanged(e: FieldDataChangedEvent): void {
-    debugger;
-}
-
