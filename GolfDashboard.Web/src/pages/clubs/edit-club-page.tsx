@@ -1,101 +1,68 @@
 import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import Form, { Item, GroupItem, Tab, TabbedItem } from 'devextreme-react/form';
+import { useQuery } from "react-query";
+import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button'
-import { useClubsQuery } from './';
 import { LoadingOverlay } from '../../components';
-import { Course, GolfClub } from '../../models';
+import { GolfClub } from '../../models';
 
 import './edit-club.css';
 
 import ArrowBackIcon from '../../images/arrow-back.svg';
 import SaveIcon from '../../images/save.svg';
+import { APIService } from '../../services';
+import { PopupUtils } from '../../popupUtils';
 
 interface EditClubPageURLParameters {
     clubID?: string
+}
+
+interface ClubDetails {
+    name: string,
+    website: string
 }
 
 export function EditClubPage(props: any) {
 
     const history = useHistory();
     const params: EditClubPageURLParameters = useParams();
-    const [courses, setCourses] = useState<Array<Course>>([]);
     const [saveEnabled, setSaveEnabled] = useState<boolean>(false);
 
-    const onDataLoad = (data: GolfClub[]) => {
+    const [clubDetails, setClubDetails] = useState<ClubDetails>({
+        name: "",
+        website: ""
+    });
 
-        const editingClub = data.find(e => e.id === parseInt(params.clubID!));
+    const clubEditQuery = useQuery<GolfClub, Error>("GetClubForEditing", async () => {
 
-        if (editingClub) {
-            setCourses(editingClub.courses ?? []);
+        const apiService = new APIService();
+        return await apiService.getClub(parseInt(params.clubID!));
+
+    }, {
+        refetchOnWindowFocus: false,
+        onError: (e) => {
+            PopupUtils.errorToast("Error Loading Club Details");
+        },
+        onSuccess: (data: GolfClub) => {
+            setClubDetails({
+                name: data.name,
+                website: data.website
+            });
         }
+    });
 
-    }
-
-    const clubsQuery = useClubsQuery(onDataLoad);
-
-    if (clubsQuery.isLoading || clubsQuery.isIdle) {
+    if (clubEditQuery.isLoading || clubEditQuery.isIdle) {
         return <LoadingOverlay />
     }
 
-    if (!clubsQuery.isSuccess) {
+    if (!clubEditQuery.isSuccess) {
         return <div />
     }
 
-    const club = clubsQuery.data.find(e => e.id === parseInt(params.clubID!));
+    const club = clubEditQuery.data;
 
     if (!club) {
         return <h2>Invalid Club ID</h2>
-    }
-
-    const validationRules = {
-        address: [
-            { type: 'required', message: 'Address is required.' },
-        ]
-    };
-
-    const addCourseButtonOptions = {
-        icon: 'add',
-        text: 'Add Course',
-        onClick: () => {
-
-            const newCourse = {
-                id: courses.length * -1,
-                name: "New Course",
-                numberOfHoles: 18,
-                rating: 0,
-                slope: 0,
-                sss: 0
-            };
-
-            setCourses([...courses, newCourse]);
-        }
-    };
-
-    const courseTabRender = (params: { title: string }) => {
-
-        var course = courses.find(c => c.name === params.title)!;
-
-        return (
-
-            <Form formData={course} colCount={2} key={course.id}>
-
-                <GroupItem caption="Course Details">
-                    <Item dataField="name" />
-                    <Item dataField="numberOfHoles" />
-                </GroupItem>
-
-                <GroupItem caption="Ratings">
-                    <Item dataField="sss" />
-                    <Item dataField="rating" />
-                    <Item dataField="slope" />
-                </GroupItem>
-
-                <GroupItem caption="Hole Details" colSpan={2}>
-                    <Item dataField="foo" />
-                </GroupItem>
-            </Form>
-        );
     }
 
     return (
@@ -112,30 +79,33 @@ export function EditClubPage(props: any) {
                 <Button
                     icon={SaveIcon}
                     text="Save"
-                    disabled={saveEnabled}
+                    disabled={!saveEnabled}
                     stylingMode="contained"
-                    type="default" />
+                    type="default"
+                    onClick={() => alert(JSON.stringify(clubDetails))} />
             </div>
-            <Form colCount={2} id="form" formData={club}>
+            <div className="edit-club-details space-x-3">
 
-                <Item dataField="address" validationRules={validationRules.address} />
-                <Item dataField="website" />
+                <span className="text-gray-500 inline-flex items-center">Name:</span>
+                <TextBox value={clubDetails.name} onInput={(e) => {
+                    setClubDetails({
+                        ...clubDetails,
+                        name: e.component.option("text")
+                    });
+                    setSaveEnabled(true);
+                }} />
 
-                <GroupItem caption="Courses" colSpan={2}>
-                    {courses.length > 0 && (
-                        <TabbedItem>
-                            {courses.map(c =>
-                                <Tab title={c.name} key={c.id} render={courseTabRender} />)}
-                        </TabbedItem>
-                    )}
-                    <Item
-                        itemType="button"
-                        colSpan={2}
-                        horizontalAlignment="left"
-                        buttonOptions={addCourseButtonOptions} />
-                </GroupItem>
+                <span className="text-gray-500 inline-flex items-center">Website:</span>
+                <TextBox value={clubDetails.website} onInput={(e) => {
+                    setClubDetails({
+                        ...clubDetails,
+                        website: e.component.option("text")
+                    });
+                    setSaveEnabled(true);
 
-            </Form>
+                }} />
+
+            </div>
         </div>
     );
 }

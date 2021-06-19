@@ -34,6 +34,12 @@ export class APIService {
         return await this.getResponseJSON<Array<GolfClub>>(baseURL);
     }
 
+    async getClub(clubID: number): Promise<GolfClub> {
+
+        let url = "/golfclubs?id=" + clubID;
+        return await this.getResponseJSON<GolfClub>(url);
+    }
+
     async getTags(): Promise<Array<Tag>> {
         return await this.getResponseJSON<Array<Tag>>("/tags");
     }
