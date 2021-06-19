@@ -12,9 +12,13 @@ namespace GolfDashboard.API
         public MappingProfiles()
         {
             CreateMap<Tag, TagDTO>();
+            CreateMap<Course, CourseDTO>();
+
             CreateMap<Note, NoteDTO>()
                 .ForMember(m => m.Tags, opts => opts.MapFrom(n => n.Tags.Select(t => t.Text).ToList()));
-            CreateMap<Course, CourseDTO>();
+
+            CreateMap<GolfClub, GolfClubDTO>()
+                .ForMember(m => m.DistanceInMiles, opts => opts.Ignore());
         }
     }
 }

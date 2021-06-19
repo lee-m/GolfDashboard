@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using AutoMapper;
 
 using GolfDashboard.API.DTO;
-using GolfDashboard.API.Models;
 using GolfDashboard.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
@@ -26,29 +26,24 @@ namespace GolfDashboard.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get(double? lat, double? lng)
+        public async Task<ActionResult> Get(double? lat, double? lng, int? id)
         {
-            if(lat == null || lng == null)
+            if(id != null)
             {
-                return Json(_golfClubsRepository.Get().Select(x => new GolfClubDTO
-                {
-                    ID = x.ID,
-                    Name = x.Name,
-                    Address = string.Join(", ", x.Address.Split("\n").ToArray()),
-                    Website = x.Website,
-                    Courses = _mapper.Map<List<CourseDTO>>(x.Courses)
-                }).OrderBy(x => x.Name));
+                var club = _mapper.Map<GolfClubDTO>(await _golfClubsRepository.GetAsync(id.Value));
+                return Json(club);
             }
 
-            //Calculate the distance from the specified location to each club
-            var clubs = _golfClubsRepository.Get().AsParallel().Select(x => new GolfClubDTO
+            var clubs = _mapper.Map<List<GolfClubDTO>>(await _golfClubsRepository.GetAsync());
+
+            if (lat != null && lng != null)
             {
-                ID = x.ID,
-                Name = x.Name,
-                Address = string.Join(", ", x.Address.Split("\n").ToArray()),
-                Website = x.Website,
-                DistanceInMiles = DistanceUtils.DistanceBetweenPositionsInMiles(x.Latitude, x.Longitude, lat.Value, lng.Value)
-            });
+                //Calculate the distance from the specified location to each club
+                clubs.AsParallel().ForAll(x =>
+                {
+                    x.DistanceInMiles = DistanceUtils.DistanceBetweenPositionsInMiles(x.Latitude, x.Longitude, lat.Value, lng.Value);
+                });
+            }
 
             return Json(clubs.OrderBy(x => x.DistanceInMiles));
         }

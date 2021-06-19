@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using GolfDashboard.Interfaces;
 using GolfDashboard.Models;
@@ -16,7 +17,10 @@ namespace GolfDashboard.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<GolfClub> Get()
-            => _context.GolfClubs.Include(c => c.Courses);
+        public async Task<IEnumerable<GolfClub>> GetAsync()
+            => await _context.GolfClubs.Include(c => c.Courses).ToListAsync();
+
+        public async Task<GolfClub> GetAsync(int id)
+            => await _context.GolfClubs.Include(c => c.Courses).FirstAsync(x => x.ID == id);
     }
 }
