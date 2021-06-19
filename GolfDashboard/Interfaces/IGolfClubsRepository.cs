@@ -9,5 +9,7 @@ namespace GolfDashboard.Interfaces
     {
         Task<IEnumerable<GolfClub>> GetAsync();
         Task<GolfClub> GetAsync(int id);
+
+        Task UpdateAsync(EditedClubDetails editDetails);
     }
 }

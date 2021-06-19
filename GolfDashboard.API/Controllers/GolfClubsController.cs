@@ -6,6 +6,7 @@ using AutoMapper;
 
 using GolfDashboard.API.DTO;
 using GolfDashboard.Interfaces;
+using GolfDashboard.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,6 +47,23 @@ namespace GolfDashboard.API.Controllers
             }
 
             return Json(clubs.OrderBy(x => x.DistanceInMiles));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Update(EditedClubDetails newDetails)
+        {
+            if (newDetails == null)
+                return BadRequest();
+
+            try
+            {
+                await _golfClubsRepository.UpdateAsync(newDetails);
+                return Ok();
+            }
+            catch(ResourceNotFoundException)
+            {
+                return NotFound();
+            }
         }
     }
 }
