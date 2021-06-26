@@ -1,54 +1,41 @@
 import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { useQuery } from "react-query";
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button'
 import { LoadingOverlay } from '../../components';
-import { GolfClub } from '../../models';
+import { GolfClub, EditedClubDetails } from '../../models';
 
 import './edit-club.css';
 
 import ArrowBackIcon from '../../images/arrow-back.svg';
 import SaveIcon from '../../images/save.svg';
-import { APIService } from '../../services';
-import { PopupUtils } from '../../popupUtils';
+import { useClubEditQuery, useClubsMutator } from './clubs-hooks';
 
 interface EditClubPageURLParameters {
     clubID?: string
 }
 
-interface ClubDetails {
-    name: string,
-    website: string
-}
-
 export function EditClubPage(props: any) {
 
     const history = useHistory();
+    const clubsMutator = useClubsMutator();
     const params: EditClubPageURLParameters = useParams();
     const [saveEnabled, setSaveEnabled] = useState<boolean>(false);
 
-    const [clubDetails, setClubDetails] = useState<ClubDetails>({
+    const [clubDetails, setClubDetails] = useState<EditedClubDetails>({
+        id: 0,
         name: "",
         website: ""
     });
 
-    const clubEditQuery = useQuery<GolfClub, Error>("GetClubForEditing", async () => {
+    const clubEditQuery = useClubEditQuery(parseInt(params.clubID!), (data: GolfClub) => {
 
-        const apiService = new APIService();
-        return await apiService.getClub(parseInt(params.clubID!));
+        setClubDetails({
+            id: data.id,
+            name: data.name,
+            website: data.website
+        });
 
-    }, {
-        refetchOnWindowFocus: false,
-        onError: (e) => {
-            PopupUtils.errorToast("Error Loading Club Details");
-        },
-        onSuccess: (data: GolfClub) => {
-            setClubDetails({
-                name: data.name,
-                website: data.website
-            });
-        }
     });
 
     if (clubEditQuery.isLoading || clubEditQuery.isIdle) {
@@ -82,7 +69,7 @@ export function EditClubPage(props: any) {
                     disabled={!saveEnabled}
                     stylingMode="contained"
                     type="default"
-                    onClick={() => alert(JSON.stringify(clubDetails))} />
+                    onClick={() => clubsMutator.update(clubDetails)} />
             </div>
             <div className="edit-club-details space-x-3">
 

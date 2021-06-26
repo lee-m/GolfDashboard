@@ -1,4 +1,4 @@
-import { GolfClub, Note, Tag } from '../models';
+import { EditedClubDetails, GolfClub, Note, Tag } from '../models';
 
 export class APIService {
 
@@ -74,6 +74,20 @@ export class APIService {
 
         let response = await fetch(this.getURL("/tags?id=" + id.toString()), {
             method: "DELETE"
+        });
+
+        return response.ok;
+
+    }
+
+    async saveClub(clubDetails: EditedClubDetails): Promise<boolean> {
+
+        let response = await fetch(this.getURL("/golfClubs"), {
+            method: "POST",
+            body: JSON.stringify(clubDetails),
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
 
         return response.ok;
