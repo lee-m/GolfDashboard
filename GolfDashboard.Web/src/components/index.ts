@@ -4,3 +4,4 @@ export * from './loading-overlay';
 export * from './separator';
 export * from './delete-prompt';
 export * from './animated-button';
+export * from './floating-label-input';

@@ -1,0 +1,21 @@
+.floating-label-container {
+    @apply focus-within:border-primary-500 border-2 px-2 relative bg-white rounded;
+}
+
+.floating-label-input {
+    @apply outline-none appearance-none h-full z-10 block w-full;
+    padding-top: 1.5rem;
+    padding-bottom: 0.625rem;
+}
+
+.floating-label-label {
+    @apply absolute top-0 block text-center text-gray-500 focus:text-primary-600 duration-300 h-full;
+    transform-origin: 0%;
+    padding-top: 1.0625rem;
+    padding-bottom: 1.0625rem;
+}
+
+input:focus-within ~ label,
+input:not(:placeholder-shown) ~ label {
+    @apply transform scale-75 -translate-y-3 text-primary-500;
+}

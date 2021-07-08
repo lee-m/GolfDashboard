@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button'
-import { LoadingOverlay } from '../../components';
+import { LoadingOverlay, FloatingLabelInput } from '../../components';
 import { GolfClub, EditedClubDetails } from '../../models';
 
 import './edit-club.css';
@@ -72,26 +72,7 @@ export function EditClubPage(props: any) {
                     onClick={() => clubsMutator.update(clubDetails)} />
             </div>
             <div className="edit-club-details space-x-3">
-
-                <span className="text-gray-500 inline-flex items-center">Name:</span>
-                <TextBox value={clubDetails.name} onInput={(e) => {
-                    setClubDetails({
-                        ...clubDetails,
-                        name: e.component.option("text")
-                    });
-                    setSaveEnabled(true);
-                }} />
-
-                <span className="text-gray-500 inline-flex items-center">Website:</span>
-                <TextBox value={clubDetails.website} onInput={(e) => {
-                    setClubDetails({
-                        ...clubDetails,
-                        website: e.component.option("text")
-                    });
-                    setSaveEnabled(true);
-
-                }} />
-
+                <FloatingLabelInput name="Name" label="Name" />
             </div>
         </div>
     );

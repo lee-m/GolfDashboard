@@ -8,6 +8,9 @@ module.exports = {
       '1/4': '25%'
     },
     extend: {
+      zIndex: {
+         '-1': '-1',
+      },
       colors: {
         accent: {
           green: '#339933',
@@ -54,7 +57,8 @@ module.exports = {
   variants: {
     extend: {
       opacity: ['disabled'],
-      cursor: ['disabled']
+      cursor: ['disabled'],
+      borderColor: ['responsive', 'hover', 'focus', 'focus-within'],
     },
   },
   plugins: [],
