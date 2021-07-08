@@ -71,8 +71,9 @@ export function EditClubPage(props: any) {
                     type="default"
                     onClick={() => clubsMutator.update(clubDetails)} />
             </div>
-            <div className="edit-club-details space-x-3">
-                <FloatingLabelInput name="Name" label="Name" />
+            <div className="flex justify-between space-x-3">
+                <FloatingLabelInput name="Name" label="Name" value={clubDetails.name} onValueChange={(name) => setClubDetails({ ...clubDetails, name: name })} />
+                <FloatingLabelInput name="Website" label="Website" value={clubDetails.website} onValueChange={(website) => setClubDetails({ ...clubDetails, website: website })} />
             </div>
         </div>
     );
