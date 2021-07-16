@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -24,7 +25,7 @@ namespace GolfDashboard.Data.Migrations
                 {
                     club.GetProperty(DisplaySequenceProperty).GetInt32(),
                     club.GetProperty(NameProperty).GetString(),
-                    club.GetProperty(AddressProperty).GetString(),
+                    string.Join(", ", club.GetProperty(AddressProperty).GetString().Split("\n")),
                     club.GetProperty(WebsiteProperty).GetString(),
                     club.GetProperty(LatProperty).GetDouble(),
                     club.GetProperty(LongProperty).GetDouble()
