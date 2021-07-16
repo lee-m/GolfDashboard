@@ -3,9 +3,7 @@
 }
 
 .floating-label-input {
-    @apply outline-none appearance-none h-full z-10 block w-full;
-    padding-top: 1.5rem;
-    padding-bottom: 0.625rem;
+    @apply outline-none appearance-none h-full z-10 block w-full pt-6 pb-2;
 }
 
 .floating-label-label {

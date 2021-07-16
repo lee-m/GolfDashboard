@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button'
-import { LoadingOverlay, FloatingLabelInput } from '../../components';
+import { LoadingOverlay, FloatingLabelInput, Separator } from '../../components';
 import { GolfClub, EditedClubDetails } from '../../models';
 
 import './edit-club.css';
@@ -25,7 +25,8 @@ export function EditClubPage(props: any) {
     const [clubDetails, setClubDetails] = useState<EditedClubDetails>({
         id: 0,
         name: "",
-        website: ""
+        website: "",
+        address: ""
     });
 
     const clubEditQuery = useClubEditQuery(parseInt(params.clubID!), (data: GolfClub) => {
@@ -33,7 +34,8 @@ export function EditClubPage(props: any) {
         setClubDetails({
             id: data.id,
             name: data.name,
-            website: data.website
+            website: data.website,
+            address: data.address
         });
 
     });
@@ -71,9 +73,17 @@ export function EditClubPage(props: any) {
                     type="default"
                     onClick={() => clubsMutator.update(clubDetails)} />
             </div>
-            <div className="flex justify-between space-x-3">
-                <FloatingLabelInput name="Name" label="Name" value={clubDetails.name} onValueChange={(name) => setClubDetails({ ...clubDetails, name: name })} />
-                <FloatingLabelInput name="Website" label="Website" value={clubDetails.website} onValueChange={(website) => setClubDetails({ ...clubDetails, website: website })} />
+            <div>
+                <div className="edit-club-details space-y-2">
+                    <FloatingLabelInput name="Name" label="Name" value={clubDetails.name} onValueChange={(name) => setClubDetails({ ...clubDetails, name: name })} />
+                    <FloatingLabelInput name="Website" label="Website" value={clubDetails.website} onValueChange={(website) => setClubDetails({ ...clubDetails, website: website })} />
+                    <FloatingLabelInput name="Address" label="Address" value={clubDetails.address} onValueChange={(address) => setClubDetails({ ...clubDetails, address: address })} />
+                </div>
+            </div>
+            <Separator />
+            <div>
+                <h4>Courses</h4>
+
             </div>
         </div>
     );
