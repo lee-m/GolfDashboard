@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import TextBox from 'devextreme-react/text-box';
 import Button from 'devextreme-react/button'
@@ -21,13 +21,7 @@ export function EditClubPage(props: any) {
     const clubsMutator = useClubsMutator();
     const params: EditClubPageURLParameters = useParams();
     const [saveEnabled, setSaveEnabled] = useState<boolean>(false);
-
-    const [clubDetails, setClubDetails] = useState<EditedClubDetails>({
-        id: 0,
-        name: "",
-        website: "",
-        address: ""
-    });
+    const [clubDetails, setClubDetails] = useState<EditedClubDetails | null>(null);
 
     const clubEditQuery = useClubEditQuery(parseInt(params.clubID!), (data: GolfClub) => {
 
@@ -39,6 +33,28 @@ export function EditClubPage(props: any) {
         });
 
     });
+
+    const onClubNameChanged = useCallback((newName: string) => {
+
+        debugger;
+        setClubDetails({ ...clubDetails!, name: newName });
+        setSaveEnabled(true);
+
+    }, [clubDetails]);
+
+    const onWebsiteChanged = useCallback((newWebsite: string) => {
+
+        setClubDetails({ ...clubDetails!, website: newWebsite });
+        setSaveEnabled(true);
+
+    }, [clubDetails]);
+
+    const onAddressChanged = useCallback((newAddress: string) => {
+
+        setClubDetails({ ...clubDetails!, address: newAddress });
+        setSaveEnabled(true);
+
+    }, [clubDetails]);
 
     if (clubEditQuery.isLoading || clubEditQuery.isIdle) {
         return <LoadingOverlay />
@@ -71,13 +87,13 @@ export function EditClubPage(props: any) {
                     disabled={!saveEnabled}
                     stylingMode="contained"
                     type="default"
-                    onClick={() => clubsMutator.update(clubDetails)} />
+                    onClick={() => clubsMutator.update(clubDetails!)} />
             </div>
             <div>
                 <div className="edit-club-details space-y-2">
-                    <FloatingLabelInput name="Name" label="Name" value={clubDetails.name} onValueChange={(name) => setClubDetails({ ...clubDetails, name: name })} />
-                    <FloatingLabelInput name="Website" label="Website" value={clubDetails.website} onValueChange={(website) => setClubDetails({ ...clubDetails, website: website })} />
-                    <FloatingLabelInput name="Address" label="Address" value={clubDetails.address} onValueChange={(address) => setClubDetails({ ...clubDetails, address: address })} />
+                    <FloatingLabelInput name="Name" label="Name" value={clubDetails?.name} onValueChange={onClubNameChanged} />
+                    <FloatingLabelInput name="Website" label="Website" value={clubDetails?.website} onValueChange={onWebsiteChanged} />
+                    <FloatingLabelInput name="Address" label="Address" value={clubDetails?.address} onValueChange={onAddressChanged} />
                 </div>
             </div>
             <Separator />

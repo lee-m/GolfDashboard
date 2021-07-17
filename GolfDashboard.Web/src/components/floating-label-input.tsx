@@ -3,7 +3,7 @@ import "./floating-label-input.css";
 export interface FloatingLabelInputProps {
     name: string;
     label: string;
-    value: string;
+    value: string | undefined;
     onValueChange: (value: string) => void
 };
 
