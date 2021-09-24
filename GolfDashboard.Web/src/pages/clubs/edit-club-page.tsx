@@ -1,14 +1,15 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import TextBox from 'devextreme-react/text-box';
+import TabPanel from 'devextreme-react/tab-panel';
 import Button from 'devextreme-react/button'
-import { LoadingOverlay, FloatingLabelInput, Separator } from '../../components';
-import { GolfClub, EditedClubDetails } from '../../models';
+import { LoadingOverlay, FloatingLabelInput, Separator, DeleteButton } from '../../components';
+import { GolfClub, EditedClubDetails, Course } from '../../models';
 
 import './edit-club.css';
 
 import ArrowBackIcon from '../../images/arrow-back.svg';
-import SaveIcon from '../../images/save.svg';
+import SaveIcon from '../../images/save-white.svg';
+import AddIcon from '../../images/add.svg';
 import { useClubEditQuery, useClubsMutator } from './clubs-hooks';
 
 interface EditClubPageURLParameters {
@@ -29,7 +30,8 @@ export function EditClubPage(props: any) {
             id: data.id,
             name: data.name,
             website: data.website,
-            address: data.address
+            address: data.address,
+            courses: data.courses
         });
 
     });
@@ -97,10 +99,56 @@ export function EditClubPage(props: any) {
                 </div>
             </div>
             <Separator />
-            <div>
+            <div className="flex flex-row justify-between">
                 <h4>Courses</h4>
+                <Button
+                    icon={AddIcon}
+                    text="Add"
+                    stylingMode="outlined"
+                    type="default"
+                    onClick={() => {
+
+                        if (!clubDetails) {
+                            return;
+                        }
+
+                        setClubDetails({
+                            ...clubDetails,
+                            courses: [
+                                ...clubDetails.courses, {
+                                    id: -1,
+                                    name: "New Course",
+                                    numberOfHoles: 18,
+                                    rating: 0,
+                                    slope: 0,
+                                    sss: 0
+                                }
+                            ]
+                        });
+
+                    }} />
 
             </div>
+            <TabPanel
+                height={260}
+                dataSource={clubDetails?.courses ?? []}
+                itemTitleRender={renderCourseTabTitle}
+                itemComponent={CourseTab} />
+        </div>
+    );
+}
+
+function CourseTab() {
+    return (
+        <span>doo</span>
+    )
+}
+
+function renderCourseTabTitle(course: Course) {
+    return (
+        <div className="flex flex-between items-center">
+            <span className="font-semibold">{course.name}</span>
+            <DeleteButton />
         </div>
     );
 }
