@@ -81,7 +81,7 @@ export function EditClubPage(props: any) {
                         stylingMode="text"
                         hint="Back"
                         onClick={() => history.goBack()} />
-                    <h2>{club.name}</h2>
+                    <span className="text-2xl">{club.name}</span>
                 </div>
                 <Button
                     icon={SaveIcon}
@@ -100,7 +100,7 @@ export function EditClubPage(props: any) {
             </div>
             <Separator />
             <div className="flex flex-row justify-between">
-                <h4>Courses</h4>
+                <span className="text-lg">Available Courses</span>
                 <Button
                     icon={AddIcon}
                     text="Add"
@@ -140,13 +140,15 @@ export function EditClubPage(props: any) {
 
 function CourseTab(props: { data: Course }) {
     return (
-        <div className="edit-club-course-container">
+        <div className="edit-club-course-container pt-3">
             <div className="dx-fieldset">
+                <div className="dx-fieldset-header text-sm">Course Details</div>
                 <div className="dx-field">
                     <FloatingLabelTextInput name="name" label="Name" value={props.data.name} onValueChange={(newName: string) => { }} />
                 </div>
             </div>
             <div className="dx-fieldset">
+                <div className="dx-fieldset-header text-sm">Ratings</div>
                 <div className="dx-field">
                     <FloatingLabelNumberInput name="sss" label="SSS" value={props.data.sss ?? ""} onValueChange={(newName: string) => { }} />
                 </div>
