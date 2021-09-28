@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import TabPanel from 'devextreme-react/tab-panel';
 import Button from 'devextreme-react/button'
-import { LoadingOverlay, FloatingLabelInput, Separator, DeleteButton } from '../../components';
+import { LoadingOverlay, FloatingLabelTextInput, FloatingLabelNumberInput, Separator } from '../../components';
 import { GolfClub, EditedClubDetails, Course } from '../../models';
 
 import './edit-club.css';
@@ -92,10 +92,10 @@ export function EditClubPage(props: any) {
                     onClick={() => clubsMutator.update(clubDetails!)} />
             </div>
             <div>
-                <div className="edit-club-details space-y-2">
-                    <FloatingLabelInput name="Name" label="Name" value={clubDetails?.name} onValueChange={onClubNameChanged} />
-                    <FloatingLabelInput name="Website" label="Website" value={clubDetails?.website} onValueChange={onWebsiteChanged} />
-                    <FloatingLabelInput name="Address" label="Address" value={clubDetails?.address} onValueChange={onAddressChanged} />
+                <div className="edit-club-details">
+                    <FloatingLabelTextInput name="Name" label="Name" value={clubDetails?.name} onValueChange={onClubNameChanged} />
+                    <FloatingLabelTextInput name="Website" label="Website" value={clubDetails?.website} onValueChange={onWebsiteChanged} />
+                    <FloatingLabelTextInput name="Address" label="Address" value={clubDetails?.address} onValueChange={onAddressChanged} />
                 </div>
             </div>
             <Separator />
@@ -119,9 +119,9 @@ export function EditClubPage(props: any) {
                                     id: -1,
                                     name: "New Course",
                                     numberOfHoles: 18,
-                                    rating: 0,
-                                    slope: 0,
-                                    sss: 0
+                                    rating: null,
+                                    slope: null,
+                                    sss: null
                                 }
                             ]
                         });
@@ -130,7 +130,7 @@ export function EditClubPage(props: any) {
 
             </div>
             <TabPanel
-                height={260}
+                noDataText="No Courses"
                 dataSource={clubDetails?.courses ?? []}
                 itemTitleRender={renderCourseTabTitle}
                 itemComponent={CourseTab} />
@@ -138,17 +138,33 @@ export function EditClubPage(props: any) {
     );
 }
 
-function CourseTab() {
+function CourseTab(props: { data: Course }) {
     return (
-        <span>doo</span>
+        <div className="edit-club-course-container">
+            <div className="dx-fieldset">
+                <div className="dx-field">
+                    <FloatingLabelTextInput name="name" label="Name" value={props.data.name} onValueChange={(newName: string) => { }} />
+                </div>
+            </div>
+            <div className="dx-fieldset">
+                <div className="dx-field">
+                    <FloatingLabelNumberInput name="sss" label="SSS" value={props.data.sss ?? ""} onValueChange={(newName: string) => { }} />
+                </div>
+                <div className="dx-field">
+                    <FloatingLabelNumberInput name="slope" label="Slope" value={props.data.slope ?? ""} onValueChange={(newName: string) => { }} />
+                </div>
+                <div className="dx-field">
+                    <FloatingLabelNumberInput name="rating" label="Rating" value={props.data.rating ?? ""} onValueChange={(newName: string) => { }} />
+                </div>
+            </div>
+        </div>
     )
 }
 
 function renderCourseTabTitle(course: Course) {
     return (
         <div className="flex flex-between items-center">
-            <span className="font-semibold">{course.name}</span>
-            <DeleteButton />
+            <span>{course.name}</span>
         </div>
     );
 }

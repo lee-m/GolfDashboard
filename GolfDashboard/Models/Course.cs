@@ -20,8 +20,8 @@ namespace GolfDashboard.Models
         public int ID { get; private set; }
         public string Name { get; private set; }
         public int NumberOfHoles { get; private set; }
-        public int SSS { get; private set; }
-        public int Slope { get; private set; }
-        public float Rating { get; private set; }
+        public int? SSS { get; private set; }
+        public int? Slope { get; private set; }
+        public float? Rating { get; private set; }
     }
 }
