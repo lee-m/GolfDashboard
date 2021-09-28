@@ -1,8 +1,8 @@
 import Popup from 'devextreme-react/popup';
 import Button from 'devextreme-react/button'
-import { AnimatedButton } from './animated-button';
+import { AnimatedButton } from '../animated-button/animated-button';
 
-import ExclamationIcon from '../images/exclamation-circle.svg';
+import ExclamationIcon from '../../images/exclamation-circle.svg';
 
 export interface DeletePromptProps {
     title: string;

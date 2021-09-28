@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Button from 'devextreme-react/button'
 
 import './animated-button.css';
-import SpinnerLogo from '../images/arrow-repeat.svg';
+import SpinnerLogo from '../../images/arrow-repeat.svg';
 
 export interface AnimatedButtonProps {
     onClick: () => Promise<void>,
