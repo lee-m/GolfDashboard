@@ -29,7 +29,7 @@
             "value": "'Nunito', sans-serif"
         }
     ],
-    "baseTheme": "generic.softblue",
+    "baseTheme": "generic.softblue.compact",
     "outputColorScheme": "custom-scheme",
     "makeSwatch": false,
     "version": "20.2.6",
