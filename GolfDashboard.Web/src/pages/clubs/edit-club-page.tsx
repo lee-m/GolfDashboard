@@ -38,7 +38,6 @@ export function EditClubPage(props: any) {
 
     const onClubNameChanged = useCallback((newName: string) => {
 
-        debugger;
         setClubDetails({ ...clubDetails!, name: newName });
         setSaveEnabled(true);
 
