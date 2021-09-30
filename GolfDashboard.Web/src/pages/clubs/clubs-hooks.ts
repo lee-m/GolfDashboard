@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { APIService } from '../../services';
 import { PopupUtils } from '../../popupUtils';
-import { EditedClubDetails, GolfClub } from '../../models';
+import { EditedGolfClubDetails, GolfClub } from '../../models';
 
 const ClubsQueryKey = "Clubs";
 const ClubEditQueryKey = "ClubEdit";
 
 export interface ClubMutator {
-    update: (clubDetails: EditedClubDetails) => void
+    update: (clubDetails: EditedGolfClubDetails) => void
 };
 
 export function useClubsQuery(successCallback?: (data: GolfClub[]) => void) {
@@ -61,7 +61,7 @@ export function useClubsMutator(): ClubMutator {
 
     const queryClient = useQueryClient();
 
-    const updateClub = (details: EditedClubDetails) => {
+    const updateClub = (details: EditedGolfClubDetails) => {
 
         const apiService = new APIService();
         return apiService.saveClub(details);
@@ -78,6 +78,6 @@ export function useClubsMutator(): ClubMutator {
     });
 
     return {
-        update: (details: EditedClubDetails) => updateMutation.mutate(details)
+        update: (details: EditedGolfClubDetails) => updateMutation.mutate(details)
     };
 }

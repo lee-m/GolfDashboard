@@ -1,6 +1,6 @@
 import { Course } from ".";
 
-export interface EditedClubDetails {
+export interface EditedGolfClubDetails {
     id: number,
     name: string,
     website: string,
