@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { EditedGolfClubDetails, GolfClub } from '../../models';
+import { EditedGolfClubDetails, GolfClub } from '../../../models';
 
 export interface EditClubContextState {
 
@@ -57,9 +57,31 @@ export function EditClubContextProvider(props: { children: any }) {
                         id: (editingClub.courses.length + 1) * -1,
                         name: "New Course",
                         numberOfHoles: 18,
-                        rating: null,
-                        slope: null,
-                        sss: null
+                        teeBoxes: [{
+                            id: -1,
+                            colour: "white",
+                            name: null,
+                            par: null,
+                            rating: null,
+                            sss: null,
+                            yards: null,
+                        }, {
+                            id: -2,
+                            colour: "#eeff00",
+                            name: null,
+                            par: null,
+                            rating: null,
+                            sss: null,
+                            yards: null,
+                        }, {
+                            id: -3,
+                            colour: "#cc0000",
+                            name: null,
+                            par: null,
+                            rating: null,
+                            sss: null,
+                            yards: null,
+                        }],
                     }
                 ]
             });

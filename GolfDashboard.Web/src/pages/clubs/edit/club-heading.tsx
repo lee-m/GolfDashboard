@@ -1,13 +1,13 @@
 import { useHistory } from 'react-router-dom';
 import Button from 'devextreme-react/button'
 
-import { useClubsMutator } from './clubs-hooks';
+import { useClubsMutator } from '../clubs-hooks';
 import { useEditClubContext } from './edit-club-context';
 
-import ArrowBackIcon from '../../images/arrow-back.svg';
-import SaveIcon from '../../images/save-white.svg';
+import ArrowBackIcon from '../../../images/arrow-back.svg';
+import SaveIcon from '../../../images/save-white.svg';
 
-export function EditClubHeading(props: any) {
+export function ClubHeading(props: any) {
 
     const history = useHistory();
     const clubsMutator = useClubsMutator();

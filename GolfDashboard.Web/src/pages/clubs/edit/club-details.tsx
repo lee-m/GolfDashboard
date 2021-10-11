@@ -1,7 +1,7 @@
 import { useEditClubContext } from './edit-club-context';
-import { FloatingLabelTextInput } from '../../components/floating-label-input';
+import { FloatingLabelTextInput } from '../../../components/floating-label-input';
 
-export function EditClubDetails(props: any) {
+export function ClubDetails(props: any) {
 
     const context = useEditClubContext();
 

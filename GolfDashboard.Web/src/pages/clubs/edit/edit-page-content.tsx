@@ -1,21 +1,21 @@
 import { useParams } from 'react-router-dom';
 
-import { EditClubHeading } from './edit-club-heading';
+import { ClubHeading } from './club-heading';
 import { useEditClubContext } from './edit-club-context';
-import { EditClubDetails } from './edit-club-details';
-import { EditClubCourses } from './edit-club-courses'
-import { LoadingOverlay, Separator } from '../../components';
-import { GolfClub, } from '../../models';
+import { ClubDetails } from './club-details';
+import { ClubCourses } from './club-courses'
+import { LoadingOverlay, Separator } from '../../../components';
+import { GolfClub, } from '../../../models';
 
 import './edit-club.css';
 
-import { useClubEditQuery } from './clubs-hooks';
+import { useClubEditQuery } from '../clubs-hooks';
 
 interface EditClubPageURLParameters {
     clubID?: string
 }
 
-export function EditClubPageContent(props: any) {
+export function EditPageContent(props: any) {
 
     const params: EditClubPageURLParameters = useParams();
     const editContext = useEditClubContext();
@@ -49,10 +49,10 @@ export function EditClubPageContent(props: any) {
 
     return (
         <div className="px-3 pt-3 space-y-3 scrollable-container">
-            <EditClubHeading />
-            <EditClubDetails />
+            <ClubHeading />
+            <ClubDetails />
             <Separator />
-            <EditClubCourses />
+            <ClubCourses />
         </div>
     );
 }

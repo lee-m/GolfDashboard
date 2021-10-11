@@ -4,10 +4,10 @@ import Button from 'devextreme-react/button'
 import { CourseTab } from './course-tab';
 import { useEditClubContext } from './edit-club-context';
 
-import AddIcon from '../../images/add.svg';
-import { Course } from '../../models';
+import AddIcon from '../../../images/add.svg';
+import { Course } from '../../../models';
 
-export function EditClubCourses(pros: any) {
+export function ClubCourses(pros: any) {
 
     const editContext = useEditClubContext();
 

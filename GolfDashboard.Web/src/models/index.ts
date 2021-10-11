@@ -3,3 +3,4 @@ export * from './note';
 export * from './tag';
 export * from './course';
 export * from './editedGolfClubDetails';
+export * from './teeBox';
