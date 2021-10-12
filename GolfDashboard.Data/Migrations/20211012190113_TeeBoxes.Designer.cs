@@ -3,14 +3,16 @@ using System;
 using GolfDashboard.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GolfDashboard.Data.Migrations
 {
     [DbContext(typeof(GolfDashboardDbContext))]
-    partial class GolfDashboardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211012190113_TeeBoxes")]
+    partial class TeeBoxes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,5 +1,7 @@
 ﻿// ReSharper disable AutoPropertyCanBeMadeGetOnly.Local
 
+using System.Collections.Generic;
+
 namespace GolfDashboard.Models
 {
     public class Course
@@ -7,21 +9,17 @@ namespace GolfDashboard.Models
         private Course()
         { }
 
-        public Course(int id, string name, int numberOfHoles, int sss, int slope, float rating)
+        public Course(int id, string name, int numberOfHoles, IEnumerable<TeeBox> teeBoxes)
         {
             ID = id;
             Name = name;
             NumberOfHoles = numberOfHoles;
-            SSS = sss;
-            Slope = slope;
-            Rating = rating;
+            TeeBoxes = teeBoxes;
         }
 
         public int ID { get; private set; }
         public string Name { get; private set; }
         public int NumberOfHoles { get; private set; }
-        public int? SSS { get; private set; }
-        public int? Slope { get; private set; }
-        public float? Rating { get; private set; }
+        public IEnumerable<TeeBox> TeeBoxes { get; private set; }
     }
 }

@@ -23,10 +23,10 @@ namespace GolfDashboard.Data.Repositories
         }
 
         public async Task<IEnumerable<GolfClub>> GetAsync()
-            => await _context.GolfClubs.Include(c => c.Courses).ToListAsync();
+            => await _context.GolfClubs.Include(c => c.Courses).ThenInclude(c => c.TeeBoxes).ToListAsync();
 
         public async Task<GolfClub> GetAsync(int id)
-            => await _context.GolfClubs.Include(c => c.Courses).FirstAsync(x => x.ID == id);
+            => await _context.GolfClubs.Include(c => c.Courses).ThenInclude(c => c.TeeBoxes).FirstAsync(x => x.ID == id);
 
         public async Task UpdateAsync(EditedClubDetails editDetails)
         {
