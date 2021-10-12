@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GolfDashboard.Data.Migrations
 {
     [DbContext(typeof(GolfDashboardDbContext))]
-    [Migration("20211012190113_TeeBoxes")]
+    [Migration("20211012194831_TeeBoxes")]
     partial class TeeBoxes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,10 +112,7 @@ namespace GolfDashboard.Data.Migrations
                     b.Property<int?>("CourseID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("Par")
+                    b.Property<int>("Par")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("Rating")
@@ -124,7 +121,7 @@ namespace GolfDashboard.Data.Migrations
                     b.Property<int?>("SSS")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Yards")
+                    b.Property<int>("Yards")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");

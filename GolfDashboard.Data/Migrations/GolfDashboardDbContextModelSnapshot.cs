@@ -110,10 +110,7 @@ namespace GolfDashboard.Data.Migrations
                     b.Property<int?>("CourseID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("Par")
+                    b.Property<int>("Par")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("Rating")
@@ -122,7 +119,7 @@ namespace GolfDashboard.Data.Migrations
                     b.Property<int?>("SSS")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Yards")
+                    b.Property<int>("Yards")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");

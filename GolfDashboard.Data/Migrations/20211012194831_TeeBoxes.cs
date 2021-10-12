@@ -25,9 +25,8 @@ namespace GolfDashboard.Data.Migrations
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Colour = table.Column<string>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Yards = table.Column<int>(type: "INTEGER", nullable: true),
-                    Par = table.Column<int>(type: "INTEGER", nullable: true),
+                    Yards = table.Column<int>(type: "INTEGER", nullable: false),
+                    Par = table.Column<int>(type: "INTEGER", nullable: false),
                     SSS = table.Column<int>(type: "INTEGER", nullable: true),
                     Rating = table.Column<int>(type: "INTEGER", nullable: true),
                     CourseID = table.Column<int>(type: "INTEGER", nullable: true)
