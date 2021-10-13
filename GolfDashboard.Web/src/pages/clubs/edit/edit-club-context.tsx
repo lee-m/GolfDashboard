@@ -60,7 +60,6 @@ export function EditClubContextProvider(props: { children: any }) {
                         teeBoxes: [{
                             id: -1,
                             colour: "white",
-                            name: null,
                             par: null,
                             rating: null,
                             sss: null,
@@ -68,7 +67,6 @@ export function EditClubContextProvider(props: { children: any }) {
                         }, {
                             id: -2,
                             colour: "#eeff00",
-                            name: null,
                             par: null,
                             rating: null,
                             sss: null,
@@ -76,7 +74,6 @@ export function EditClubContextProvider(props: { children: any }) {
                         }, {
                             id: -3,
                             colour: "#cc0000",
-                            name: null,
                             par: null,
                             rating: null,
                             sss: null,
