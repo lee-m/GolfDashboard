@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using AutoMapper;
 
-using GolfDashboard.API.DTO;
+using GolfDashboard.DTO;
 using GolfDashboard.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +27,9 @@ namespace GolfDashboard.API.Controllers
         public void AddOrUpdate(NoteDTO newNote)
         {
             if (newNote.ID == 0)
-                _notesRepository.Add(newNote.ToNoteModel());
+                _notesRepository.Add(newNote);
             else
-                _notesRepository.Update(newNote.ToNoteModel());
+                _notesRepository.Update(newNote);
         }
 
         [HttpGet]

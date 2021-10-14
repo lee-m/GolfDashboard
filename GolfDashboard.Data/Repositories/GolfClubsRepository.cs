@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
+using GolfDashboard.DTO;
 using GolfDashboard.Interfaces;
 using GolfDashboard.Models;
 
@@ -28,7 +29,7 @@ namespace GolfDashboard.Data.Repositories
         public async Task<GolfClub> GetAsync(int id)
             => await _context.GolfClubs.Include(c => c.Courses).ThenInclude(c => c.TeeBoxes).AsSingleQuery().FirstAsync(x => x.ID == id);
 
-        public async Task UpdateAsync(EditedClubDetails editDetails)
+        public async Task UpdateAsync(EditedClubDetailsDTO editDetails)
         {
             var club = await GetAsync(editDetails.ID);
 

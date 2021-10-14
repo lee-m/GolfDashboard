@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GolfDashboard.API.DTO
+namespace GolfDashboard.DTO
 {
     public class GolfClubDTO
     {

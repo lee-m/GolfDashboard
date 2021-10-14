@@ -119,7 +119,7 @@ namespace GolfDashboard.Data.Migrations
                     b.Property<int?>("SSS")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Slope")
+                    b.Property<int?>("Slope")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Yards")

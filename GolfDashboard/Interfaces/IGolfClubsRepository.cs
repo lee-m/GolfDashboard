@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using GolfDashboard.DTO;
 using GolfDashboard.Models;
 
 namespace GolfDashboard.Interfaces
@@ -10,6 +11,6 @@ namespace GolfDashboard.Interfaces
         Task<IEnumerable<GolfClub>> GetAsync();
         Task<GolfClub> GetAsync(int id);
 
-        Task UpdateAsync(EditedClubDetails editDetails);
+        Task UpdateAsync(EditedClubDetailsDTO editDetails);
     }
 }

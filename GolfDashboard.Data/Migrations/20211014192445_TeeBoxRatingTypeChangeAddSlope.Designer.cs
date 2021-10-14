@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GolfDashboard.Data.Migrations
 {
     [DbContext(typeof(GolfDashboardDbContext))]
-    [Migration("20211014183758_TeeBoxRatingTypeChangeAddSlope")]
+    [Migration("20211014192445_TeeBoxRatingTypeChangeAddSlope")]
     partial class TeeBoxRatingTypeChangeAddSlope
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -121,7 +121,7 @@ namespace GolfDashboard.Data.Migrations
                     b.Property<int?>("SSS")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Slope")
+                    b.Property<int?>("Slope")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Yards")

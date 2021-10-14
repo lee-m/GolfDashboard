@@ -1,4 +1,4 @@
-﻿namespace GolfDashboard.API.DTO
+﻿namespace GolfDashboard.DTO
 {
     public class TagDTO
     {

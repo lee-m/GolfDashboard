@@ -19,8 +19,7 @@ namespace GolfDashboard.Data.Migrations
                 name: "Slope",
                 table: "TeeBoxes",
                 type: "INTEGER",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

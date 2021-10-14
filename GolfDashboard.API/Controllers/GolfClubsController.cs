@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
-using GolfDashboard.API.DTO;
+using GolfDashboard.DTO;
 using GolfDashboard.Interfaces;
-using GolfDashboard.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,7 +49,7 @@ namespace GolfDashboard.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Update(EditedClubDetails newDetails)
+        public async Task<ActionResult> Update(EditedClubDetailsDTO newDetails)
         {
             if (newDetails == null)
                 return BadRequest();

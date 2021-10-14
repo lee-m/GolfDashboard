@@ -2,7 +2,7 @@
 
 using AutoMapper;
 
-using GolfDashboard.API.DTO;
+using GolfDashboard.DTO;
 using GolfDashboard.Models;
 
 namespace GolfDashboard.API
@@ -11,9 +11,16 @@ namespace GolfDashboard.API
     {
         public MappingProfiles()
         {
-            CreateMap<Tag, TagDTO>();
-            CreateMap<Course, CourseDTO>();
-            CreateMap<EditedClubDetails, GolfClub>();
+            CreateMap<TagDTO, Tag>();
+
+            CreateMap<CourseDTO, Course>()
+                .ReverseMap();
+
+            CreateMap<TeeBoxDTO, TeeBox>()
+                .ReverseMap();
+
+            CreateMap<EditedClubDetailsDTO, GolfClub>()
+                .ReverseMap();
 
             CreateMap<Note, NoteDTO>()
                 .ForMember(m => m.Tags, opts => opts.MapFrom(n => n.Tags.Select(t => t.Text).ToList()));

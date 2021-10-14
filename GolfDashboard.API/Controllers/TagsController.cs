@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 
-using GolfDashboard.API.DTO;
 using GolfDashboard.Data;
+using GolfDashboard.DTO;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

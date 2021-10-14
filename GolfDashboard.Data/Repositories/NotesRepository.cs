@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using GolfDashboard.DTO;
 using GolfDashboard.Interfaces;
 using GolfDashboard.Models;
 
@@ -18,7 +19,7 @@ namespace GolfDashboard.Data.Repositories
             _context = context;
         }
 
-        public void Add(Note note)
+        public void Add(NoteDTO note)
         {
             _context.Notes.Add(new Note(0, note.Title, note.Content, GetNewNoteTags(note)));
             _context.SaveChanges();
@@ -35,7 +36,7 @@ namespace GolfDashboard.Data.Repositories
             _context.SaveChanges();
         }
 
-        public void Update(Note note)
+        public void Update(NoteDTO note)
         {
             var existingNote = _context.Notes.Include(n => n.Tags).FirstOrDefault(n => n.ID == note.ID);
 
@@ -65,7 +66,7 @@ namespace GolfDashboard.Data.Repositories
                     existingNote.Tags.Add(tag);
                 else
                 {
-                    var tagEntry = _context.Tags.Add(incomingTag);
+                    var tagEntry = _context.Tags.Add(new Tag(incomingTag.ID, incomingTag.Text, null));
                     existingNote.Tags.Add(tagEntry.Entity);
                 }
             }
@@ -76,7 +77,7 @@ namespace GolfDashboard.Data.Repositories
         public IEnumerable<Note> Get()
             => _context.Notes.Include(n => n.Tags);
 
-        private ICollection<Tag> GetNewNoteTags(Note note)
+        private ICollection<Tag> GetNewNoteTags(NoteDTO note)
         {
             var tags = new List<Tag>();
 
