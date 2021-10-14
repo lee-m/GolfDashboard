@@ -341,3 +341,5 @@ healthchecksdb
 GolfDashboard.Web/ClientApp/.eslintcache
 GolfDashboard.Web/.eslintcache
 GolfDashboard.API/GolfDashboard.db
+*.db-shm
+*.db-wal
