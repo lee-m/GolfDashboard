@@ -23,10 +23,10 @@ namespace GolfDashboard.Data.Repositories
         }
 
         public async Task<IEnumerable<GolfClub>> GetAsync()
-            => await _context.GolfClubs.Include(c => c.Courses).ThenInclude(c => c.TeeBoxes).ToListAsync();
+            => await _context.GolfClubs.Include(c => c.Courses).ThenInclude(c => c.TeeBoxes).AsSingleQuery().ToListAsync();
 
         public async Task<GolfClub> GetAsync(int id)
-            => await _context.GolfClubs.Include(c => c.Courses).ThenInclude(c => c.TeeBoxes).FirstAsync(x => x.ID == id);
+            => await _context.GolfClubs.Include(c => c.Courses).ThenInclude(c => c.TeeBoxes).AsSingleQuery().FirstAsync(x => x.ID == id);
 
         public async Task UpdateAsync(EditedClubDetails editDetails)
         {
@@ -35,8 +35,22 @@ namespace GolfDashboard.Data.Repositories
             if (club == null)
                 throw new ResourceNotFoundException($"No club found with ID {editDetails.ID}");
 
-            _mapper.Map(editDetails, club);
-            await _context.SaveChangesAsync();
+            await using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                //Zap and re-add courses and tee-boxes
+                foreach (var course in club.Courses)
+                {
+                    _context.RemoveRange(course.TeeBoxes);
+                    _context.Remove(course);
+                }
+
+                await _context.SaveChangesAsync();
+
+                _mapper.Map(editDetails, club);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
         }
     }
 }

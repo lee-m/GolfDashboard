@@ -9,7 +9,7 @@ namespace GolfDashboard.Models
         private GolfClub()
         { }
 
-        public GolfClub(int id, int displaySequence, string name, string address, double lat, double lng, string website, IEnumerable<Course> courses)
+        public GolfClub(int id, int displaySequence, string name, string address, double lat, double lng, string website, ICollection<Course> courses)
         {
             ID = id;
             DisplaySequence = displaySequence;
@@ -29,6 +29,6 @@ namespace GolfDashboard.Models
         public double Longitude { get; private set; }
         public string Website { get; private set; }
 
-        public IEnumerable<Course> Courses { get; private set; }
+        public ICollection<Course> Courses { get; private set; }
     }
 }
