@@ -57,28 +57,7 @@ export function EditClubContextProvider(props: { children: any }) {
                         id: (editingClub.courses.length + 1) * -1,
                         name: "New Course",
                         numberOfHoles: 18,
-                        teeBoxes: [{
-                            id: -1,
-                            colour: "white",
-                            par: null,
-                            rating: null,
-                            sss: null,
-                            yards: null,
-                        }, {
-                            id: -2,
-                            colour: "#eeff00",
-                            par: null,
-                            rating: null,
-                            sss: null,
-                            yards: null,
-                        }, {
-                            id: -3,
-                            colour: "#cc0000",
-                            par: null,
-                            rating: null,
-                            sss: null,
-                            yards: null,
-                        }],
+                        teeBoxes: [],
                     }
                 ]
             });

@@ -5,4 +5,5 @@ export interface TeeBox {
     par: number | null;
     sss: number | null;
     rating: number | null;
+    slope: number | null;
 }
