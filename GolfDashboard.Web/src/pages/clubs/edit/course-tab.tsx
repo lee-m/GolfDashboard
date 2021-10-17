@@ -5,7 +5,7 @@ import DataGrid, { Column, Editing, Paging, FormItem, RequiredRule, RangeRule } 
 export function CourseTab(props: { data: Course }) {
     return (
         <div className="pt-3">
-            <DataGrid dataSource={props.data.teeBoxes} keyExpr="id" showBorders={true} >
+            <DataGrid id="edit-club-course-grid" dataSource={props.data.teeBoxes} keyExpr="id" showBorders={true} onEditingStart={onEditingStarted} >
                 <Paging enabled={false} />
                 <Editing mode="form" allowUpdating={true} useIcons={true} />
                 <Column dataField="colour" caption="" width="auto" allowEditing="false" cellRender={TeeBoxBadgeColumnTemplate}>

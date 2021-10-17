@@ -13,3 +13,11 @@
     height: 16px;
     @apply border border-solid border-gray-400 rounded;
 }
+
+#edit-club-course-grid .dx-toolbar-items-container {
+    @apply mt-1;
+}
+
+#edit-club-course-grid .dx-toolbar-after {
+    @apply right-1 !important;
+}
