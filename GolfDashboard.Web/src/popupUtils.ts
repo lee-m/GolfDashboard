@@ -5,7 +5,6 @@ export class PopupUtils {
     public static infoToast(title: string) {
 
         toast.info(title, {
-            className: "bg-accent-green",
             closeButton: true
         });
 
@@ -13,8 +12,7 @@ export class PopupUtils {
 
     public static errorToast(title: string) {
 
-        toast.info(title, {
-            className: "bg-accent-red",
+        toast.error(title, {
             closeButton: true,
             autoClose: false
         });
