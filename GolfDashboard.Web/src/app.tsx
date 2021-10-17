@@ -15,7 +15,7 @@ export default function App(props: any) {
             <TopNavBar />
             <Sidebar />
             <div id="page-content" className="relative flex flex-col bg-gray-100 rounded-tl">
-                <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={true} />
+                <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={true} limit={1} />
                 <Switch>
                     <Route exact path="/" component={DashboardPage} />
                     <Route exact path="/clubs" component={ClubsPage} />
