@@ -61,6 +61,7 @@ export function EditClubContextProvider(props: { children: any }) {
                     }
                 ]
             });
+            setSaveEnabled(true);
         }
     };
 
