@@ -23,6 +23,15 @@ export class APIService {
         return await response.json();
     }
 
+    private validateResponse(response: Response): boolean {
+
+        if (!response.ok) {
+            throw new Error("Unsuccessful response received");
+        }
+
+        return true;
+    }
+
     async getClubs(position: GeolocationPosition | null): Promise<Array<GolfClub>> {
 
         let baseURL = "/golfclubs";
@@ -58,7 +67,7 @@ export class APIService {
             }
         });
 
-        return response.ok;
+        return this.validateResponse(response);
     }
 
     async deleteNote(id: number): Promise<boolean> {
@@ -67,7 +76,7 @@ export class APIService {
             method: "DELETE"
         });
 
-        return response.ok;
+        return this.validateResponse(response);
     }
 
     async deleteTag(id: number): Promise<boolean> {
@@ -76,8 +85,7 @@ export class APIService {
             method: "DELETE"
         });
 
-        return response.ok;
-
+        return this.validateResponse(response);
     }
 
     async saveClub(clubDetails: EditedGolfClubDetails): Promise<boolean> {
@@ -90,6 +98,6 @@ export class APIService {
             }
         });
 
-        return response.ok;
+        return this.validateResponse(response);
     }
 }
