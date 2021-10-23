@@ -1,15 +1,31 @@
 import { Course, TeeBox } from '../../../models';
 import { TeeBoxBadge } from './tee-box-badge';
 import DataGrid, { Column, Editing, Paging, FormItem, RequiredRule, RangeRule } from 'devextreme-react/data-grid';
+import ArrayStore from 'devextreme/data/array_store';
+
+const dropDownEditorOptions = {
+    dataSource: new ArrayStore({
+        data: [
+            { colour: "#cc0000", name: "Red" },
+            { colour: "#eeff00", name: "Yellow" },
+            { colour: "white", name: "White" }
+        ],
+        key: 'colour'
+    }),
+    displayExpr: "name",
+    valueExpr: "colour"
+};
 
 export function CourseTab(props: { data: Course }) {
+
     return (
         <div className="pt-3">
-            <DataGrid id="edit-club-course-grid" dataSource={props.data.teeBoxes} keyExpr="id" showBorders={true} onEditingStart={onEditingStarted} >
+            <DataGrid id="edit-club-course-grid" dataSource={props.data.teeBoxes} keyExpr="id" showBorders={true}>
                 <Paging enabled={false} />
-                <Editing mode="form" allowUpdating={true} useIcons={true} />
+                <Editing mode="form" allowUpdating={true} useIcons={true} allowAdding={true} />
                 <Column dataField="colour" caption="" width="auto" allowEditing="false" cellRender={TeeBoxBadgeColumnTemplate}>
-                    <FormItem visible={false} />
+                    <FormItem editorType="dxSelectBox" editorOptions={dropDownEditorOptions}>
+                    </FormItem>
                 </Column>
                 <Column dataField="yards" caption="Length (yards)" dataType="number">
                     <RequiredRule />
@@ -23,6 +39,9 @@ export function CourseTab(props: { data: Course }) {
                     <RangeRule min={1} max={999} />
                 </Column>
                 <Column dataField="rating" caption="Rating" dataType="number">
+                    <RangeRule min={1} max={999} />
+                </Column>
+                <Column dataField="slope" caption="Slope" dataType="number">
                     <RangeRule min={1} max={999} />
                 </Column>
             </DataGrid>
