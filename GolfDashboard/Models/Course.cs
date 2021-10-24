@@ -9,7 +9,7 @@ namespace GolfDashboard.Models
         private Course()
         { }
 
-        public Course(int id, string name, int numberOfHoles, IEnumerable<TeeBox> teeBoxes)
+        public Course(int id, string name, int numberOfHoles, ICollection<TeeBox> teeBoxes)
         {
             ID = id;
             Name = name;
@@ -20,6 +20,6 @@ namespace GolfDashboard.Models
         public int ID { get; private set; }
         public string Name { get; private set; }
         public int NumberOfHoles { get; private set; }
-        public IEnumerable<TeeBox> TeeBoxes { get; private set; }
+        public ICollection<TeeBox> TeeBoxes { get; private set; }
     }
 }

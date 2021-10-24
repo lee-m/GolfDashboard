@@ -47,7 +47,15 @@ namespace GolfDashboard.Data.Repositories
 
                 await _context.SaveChangesAsync();
 
-                _mapper.Map(editDetails, club);
+                foreach(var courseDTO in editDetails.Courses)
+                {
+                    var newCourse = _context.Add(new Course(default, courseDTO.Name, courseDTO.NumberOfHoles, new List<TeeBox>()));
+
+                    foreach (var teeBoxDTO in courseDTO.TeeBoxes)
+                        newCourse.Entity.TeeBoxes.Add(new TeeBox(default, teeBoxDTO.Colour, teeBoxDTO.Yards, teeBoxDTO.Par, teeBoxDTO.SSS, teeBoxDTO.Rating, teeBoxDTO.Slope));
+
+                    club.Courses.Add(newCourse.Entity);
+                }
 
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();

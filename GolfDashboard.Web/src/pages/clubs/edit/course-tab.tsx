@@ -2,6 +2,7 @@ import { Course, TeeBox } from '../../../models';
 import { TeeBoxBadge } from './tee-box-badge';
 import DataGrid, { Column, Editing, Paging, FormItem, RequiredRule, RangeRule } from 'devextreme-react/data-grid';
 import ArrayStore from 'devextreme/data/array_store';
+import { useEditClubContext } from './edit-club-context';
 
 const dropDownEditorOptions = {
     dataSource: new ArrayStore({
@@ -18,9 +19,20 @@ const dropDownEditorOptions = {
 
 export function CourseTab(props: { data: Course }) {
 
+    const editClubContext = useEditClubContext();
+
+    const initNewTeeBoxRow = (e: { data: TeeBox }) => {
+        e.data.id = -(props.data.teeBoxes.length + 1);
+    };
+
     return (
         <div className="pt-3">
-            <DataGrid id="edit-club-course-grid" dataSource={props.data.teeBoxes} keyExpr="id" showBorders={true}>
+            <DataGrid id="edit-club-course-grid"
+                dataSource={props.data.teeBoxes}
+                keyExpr="id"
+                showBorders={true}
+                onInitNewRow={initNewTeeBoxRow}
+                onSaved={() => editClubContext.updateSaveEnabled(true)}>
                 <Paging enabled={false} />
                 <Editing mode="form" allowUpdating={true} useIcons={true} allowAdding={true} />
                 <Column dataField="colour" caption="" width="auto" allowEditing="false" cellRender={TeeBoxBadgeColumnTemplate}>

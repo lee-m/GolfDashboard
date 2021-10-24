@@ -10,6 +10,7 @@ export interface EditClubContextState {
     updateClubName(newName: string): void;
     updateClubWebsite(newWebsite: string): void;
     updateClubAddress(newAddress: string): void;
+    updateSaveEnabled(enabled: boolean): void;
     addCourse(): void
 };
 
@@ -42,6 +43,10 @@ export function EditClubContextProvider(props: { children: any }) {
         updateClubAddress: (newAddress: string) => {
             setEditingClub({ ...editingClub!, address: newAddress });
             setSaveEnabled(true);
+        },
+
+        updateSaveEnabled: (enabled: boolean) => {
+            setSaveEnabled(enabled);
         },
 
         addCourse: () => {
