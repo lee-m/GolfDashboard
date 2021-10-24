@@ -343,3 +343,4 @@ GolfDashboard.Web/.eslintcache
 GolfDashboard.API/GolfDashboard.db
 *.db-shm
 *.db-wal
+GolfDashboard.API/appsettings.Development.json
