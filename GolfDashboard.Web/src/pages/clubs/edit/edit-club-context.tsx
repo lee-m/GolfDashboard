@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, VoidFunctionComponent } from "react";
 import { EditedGolfClubDetails, GolfClub } from '../../../models';
 
 export interface EditClubContextState {
@@ -7,11 +7,15 @@ export interface EditClubContextState {
     club: EditedGolfClubDetails | null;
 
     setClub(club: GolfClub): void;
+
     updateClubName(newName: string): void;
     updateClubWebsite(newWebsite: string): void;
     updateClubAddress(newAddress: string): void;
     updateSaveEnabled(enabled: boolean): void;
-    addCourse(): void
+
+    addCourse(): void;
+
+    deleteCourse(courseID: number): void;
 };
 
 const EditClubContext = React.createContext<EditClubContextState | undefined>(undefined);
@@ -66,6 +70,22 @@ export function EditClubContextProvider(props: { children: any }) {
                     }
                 ]
             });
+            setSaveEnabled(true);
+        },
+
+        deleteCourse: (courseID: number) => {
+
+            if (!editingClub) {
+                return;
+            }
+
+            setEditingClub({
+                ...editingClub,
+                courses: [
+                    ...editingClub.courses.filter(e => e.id !== courseID),
+                ]
+            });
+
             setSaveEnabled(true);
         }
     };

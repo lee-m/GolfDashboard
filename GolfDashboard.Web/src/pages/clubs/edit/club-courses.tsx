@@ -7,7 +7,7 @@ import { useEditClubContext } from './edit-club-context';
 import AddIcon from '../../../images/add.svg';
 import { Course } from '../../../models';
 
-export function ClubCourses(pros: any) {
+export function ClubCourses(props: any) {
 
     const editContext = useEditClubContext();
 
@@ -26,13 +26,13 @@ export function ClubCourses(pros: any) {
             <TabPanel
                 noDataText="No Courses"
                 dataSource={editContext.club?.courses ?? []}
-                itemTitleRender={renderCourseTabTitle}
+                itemTitleRender={RenderCourseTabTitle}
                 itemComponent={CourseTab} />
         </>
     );
 }
 
-function renderCourseTabTitle(course: Course) {
+function RenderCourseTabTitle(course: Course) {
     return (
         <div className="flex flex-between items-center">
             <span>{course.name}</span>
