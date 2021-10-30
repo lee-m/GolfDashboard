@@ -72,8 +72,8 @@ export function CourseTab(props: { data: Course }) {
             </DataGrid>
             <Button className="mt-5" type="danger" text="Delete Course" stylingMode="outlined" onClick={onMaybeDeleteCourse} />
             <DeletePrompt visible={deletePromptVisible}
-                title="Confirm Note Deletion"
-                message={`This course will be deleted. Do you wish to continue?`}
+                title="Confirm Course Deletion"
+                message="This course will be deleted. Do you wish to continue?"
                 onDelete={() => new Promise(() => editClubContext.deleteCourse(props.data.id))}
                 onCancel={() => setDeletePromptVisible(false)} />
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, VoidFunctionComponent } from "react";
+import React, { useState } from "react";
 import { EditedGolfClubDetails, GolfClub } from '../../../models';
 
 export interface EditClubContextState {
