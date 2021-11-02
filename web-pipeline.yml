@@ -15,6 +15,11 @@ steps:
     versionSpec: '12.x'
   displayName: 'Install Node.js'
 
+- task: PowerShell@2
+  displayName: Build
+  env:
+    NODE_OPTIONS: --max_old_space_size=16384
+    
 - script: |
     npm ci
     npm run build
