@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Prompt, useParams } from 'react-router-dom';
 
 import { ClubHeading } from './club-heading';
 import { useEditClubContext } from './edit-club-context';
@@ -6,10 +6,9 @@ import { ClubDetails } from './club-details';
 import { ClubCourses } from './club-courses'
 import { LoadingOverlay, Separator } from '../../../components';
 import { GolfClub, } from '../../../models';
+import { useClubEditQuery } from '../clubs-hooks';
 
 import './edit-club.css';
-
-import { useClubEditQuery } from '../clubs-hooks';
 
 interface EditClubPageURLParameters {
     clubID?: string
@@ -53,6 +52,8 @@ export function EditPageContent(props: any) {
             <ClubDetails />
             <Separator />
             <ClubCourses />
+            <Prompt when={editContext.saveEnabled} message="You have unsaved changes, do you wish to continue?" />
         </div>
     );
 }
+

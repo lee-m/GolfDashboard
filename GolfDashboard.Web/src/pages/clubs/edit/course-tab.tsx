@@ -34,10 +34,6 @@ export function CourseTab(props: { data: Course }) {
         setDeletePromptVisible(true);
     };
 
-    const deleteNote = () => {
-        editClubContext.deleteCourse(props.data.id);
-    }
-
     return (
         <div className="pt-3">
             <DataGrid id="edit-club-course-grid"
