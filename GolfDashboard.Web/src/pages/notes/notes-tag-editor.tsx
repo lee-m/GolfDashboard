@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import TagBox from 'devextreme-react/tag-box';
 import DataSource from 'devextreme/data/data_source';
-import { CustomItemCreatingEvent } from 'devextreme/ui/tag_box';
+import { CustomItemCreatingEvent } from 'devextreme/ui/select_box';
 
 import { Tag } from '../../models';
 
