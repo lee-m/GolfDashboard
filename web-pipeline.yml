@@ -9,20 +9,14 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  NODE_OPTIONS: --max_old_space_size=4096
+
 steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '12.x'
   displayName: 'Install Node.js'
-
-- task: AzurePowerShell@5
-  inputs:
-    azureSubscription: 'My Golf Dashboard Connection'
-    ScriptType: InlineScript
-    Inline: '[Environment]::SetEnvironmentVariable("NODE_OPTIONS", "--max_old_space_size=16384", "Machine")'
-    FailOnStandardError: true
-    azurePowerShellVersion: LatestVersion
-  displayName: 'Set Node heap size limit'
 
 - script: |
     npm ci
