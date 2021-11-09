@@ -19,7 +19,7 @@ steps:
   inputs:
     azureSubscription: 'My Golf Dashboard Connection'
     ScriptType: InlineScript
-    Inline: '[Environment]::SetEnvironmentVariable("NODE_OPTIONS", "--max_old_space_size=16384", "Machine")'
+    Inline: '[Environment]::SetEnvironmentVariable("NODE_OPTIONS", "--max-old-space-size=6144", "Machine")'
     FailOnStandardError: true
     azurePowerShellVersion: LatestVersion
   displayName: 'Set Node heap size limit'
